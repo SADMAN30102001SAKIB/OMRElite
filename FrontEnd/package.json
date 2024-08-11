@@ -23,7 +23,7 @@
     "react-native-image-picker": "^7.1.2",
     "react-native-paper": "^5.12.3",
     "react-native-pdf": "^6.7.4",
-    "react-native-safe-area-context": "^4.9.0",
+    "react-native-safe-area-context": "^4.10.8",
     "react-native-screens": "^3.30.1",
     "react-native-vector-icons": "^10.0.3",
     "rn-fetch-blob": "^0.12.0"
