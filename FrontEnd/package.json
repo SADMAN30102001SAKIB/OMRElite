@@ -17,7 +17,7 @@
     "axios": "^1.6.8",
     "prop-types": "^15.8.1",
     "react": "18.2.0",
-    "react-native": "0.73.6",
+    "react-native": "0.74.3",
     "react-native-file-viewer": "^2.1.5",
     "react-native-fs": "^2.20.0",
     "react-native-image-picker": "^7.1.2",
