@@ -1,5 +1,5 @@
 Flask==3.0.3
-Flask-CORS==4.0.0
+Flask-CORS==4.0.1
 opencv-python==4.9.0.80
 numpy==1.26.4
 FPDF2==2.7.8
