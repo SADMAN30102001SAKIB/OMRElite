@@ -1,3 +1,4 @@
 Flask==3.0.3
 Flask-CORS==4.0.0
 reportlab==4.1.0
+werkzeug>=3.0.6 # not directly required, pinned by Snyk to avoid a vulnerability
