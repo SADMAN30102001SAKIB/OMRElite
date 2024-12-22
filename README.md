@@ -1,4 +1,4 @@
-OMRElite: Computer Vision Mobile App for Evaluating OMR/Bubble Sheet Based Exams
+# OMRElite: Computer Vision Mobile App for Evaluating OMR/Bubble Sheet Based Exams
 
 After almost 10K+ lines of code, countless sleepless nights, infinite amount of bug/error fixing later, Introducing "OMRElite"!
 
@@ -7,14 +7,14 @@ The main moto of the app is to reduce the tedious process of evaluating OMR Shee
 But this app can do all these in couple of minutes with few clicks of buttons.
 How?
 
-Well, it has 3 core features:
+## Well, it has 3 core features:
 I) Creating customizable OMR Sheets (the OMR PDF can be printed for examination)
 II) Evaluating those papers with mobile camera in a short amount of time using computer vision
 III) Generating customizable report of all evaluated students (available as a PDF or send it to teacher's email as a .csv file)
 
-Check This Demo Video: https://youtu.be/F7PN6prPl0g?si=3p7yAwGtiqWsPqlr
+### Check This Demo Video: https://youtu.be/F7PN6prPl0g?si=3p7yAwGtiqWsPqlr
 
-But there are many minor features as well, like
+## But there are many minor features as well, like
 * If somehow user deletes the PDFs made by the app (mistakenly or to free up storage), then the app can re-generate those PDFs automatically with 1 click of a button.
 * If a student mistakenly filled wrong ID number / set, then teacher can manually fix that inside the app.
 * There are lots of analysis, like individual student analysis, overall exam analysis. 
@@ -22,14 +22,14 @@ But there are many minor features as well, like
 
 Ummmm, with all these, now it's not even a OMR (Optical Mark Recognition) anymore, right? I think we should call It AMR (Artificial Mark Recognition). JK! But the app has limitations, which I'll try to improve time to time.
 
-All right, now future goals for OMRElite
-Major:
+## All right, now future goals for OMRElite
+### Major:
 1) Integration Database for creating accounts so that users can log in to any device with their credentials & all their previous work will be visible.
 2) Create a mechanism for joining students via a "joining code", so that students can join with that "code" & view their own evaluated OMR & overall report.
 3) Currently the user has to manually click on capture to get the image. so will try to automate it such a way that the app auto captures the OMR page as soon as the camera detects the page. 
 4) Creating a Web Version of the app
 
-Minor:
+### Minor:
 1) Implement a "recycle bin" feature to safely store deleted exams or student data before permanent deletion.
 2) Reduce network latency & improve app performance.
 3) Improve the OMR & App designs.
