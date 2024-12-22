@@ -1,0 +1,7 @@
+npx react-native set-icon --path "C:/Users/Asus/Downloads/app-logo.png" --background "#FFFFFF"
+
+cd android
+./gradlew clean
+./gradlew assembleRelease
+cd..
+adb install -r android/app/build/outputs/apk/release/app-release.apk

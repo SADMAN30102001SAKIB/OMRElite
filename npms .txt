@@ -1,0 +1,2 @@
+npm install --save-dev @babel/preset-env @babel/preset-react
+npm install @babel/core @babel/preset-env --save-dev
