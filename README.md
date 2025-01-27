@@ -36,7 +36,7 @@ Ummmm, with all these, now it's not even a OMR (Optical Mark Recognition) anymor
 Anyways, in the last couple of months, I've explored a lot about the android Operating System, Computer Vision & Cross-Platform Apps.
 It's still under development and I'm continuously learning & researching new things & hoping to make OMRElite better 💜.
 
-
+## Update:
 Currently i'm Planning to build a hardware device for this.
 Currently one has to evaluate each paper by holding the phone with hand, which might become overwhelming if the there's a lot of OMR papers (let's say 500+).
 So, if there were a machine where one will simply put all the OMR papers & adjust the mobile phone on top that machine in a way that the machine will automatically slide the papers & this app will evaluate each paper one by one, then it'll literally eliminate all human intervention.
