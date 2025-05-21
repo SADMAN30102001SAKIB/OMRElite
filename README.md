@@ -35,7 +35,6 @@ Ummmm, with all these, now it's not even a OMR (Optical Mark Recognition) anymor
 3) Improve the OMR & App designs.
 Anyways, in the last couple of months, I've explored a lot about the android Operating System, Computer Vision & Cross-Platform Apps.
 It's still under development and I'm continuously learning & researching new things & hoping to make OMRElite better 💜.
-
 ## Update:
 Currently i'm Planning to build a hardware device for this.
 Currently one has to evaluate each paper by holding the phone with hand, which might become overwhelming if the there's a lot of OMR papers (let's say 500+).
