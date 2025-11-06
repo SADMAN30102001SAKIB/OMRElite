@@ -3,6 +3,10 @@ import { ActivityIndicator, View, Alert, ToastAndroid } from "react-native";
 import RNFS from "react-native-fs";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import StudentHistoryList from "../components/StudentHistoryList";
+import {
+  checkStoragePermissions,
+  requestStoragePermissions,
+} from "../utils/permissions";
 
 const StudentHistory = ({ route, navigation }) => {
   const { formData, localFilePath, index, students } = route.params;
@@ -41,6 +45,19 @@ const StudentHistory = ({ route, navigation }) => {
 
   const Delete = async directoryPath => {
     try {
+      // Check permissions before file operations
+      const hasPermissions = await checkStoragePermissions();
+      if (!hasPermissions) {
+        const granted = await requestStoragePermissions();
+        if (!granted) {
+          Alert.alert(
+            "Permission Required",
+            "Storage permission is required to delete files.",
+          );
+          return;
+        }
+      }
+
       const directoryExists = await RNFS.exists(directoryPath);
       if (directoryExists) {
         await RNFS.unlink(directoryPath);

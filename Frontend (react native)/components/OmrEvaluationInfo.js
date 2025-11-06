@@ -7,6 +7,7 @@ import {
   Dimensions,
 } from "react-native";
 import { launchCamera, launchImageLibrary } from "react-native-image-picker";
+import { requestCameraPermission } from "../utils/permissions";
 import styles from "../componentStyles/OmrEvaluationInfoStyle";
 
 const OmrEvaluationInfo = ({
@@ -70,7 +71,7 @@ const OmrEvaluationInfo = ({
         console.log("ImagePicker Error: ", response.error);
       } else if (response.customButton) {
         console.log("User tapped custom button: ", response.customButton);
-      } else {
+      } else if (response.assets && response.assets.length > 0) {
         source.push(response.assets[0].uri);
         if (omrData.questionsCount > 35 && !takeSecondPicture) {
           console.log("Picking a second image...");
@@ -83,17 +84,27 @@ const OmrEvaluationInfo = ({
         ) {
           handleSubmit(source);
         }
+      } else {
+        console.log("Gallery response invalid: ", response);
       }
     };
 
     launchImageLibrary(options, handleGalleryResponse);
   };
 
-  const takePicture = (takeSecondPicture = false) => {
+  const takePicture = async (takeSecondPicture = false) => {
+    // Request camera permission first
+    const hasPermission = await requestCameraPermission();
+
+    if (!hasPermission) {
+      console.log("Camera permission denied");
+      return;
+    }
+
     const options = {
       mediaType: "photo",
       quality: 1,
-      saveToPhotos: true,
+      saveToPhotos: false,
     };
 
     const handleCameraResponse = response => {
@@ -103,7 +114,7 @@ const OmrEvaluationInfo = ({
         console.log("Camera Error: ", response.error);
       } else if (response.customButton) {
         console.log("User tapped custom button: ", response.customButton);
-      } else {
+      } else if (response.assets && response.assets.length > 0) {
         source.push(response.assets[0].uri);
         if (omrData.questionsCount > 35 && !takeSecondPicture) {
           console.log("Taking a second picture...");
@@ -116,6 +127,8 @@ const OmrEvaluationInfo = ({
         ) {
           handleSubmit(source);
         }
+      } else {
+        console.log("Camera response invalid: ", response);
       }
     };
 

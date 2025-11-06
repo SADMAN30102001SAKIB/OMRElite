@@ -248,7 +248,7 @@ def send_email_with_attachment(
     csv_content, recipient_email, msgBody, filename="report.csv"
 ):
     sender_email = "evan30102001flair@gmail.com"
-    sender_password = "bqqr afsj bxab wfkn"
+    sender_password = "duma iqcf domb qnry"
 
     msg = MIMEMultipart()
     msg["From"] = sender_email

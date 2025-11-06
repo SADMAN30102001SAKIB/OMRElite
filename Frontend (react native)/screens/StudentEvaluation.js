@@ -13,6 +13,10 @@ import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import StudentEvaluationInfo from "../components/StudentEvaluationInfo";
 import styles from "../screenStyles/OmrEvaluationStyle";
+import {
+  checkStoragePermissions,
+  requestStoragePermissions,
+} from "../utils/permissions";
 
 const StudentEvaluation = ({ route, navigation }) => {
   let { formData, localFilePath, index, student, idx } = route.params;
@@ -32,7 +36,10 @@ const StudentEvaluation = ({ route, navigation }) => {
         ) {
           if (errorFileDelete) {
             Alert.alert("Error", errorHeader);
-            await RNFS.unlink(localPath);
+            const hasPermissions = await checkStoragePermissions();
+            if (hasPermissions) {
+              await RNFS.unlink(localPath);
+            }
             setErrorFileDelete(false);
           }
         }
@@ -46,6 +53,19 @@ const StudentEvaluation = ({ route, navigation }) => {
   }, [appState]);
 
   const openPDF = async () => {
+    // Check permissions before file operations
+    const hasPermissions = await checkStoragePermissions();
+    if (!hasPermissions) {
+      const granted = await requestStoragePermissions();
+      if (!granted) {
+        Alert.alert(
+          "Permission Required",
+          "Storage permission is required to access PDF files.",
+        );
+        return;
+      }
+    }
+
     const directoryExists = await RNFS.exists(localPath);
     if (directoryExists) {
       FileViewer.open(localPath).catch(async error => {
@@ -57,7 +77,10 @@ const StudentEvaluation = ({ route, navigation }) => {
         );
         if (errorFileDelete) {
           Alert.alert("Error", errorHeader);
-          await RNFS.unlink(localPath);
+          const hasPermissions = await checkStoragePermissions();
+          if (hasPermissions) {
+            await RNFS.unlink(localPath);
+          }
           setErrorFileDelete(false);
         }
         console.log("Error Opening PDF:", error);
@@ -72,19 +95,28 @@ const StudentEvaluation = ({ route, navigation }) => {
 
   async function convertUriToFile(uri, fileName, mimeType) {
     try {
+      // Check permissions before file operations
+      const hasPermissions = await checkStoragePermissions();
+      if (!hasPermissions) {
+        const granted = await requestStoragePermissions();
+        if (!granted) {
+          throw new Error("Storage permission not granted");
+        }
+      }
+
       const fileExists = await RNFS.exists(uri);
       if (!fileExists) {
         throw new Error("File does not exist at the provided URI.");
       }
 
-      const fileBase64 = await RNFS.readFile(uri, "base64");
-      const fileBlob = {
-        uri: `data:${mimeType};base64,${fileBase64}`,
+      // Return file object directly - no base64 conversion needed!
+      const fileObject = {
+        uri: uri,
         name: fileName,
         type: mimeType,
       };
 
-      return fileBlob;
+      return fileObject;
     } catch (error) {
       console.log("Error converting URI to file:", error);
       throw error;
@@ -105,35 +137,41 @@ const StudentEvaluation = ({ route, navigation }) => {
   }
 
   const handleSubmit = async source => {
+    // Check permissions before file operations
+    const hasPermissions = await checkStoragePermissions();
+    if (!hasPermissions) {
+      const granted = await requestStoragePermissions();
+      if (!granted) {
+        Alert.alert(
+          "Permission Required",
+          "Storage permission is required to process files.",
+        );
+        return;
+      }
+    }
+
+    // User must always provide new photos
+    if (!source.length) {
+      Alert.alert(
+        "Photos Required",
+        "Please take or select new photos to re-evaluate this student.",
+      );
+      return;
+    }
+
     setIsLoading(true);
-    let file1 = null;
+    let file1 = await convertUriToFile(
+      source[0],
+      source[0].split("/").pop(),
+      guessMimeType(source[0]),
+    );
     let file2 = null;
-    if (source.length) {
-      file1 = await convertUriToFile(
-        source[0],
-        source[0].split("/").pop(),
-        guessMimeType(source[0]),
+    if (source[1]) {
+      file2 = await convertUriToFile(
+        source[1],
+        source[1].split("/").pop(),
+        guessMimeType(source[1]),
       );
-      if (source[1]) {
-        file2 = await convertUriToFile(
-          source[1],
-          source[1].split("/").pop(),
-          guessMimeType(source[1]),
-        );
-      }
-    } else {
-      file1 = await convertUriToFile(
-        student.file1,
-        student.file1.split("/").pop(),
-        guessMimeType(student.file1),
-      );
-      if (student.file2) {
-        file2 = await convertUriToFile(
-          student.file2,
-          student.file2.split("/").pop(),
-          guessMimeType(student.file2),
-        );
-      }
     }
 
     const formdata = new FormData();
@@ -161,7 +199,7 @@ const StudentEvaluation = ({ route, navigation }) => {
 
     try {
       const response = await axios.post(
-        "https://omrevalserver.onrender.com/upload",
+        "https://sakib30102001.pythonanywhere.com/upload",
         formdata,
         {
           headers: {

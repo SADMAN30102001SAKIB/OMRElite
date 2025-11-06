@@ -13,6 +13,10 @@ import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import OmrEvaluationInfo from "../components/OmrEvaluationInfo";
 import styles from "../screenStyles/OmrEvaluationStyle";
+import {
+  checkStoragePermissions,
+  requestStoragePermissions,
+} from "../utils/permissions";
 
 const OmrEvaluation = ({ route, navigation }) => {
   const { formData, localFilePath, index, students, reports } = route.params;
@@ -37,7 +41,10 @@ const OmrEvaluation = ({ route, navigation }) => {
           fetchData();
           if (errorFileDelete) {
             Alert.alert("Error!", errorHeader.replace(/\|\|/g, "\n"));
-            await RNFS.unlink(localPath);
+            const hasPermissions = await checkStoragePermissions();
+            if (hasPermissions) {
+              await RNFS.unlink(localPath);
+            }
             setErrorFileDelete(false);
           }
         }
@@ -73,6 +80,19 @@ const OmrEvaluation = ({ route, navigation }) => {
   };
 
   const openPDF = async localFilePath => {
+    // Check permissions before file operations
+    const hasPermissions = await checkStoragePermissions();
+    if (!hasPermissions) {
+      const granted = await requestStoragePermissions();
+      if (!granted) {
+        Alert.alert(
+          "Permission Required",
+          "Storage permission is required to access PDF files.",
+        );
+        return;
+      }
+    }
+
     const directoryExists = await RNFS.exists(localFilePath);
     if (directoryExists) {
       FileViewer.open(localFilePath).catch(async error => {
@@ -84,7 +104,10 @@ const OmrEvaluation = ({ route, navigation }) => {
         );
         if (errorFileDelete) {
           Alert.alert("Error!", errorHeader.replace(/\|\|/g, "\n"));
-          await RNFS.unlink(localPath);
+          const hasPermissions = await checkStoragePermissions();
+          if (hasPermissions) {
+            await RNFS.unlink(localPath);
+          }
           setErrorFileDelete(false);
         }
         console.log("Error opening PDF:", error);
@@ -119,19 +142,28 @@ const OmrEvaluation = ({ route, navigation }) => {
 
   const convertUriToFile = async (uri, fileName, mimeType) => {
     try {
+      // Check permissions before file operations
+      const hasPermissions = await checkStoragePermissions();
+      if (!hasPermissions) {
+        const granted = await requestStoragePermissions();
+        if (!granted) {
+          throw new Error("Storage permission not granted");
+        }
+      }
+
       const fileExists = await RNFS.exists(uri);
       if (!fileExists) {
         throw new Error("File does not exist at the provided URI.");
       }
 
-      const fileBase64 = await RNFS.readFile(uri, "base64");
-      const fileBlob = {
-        uri: `data:${mimeType};base64,${fileBase64}`,
+      // Return file object directly - no base64 conversion needed!
+      const fileObject = {
+        uri: uri,
         name: fileName,
         type: mimeType,
       };
 
-      return fileBlob;
+      return fileObject;
     } catch (error) {
       ToastAndroid.show("An Unexpected Error Occured!", ToastAndroid.LONG);
       console.log("Error converting URI to file:", error);
@@ -153,6 +185,19 @@ const OmrEvaluation = ({ route, navigation }) => {
   };
 
   const saveToLocalStorage = async student => {
+    // Check permissions before file operations
+    const hasPermissions = await checkStoragePermissions();
+    if (!hasPermissions) {
+      const granted = await requestStoragePermissions();
+      if (!granted) {
+        Alert.alert(
+          "Permission Required",
+          "Storage permission is required to save files.",
+        );
+        return;
+      }
+    }
+
     const existingHistory = await AsyncStorage.getItem("pdfHistory");
     const pdfHistory = JSON.parse(existingHistory);
     idx = pdfHistory[index].students.findIndex(
@@ -196,6 +241,19 @@ const OmrEvaluation = ({ route, navigation }) => {
   };
 
   const handleSubmit = async source => {
+    // Check permissions before file operations
+    const hasPermissions = await checkStoragePermissions();
+    if (!hasPermissions) {
+      const granted = await requestStoragePermissions();
+      if (!granted) {
+        Alert.alert(
+          "Permission Required",
+          "Storage permission is required to process files.",
+        );
+        return;
+      }
+    }
+
     setIsLoading(true);
     // setTimeout(() => {
     //   setIsLoading(true);
@@ -233,7 +291,7 @@ const OmrEvaluation = ({ route, navigation }) => {
     formdata.append("regenerate", false);
     try {
       const response = await axios.post(
-        "https://omrevalserver.onrender.com/upload",
+        "https://sakib30102001.pythonanywhere.com/upload",
         formdata,
         {
           headers: {
@@ -258,8 +316,7 @@ const OmrEvaluation = ({ route, navigation }) => {
           name: "",
           setno: setnoHeader ? Number(setnoHeader) : 0,
           marks: marksHeader ? Number(marksHeader) : "N/A",
-          file1: source[0],
-          file2: source[1],
+          // No need to store file URIs - user will always provide new photos for re-evaluation
           ...Object.fromEntries(
             new Array(formData.questionsCount)
               .fill(null)

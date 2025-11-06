@@ -11,6 +11,10 @@ import RNFS from "react-native-fs";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import ReportGenerationForm from "../components/ReportGenerationForm";
+import {
+  checkStoragePermissions,
+  requestStoragePermissions,
+} from "../utils/permissions";
 
 const ReportGeneration = ({ route, navigation }) => {
   const { omrData, localPath, index, students } = route.params;
@@ -40,6 +44,19 @@ const ReportGeneration = ({ route, navigation }) => {
   };
 
   const handleSubmit = async () => {
+    // Check permissions before file operations
+    const hasPermissions = await checkStoragePermissions();
+    if (!hasPermissions) {
+      const granted = await requestStoragePermissions();
+      if (!granted) {
+        Alert.alert(
+          "Permission Required",
+          "Storage permission is required to generate reports.",
+        );
+        return;
+      }
+    }
+
     const formdata = {};
     formdata["institute_name"] = omrData.iName;
     formdata["paper_name"] = omrData.pName;
@@ -171,7 +188,7 @@ const ReportGeneration = ({ route, navigation }) => {
     setIsLoading(true);
     try {
       const response = await axios.post(
-        "https://reportgenserver-sadman-sakibs-projects.vercel.app/generate_report",
+        "https://report-gen-server.vercel.app/generate_report",
         formdata,
         {
           responseType: "blob",
@@ -251,10 +268,25 @@ const ReportGeneration = ({ route, navigation }) => {
   };
 
   const handleSubmitCSV = async () => {
+    // Check permissions before file operations
+    const hasPermissions = await checkStoragePermissions();
+    if (!hasPermissions) {
+      const granted = await requestStoragePermissions();
+      if (!granted) {
+        Alert.alert(
+          "Permission Required",
+          "Storage permission is required to generate CSV files.",
+        );
+        return;
+      }
+    }
+
     if (
-      !/^[a-zA-Z0-9]+(\.[a-zA-Z0-9]+)*@gmail\.com$/.test(formData.rEmail.trim())
+      !/^[a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(
+        formData.rEmail.trim(),
+      )
     ) {
-      Alert.alert("", "Please Enter a Valid Gmail!");
+      Alert.alert("", "Please Enter a Valid Email Address!");
       return;
     }
 
@@ -318,7 +350,7 @@ const ReportGeneration = ({ route, navigation }) => {
     setIsLoading(true);
     try {
       const response = await axios.post(
-        "https://reportgenserver-sadman-sakibs-projects.vercel.app/generate_report_csv",
+        "https://report-gen-server.vercel.app/generate_report_csv",
         formdata,
       );
       if (response.data) {

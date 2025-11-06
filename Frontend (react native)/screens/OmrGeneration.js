@@ -11,6 +11,10 @@ import RNFS from "react-native-fs";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import OmrGenerationForm from "../components/OmrGenerationForm";
+import {
+  checkStoragePermissions,
+  requestStoragePermissions,
+} from "../utils/permissions";
 
 const OmrGeneration = ({ route, navigation }) => {
   const { omrData, localPath, idx, students, reports } = route.params;
@@ -71,7 +75,10 @@ const OmrGeneration = ({ route, navigation }) => {
         ? (pdfHistory[idx] = examHistory)
         : pdfHistory.push(examHistory);
       await AsyncStorage.setItem("pdfHistory", JSON.stringify(pdfHistory));
-      (await RNFS.exists(examHistory.localFilePath)) &&
+
+      // Check permission before file operations
+      const hasPermissions = await checkStoragePermissions();
+      if (hasPermissions && (await RNFS.exists(examHistory.localFilePath))) {
         FileViewer.open(examHistory.localFilePath).catch(error => {
           ToastAndroid.show(
             "Can't Open PDF!\n" +
@@ -83,6 +90,8 @@ const OmrGeneration = ({ route, navigation }) => {
           );
           console.log("Error opening PDF:", error);
         });
+      }
+
       navigation.navigate("OmrEvaluation", {
         formData: examHistory.formData,
         localFilePath: examHistory.localFilePath,
@@ -98,6 +107,19 @@ const OmrGeneration = ({ route, navigation }) => {
   };
 
   const handleSubmit = async () => {
+    // Verify storage permissions before proceeding
+    const hasPermissions = await checkStoragePermissions();
+    if (!hasPermissions) {
+      const granted = await requestStoragePermissions();
+      if (!granted) {
+        Alert.alert(
+          "Permission Required",
+          "Storage permission is required to save OMR sheets. Please grant permission and try again.",
+        );
+        return;
+      }
+    }
+
     if (
       !formData.iName.trim() ||
       !formData.pName.trim() ||
@@ -150,7 +172,7 @@ const OmrGeneration = ({ route, navigation }) => {
     setIsLoading(true);
     try {
       const response = await axios.post(
-        "https://omrgenserver-sadman-sakibs-projects.vercel.app/generate-pdf",
+        "https://omr-gen-server.vercel.app/generate-pdf",
         formdata,
         {
           responseType: "blob",
@@ -221,7 +243,18 @@ const OmrGeneration = ({ route, navigation }) => {
             })
             .catch(err => {
               setIsLoading(false);
-              ToastAndroid.show("Error Saving PDF!", ToastAndroid.LONG);
+              const errorMsg = err.message?.toLowerCase() || "";
+              if (
+                errorMsg.includes("permission") ||
+                errorMsg.includes("eacces")
+              ) {
+                Alert.alert(
+                  "Permission Error",
+                  "Unable to save PDF. Please check storage permissions in your device settings.",
+                );
+              } else {
+                ToastAndroid.show("Error Saving PDF!", ToastAndroid.LONG);
+              }
               console.log("Error Saving PDF:", err.message);
             });
         };

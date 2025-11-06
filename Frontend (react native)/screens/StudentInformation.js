@@ -3,6 +3,10 @@ import { BackHandler, Alert, AppState, ScrollView } from "react-native";
 import RNFS from "react-native-fs";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import StudentInformationForm from "../components/StudentInformationForm";
+import {
+  checkStoragePermissions,
+  requestStoragePermissions,
+} from "../utils/permissions";
 
 const StudentInformation = ({ route, navigation }) => {
   let { formData, localFilePath, index, student, idx, allowBack, msg } =
@@ -49,8 +53,11 @@ const StudentInformation = ({ route, navigation }) => {
           {
             text: "Go Back",
             onPress: async () => {
-              (await RNFS.exists(studentData.localPath)) &&
-                (await RNFS.unlink(studentData.localPath));
+              const hasPermissions = await checkStoragePermissions();
+              if (hasPermissions) {
+                (await RNFS.exists(studentData.localPath)) &&
+                  (await RNFS.unlink(studentData.localPath));
+              }
               navigation.goBack();
             },
           },
@@ -190,7 +197,10 @@ const StudentInformation = ({ route, navigation }) => {
               text: "YES",
               onPress: async () => {
                 let path = pdfHistory[index].students[foundIdx].localPath;
-                (await RNFS.exists(path)) && (await RNFS.unlink(path));
+                const hasPermissions = await checkStoragePermissions();
+                if (hasPermissions) {
+                  (await RNFS.exists(path)) && (await RNFS.unlink(path));
+                }
                 calculateMarks();
                 pdfHistory[index].students[foundIdx] = studentData;
                 idx != null && pdfHistory[index].students.splice(idx, 1);

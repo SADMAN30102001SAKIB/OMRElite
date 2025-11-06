@@ -9,6 +9,10 @@ import {
 } from "react-native";
 import FileViewer from "react-native-file-viewer";
 import RNFS from "react-native-fs";
+import {
+  checkStoragePermissions,
+  requestStoragePermissions,
+} from "../utils/permissions";
 import styles from "../componentStyles/ExamListStyle";
 
 const ReportHistoryList = ({
@@ -57,6 +61,18 @@ const ReportHistoryList = ({
           <View key={idx} style={styles.historyItem}>
             <TouchableOpacity
               onPress={async () => {
+                const hasPermissions = await checkStoragePermissions();
+                if (!hasPermissions) {
+                  const granted = await requestStoragePermissions();
+                  if (!granted) {
+                    Alert.alert(
+                      "Permission Required",
+                      "Storage permission is required to access files.",
+                    );
+                    return;
+                  }
+                }
+
                 if (await RNFS.exists(item.path)) {
                   FileViewer.open(item.path).catch(error => {
                     ToastAndroid.show(

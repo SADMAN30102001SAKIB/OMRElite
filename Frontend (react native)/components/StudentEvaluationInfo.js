@@ -3,6 +3,11 @@ import { View, Text, TouchableOpacity, Alert } from "react-native";
 import { launchCamera, launchImageLibrary } from "react-native-image-picker";
 import RNFS from "react-native-fs";
 import styles from "../componentStyles/OmrEvaluationInfoStyle";
+import {
+  checkStoragePermissions,
+  requestStoragePermissions,
+  requestCameraPermission,
+} from "../utils/permissions";
 
 const StudentEvaluationInfo = ({
   omrData,
@@ -68,7 +73,7 @@ const StudentEvaluationInfo = ({
         console.log("ImagePicker Error: ", response.error);
       } else if (response.customButton) {
         console.log("User tapped custom button: ", response.customButton);
-      } else {
+      } else if (response.assets && response.assets.length > 0) {
         source.push(response.assets[0].uri);
         if (omrData.questionsCount > 35 && !takeSecondPicture) {
           console.log("Picking a second image...");
@@ -81,17 +86,27 @@ const StudentEvaluationInfo = ({
         ) {
           handleSubmit(source);
         }
+      } else {
+        console.log("Gallery response invalid: ", response);
       }
     };
 
     launchImageLibrary(options, handleGalleryResponse);
   };
 
-  const takePicture = (takeSecondPicture = false) => {
+  const takePicture = async (takeSecondPicture = false) => {
+    // Request camera permission first
+    const hasPermission = await requestCameraPermission();
+
+    if (!hasPermission) {
+      console.log("Camera permission denied");
+      return;
+    }
+
     const options = {
       mediaType: "photo",
       quality: 1,
-      saveToPhotos: true,
+      saveToPhotos: false,
     };
 
     const handleCameraResponse = response => {
@@ -101,7 +116,7 @@ const StudentEvaluationInfo = ({
         console.log("Camera Error: ", response.error);
       } else if (response.customButton) {
         console.log("User tapped custom button: ", response.customButton);
-      } else {
+      } else if (response.assets && response.assets.length > 0) {
         source.push(response.assets[0].uri);
         if (omrData.questionsCount > 35 && !takeSecondPicture) {
           console.log("Taking a second picture...");
@@ -114,6 +129,8 @@ const StudentEvaluationInfo = ({
         ) {
           handleSubmit(source);
         }
+      } else {
+        console.log("Camera response invalid: ", response);
       }
     };
 
@@ -275,80 +292,25 @@ const StudentEvaluationInfo = ({
         </View>
       ) : (
         <View>
-          <Text
-            style={{
-              ...styles.text,
-              marginTop: "5%",
-              marginLeft: "1.5%",
-              fontSize: 11,
-            }}>
-            Picture To Use For Re-Generating PDF Result:
-          </Text>
-          <View
-            style={{
-              ...styles.buttonGroup,
-              ...styles.topBox,
-              paddingTop: "0%",
-              paddingBottom: "5%",
-            }}>
-            <View style={styles.button}>
-              <TouchableOpacity
+          <View style={styles.button}>
+            <TouchableOpacity
+              style={{
+                ...styles.submitButton,
+                borderRadius: 10,
+                backgroundColor: "#ee6f2f",
+                borderWidth: 2,
+                borderColor: "white",
+                borderStyle: "dotted",
+              }}
+              onPress={() => setShowBox(true)}>
+              <Text
                 style={{
-                  ...styles.submitButton,
-                  borderRadius: 10,
-                  borderWidth: 2,
-                  borderColor: "white",
-                  borderStyle: "dotted",
-                }}
-                onPress={async () => {
-                  const directoryExists1 = await RNFS.exists(student.file1);
-                  const directoryExists2 = await RNFS.exists(
-                    student.file2 ? student.file2 : "",
-                  );
-                  if (
-                    (omrData.questionsCount > 35 &&
-                      directoryExists1 &&
-                      directoryExists2) ||
-                    (omrData.questionsCount <= 35 && directoryExists1)
-                  ) {
-                    handleSubmit(source);
-                  } else {
-                    Alert.alert(
-                      "No Previous Saved Picture Found!",
-                      "Please Re-Generate With New Pictures.",
-                    );
-                    setShowBox(true);
-                  }
+                  ...styles.submitButtonText,
+                  color: "white",
                 }}>
-                <Text
-                  style={{
-                    ...styles.submitButtonText,
-                    color: "white",
-                  }}>
-                  Previous
-                </Text>
-              </TouchableOpacity>
-            </View>
-            <View style={styles.button}>
-              <TouchableOpacity
-                style={{
-                  ...styles.submitButton,
-                  borderRadius: 10,
-                  backgroundColor: "#ee6f2f",
-                  borderWidth: 2,
-                  borderColor: "white",
-                  borderStyle: "dotted",
-                }}
-                onPress={() => setShowBox(true)}>
-                <Text
-                  style={{
-                    ...styles.submitButtonText,
-                    color: "white",
-                  }}>
-                  New
-                </Text>
-              </TouchableOpacity>
-            </View>
+                Take/Select New Pictures
+              </Text>
+            </TouchableOpacity>
           </View>
         </View>
       )}

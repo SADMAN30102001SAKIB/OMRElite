@@ -1,40 +1,40 @@
 import React from "react";
-import {
-  PermissionsAndroid,
-  View,
-  TouchableOpacity,
-  Text,
-  ToastAndroid,
-} from "react-native";
+import { View, TouchableOpacity, Text, ToastAndroid } from "react-native";
 import styles from "../screenStyles/HomeStyle";
+import {
+  checkStoragePermissions,
+  requestStoragePermissions,
+} from "../utils/permissions";
 
 const Home = ({ navigation }) => {
-  const requestStoragePermission = async () => {
+  const handleCreatePress = async () => {
     try {
-      const granted = await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
-        {
-          title: "Storage Permission Required",
-          message: "This app needs access to your storage to download PDFs.",
-          buttonNeutral: "Ask Me Later",
-          buttonNegative: "Cancel",
-          buttonPositive: "OK",
-        },
-      );
-      if (granted !== PermissionsAndroid.RESULTS.GRANTED) {
-        ToastAndroid.show("Storage Permission Denied!", ToastAndroid.LONG);
-        console.log("Storage Permission Denied!");
-      } else {
-        navigation.navigate("OmrGeneration", {
-          omrData: null,
-          localPath: null,
-          idx: null,
-          students: [],
-          reports: [],
-        });
+      // Check if permissions are already granted (they should be from App.js)
+      const hasPermissions = await checkStoragePermissions();
+
+      if (!hasPermissions) {
+        // Request permissions if not granted
+        const granted = await requestStoragePermissions();
+        if (!granted) {
+          ToastAndroid.show(
+            "Storage permission is required to create OMR sheets",
+            ToastAndroid.LONG,
+          );
+          return;
+        }
       }
+
+      // Navigate to OMR Generation if permissions are granted
+      navigation.navigate("OmrGeneration", {
+        omrData: null,
+        localPath: null,
+        idx: null,
+        students: [],
+        reports: [],
+      });
     } catch (err) {
-      console.warn(err);
+      console.warn("Permission error:", err);
+      ToastAndroid.show("Error checking permissions", ToastAndroid.SHORT);
     }
   };
 
@@ -44,9 +44,7 @@ const Home = ({ navigation }) => {
       <View style={styles.button}>
         <TouchableOpacity
           style={{ ...styles.submitButton, backgroundColor: "#00ff5f" }}
-          onPress={async () => {
-            await requestStoragePermission();
-          }}>
+          onPress={handleCreatePress}>
           <Text style={{ ...styles.submitButtonText, color: "black" }}>
             Create
           </Text>
