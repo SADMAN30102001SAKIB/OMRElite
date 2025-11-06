@@ -40,6 +40,7 @@ local.properties
 *.hprof
 .cxx/
 *.keystore
+!omrelite-release-key.keystore
 !debug.keystore
 
 # Android - Build outputs only

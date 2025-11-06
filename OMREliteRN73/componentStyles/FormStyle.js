@@ -42,7 +42,6 @@ const styles = StyleSheet.create({
   },
   switchBox: {
     flexDirection: "row",
-    marginTop: "5%",
     marginTop: "10%",
   },
   radioButton: {
