@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, {useState, useEffect} from 'react';
 import {
   ScrollView,
   ActivityIndicator,
@@ -6,41 +6,41 @@ import {
   Alert,
   ToastAndroid,
   AppState,
-} from "react-native";
-import FileViewer from "react-native-file-viewer";
-import RNFS from "react-native-fs";
-import axios from "axios";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import OmrEvaluationInfo from "../components/OmrEvaluationInfo";
-import styles from "../screenStyles/OmrEvaluationStyle";
+} from 'react-native';
+import FileViewer from 'react-native-file-viewer';
+import RNFS from 'react-native-fs';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import OmrEvaluationInfo from '../components/OmrEvaluationInfo';
+import styles from '../screenStyles/OmrEvaluationStyle';
 import {
   checkStoragePermissions,
   requestStoragePermissions,
-} from "../utils/permissions";
+} from '../utils/permissions';
 
-const OmrEvaluation = ({ route, navigation }) => {
-  const { formData, localFilePath, index, students, reports } = route.params;
+const OmrEvaluation = ({route, navigation}) => {
+  const {formData, localFilePath, index, students, reports} = route.params;
   const [studentsState, setStudentsState] = useState(students);
   const [reportsState, setReportsState] = useState(reports);
   const [isLoading, setIsLoading] = useState(false);
   let [student, setStudent] = useState({});
-  let [localPath, setLocalPath] = useState("");
+  let [localPath, setLocalPath] = useState('');
   let [idx, setIdx] = useState(null);
-  let [errorHeader, setErrorHeader] = useState("");
+  let [errorHeader, setErrorHeader] = useState('');
   let [errorFileDelete, setErrorFileDelete] = useState(false);
   const [appState, setAppState] = useState(AppState.currentState);
 
   useEffect(() => {
     const subscription = AppState.addEventListener(
-      "change",
+      'change',
       async nextAppState => {
         if (
           appState.match(/inactive|background/) &&
-          nextAppState === "active"
+          nextAppState === 'active'
         ) {
           fetchData();
           if (errorFileDelete) {
-            Alert.alert("Error!", errorHeader.replace(/\|\|/g, "\n"));
+            Alert.alert('Error!', errorHeader.replace(/\|\|/g, '\n'));
             const hasPermissions = await checkStoragePermissions();
             if (hasPermissions) {
               await RNFS.unlink(localPath);
@@ -58,7 +58,7 @@ const OmrEvaluation = ({ route, navigation }) => {
   }, [appState]);
 
   useEffect(() => {
-    const unsubscribe = navigation.addListener("focus", () => {
+    const unsubscribe = navigation.addListener('focus', () => {
       fetchData();
     });
     return unsubscribe;
@@ -67,15 +67,15 @@ const OmrEvaluation = ({ route, navigation }) => {
   const fetchData = async () => {
     // setIsLoading(true);
     try {
-      const historyJson = await AsyncStorage.getItem("pdfHistory");
+      const historyJson = await AsyncStorage.getItem('pdfHistory');
       const history = historyJson ? JSON.parse(historyJson) : [];
       setStudentsState(history[index].students);
       setReportsState(history[index].reports);
       // setIsLoading(false);
     } catch (error) {
       // setIsLoading(false);
-      ToastAndroid.show("Error Saving History!", ToastAndroid.LONG);
-      console.log("Error fetching history from local storage:", error);
+      ToastAndroid.show('Error Saving History!', ToastAndroid.LONG);
+      console.log('Error fetching history from local storage:', error);
     }
   };
 
@@ -86,8 +86,8 @@ const OmrEvaluation = ({ route, navigation }) => {
       const granted = await requestStoragePermissions();
       if (!granted) {
         Alert.alert(
-          "Permission Required",
-          "Storage permission is required to access PDF files.",
+          'Permission Required',
+          'Storage permission is required to access PDF files.',
         );
         return;
       }
@@ -98,34 +98,34 @@ const OmrEvaluation = ({ route, navigation }) => {
       FileViewer.open(localFilePath).catch(async error => {
         ToastAndroid.show(
           "Can't Open PDF!\n" +
-            "Go Manually Open It in Your Device From This Path: " +
-            localFilePath.substring(localFilePath.indexOf("Download")),
+            'Go Manually Open It in Your Device From This Path: ' +
+            localFilePath.substring(localFilePath.indexOf('Download')),
           ToastAndroid.LONG,
         );
         if (errorFileDelete) {
-          Alert.alert("Error!", errorHeader.replace(/\|\|/g, "\n"));
+          Alert.alert('Error!', errorHeader.replace(/\|\|/g, '\n'));
           const hasPermissions = await checkStoragePermissions();
           if (hasPermissions) {
             await RNFS.unlink(localPath);
           }
           setErrorFileDelete(false);
         }
-        console.log("Error opening PDF:", error);
+        console.log('Error opening PDF:', error);
       });
     } else {
       Alert.alert(
-        "File Does Not Exist!",
-        "Do you want to Re-Generate the file?",
+        'File Does Not Exist!',
+        'Do you want to Re-Generate the file?',
         [
           {
-            text: "NO",
+            text: 'NO',
             onPress: () => {},
-            style: "cancel",
+            style: 'cancel',
           },
           {
-            text: "YES",
+            text: 'YES',
             onPress: () => {
-              navigation.navigate("OmrGeneration", {
+              navigation.navigate('OmrGeneration', {
                 omrData: formData,
                 localPath: localFilePath,
                 idx: index,
@@ -135,7 +135,7 @@ const OmrEvaluation = ({ route, navigation }) => {
             },
           },
         ],
-        { cancelable: false },
+        {cancelable: false},
       );
     }
   };
@@ -147,13 +147,13 @@ const OmrEvaluation = ({ route, navigation }) => {
       if (!hasPermissions) {
         const granted = await requestStoragePermissions();
         if (!granted) {
-          throw new Error("Storage permission not granted");
+          throw new Error('Storage permission not granted');
         }
       }
 
       const fileExists = await RNFS.exists(uri);
       if (!fileExists) {
-        throw new Error("File does not exist at the provided URI.");
+        throw new Error('File does not exist at the provided URI.');
       }
 
       // Return file object directly - no base64 conversion needed!
@@ -165,22 +165,22 @@ const OmrEvaluation = ({ route, navigation }) => {
 
       return fileObject;
     } catch (error) {
-      ToastAndroid.show("An Unexpected Error Occured!", ToastAndroid.LONG);
-      console.log("Error converting URI to file:", error);
+      ToastAndroid.show('An Unexpected Error Occured!', ToastAndroid.LONG);
+      console.log('Error converting URI to file:', error);
       throw error;
     }
   };
 
   const guessMimeType = uri => {
-    const extension = uri.split(".").pop().toLowerCase();
+    const extension = uri.split('.').pop().toLowerCase();
     switch (extension) {
-      case "jpg":
-      case "jpeg":
-        return "image/jpeg";
-      case "png":
-        return "image/png";
+      case 'jpg':
+      case 'jpeg':
+        return 'image/jpeg';
+      case 'png':
+        return 'image/png';
       default:
-        return "application/octet-stream";
+        return 'application/octet-stream';
     }
   };
 
@@ -191,14 +191,14 @@ const OmrEvaluation = ({ route, navigation }) => {
       const granted = await requestStoragePermissions();
       if (!granted) {
         Alert.alert(
-          "Permission Required",
-          "Storage permission is required to save files.",
+          'Permission Required',
+          'Storage permission is required to save files.',
         );
         return;
       }
     }
 
-    const existingHistory = await AsyncStorage.getItem("pdfHistory");
+    const existingHistory = await AsyncStorage.getItem('pdfHistory');
     const pdfHistory = JSON.parse(existingHistory);
     idx = pdfHistory[index].students.findIndex(
       obj => obj.idno === student.idno,
@@ -208,34 +208,34 @@ const OmrEvaluation = ({ route, navigation }) => {
     );
     if (idx !== -1) {
       Alert.alert(
-        "StudentID: " + student.idno + " Already Evaluated!",
-        "Do you want to overwrite?",
+        'StudentID: ' + student.idno + ' Already Evaluated!',
+        'Do you want to overwrite?',
         [
           {
-            text: "NO",
+            text: 'NO',
             onPress: async () => {
               await RNFS.unlink(student.localPath);
             },
-            style: "cancel",
+            style: 'cancel',
           },
           {
-            text: "YES",
+            text: 'YES',
             onPress: async () => {
               await RNFS.unlink(pdfHistory[index].students[idx].localPath);
               pdfHistory[index].students[idx] = student;
               await AsyncStorage.setItem(
-                "pdfHistory",
+                'pdfHistory',
                 JSON.stringify(pdfHistory),
               );
               openPDF(localPath);
             },
           },
         ],
-        { cancelable: false },
+        {cancelable: false},
       );
     } else {
       pdfHistory[index].students.push(student);
-      await AsyncStorage.setItem("pdfHistory", JSON.stringify(pdfHistory));
+      await AsyncStorage.setItem('pdfHistory', JSON.stringify(pdfHistory));
       openPDF(localPath);
     }
   };
@@ -247,8 +247,8 @@ const OmrEvaluation = ({ route, navigation }) => {
       const granted = await requestStoragePermissions();
       if (!granted) {
         Alert.alert(
-          "Permission Required",
-          "Storage permission is required to process files.",
+          'Permission Required',
+          'Storage permission is required to process files.',
         );
         return;
       }
@@ -263,41 +263,41 @@ const OmrEvaluation = ({ route, navigation }) => {
     let file2 = null;
     file1 = await convertUriToFile(
       source[0],
-      source[0].split("/").pop(),
+      source[0].split('/').pop(),
       guessMimeType(source[0]),
     );
     if (source[1]) {
       file2 = await convertUriToFile(
         source[1],
-        source[1].split("/").pop(),
+        source[1].split('/').pop(),
         guessMimeType(source[1]),
       );
     }
     const formdata = new FormData();
-    formdata.append("isRoll", formData.isRoll);
-    formdata.append("rollDigit", formData.rollDigit);
-    formdata.append("setCount", formData.setCount);
-    formdata.append("questionsCount", formData.questionsCount);
-    formdata.append("mpq", formData.mpq);
-    formdata.append("isNegative", formData.isNegative);
-    formdata.append("negativeMark", formData.negativeMark);
+    formdata.append('isRoll', formData.isRoll);
+    formdata.append('rollDigit', formData.rollDigit);
+    formdata.append('setCount', formData.setCount);
+    formdata.append('questionsCount', formData.questionsCount);
+    formdata.append('mpq', formData.mpq);
+    formdata.append('isNegative', formData.isNegative);
+    formdata.append('negativeMark', formData.negativeMark);
     for (let i = 1; i <= formData.setCount; i++) {
       for (let j = 1; j <= formData.questionsCount; j++) {
-        formdata.append("set" + i + "Q" + j, formData["set" + i + "Q" + j]);
+        formdata.append('set' + i + 'Q' + j, formData['set' + i + 'Q' + j]);
       }
     }
-    formdata.append("file1", file1);
-    formdata.append("file2", file2);
-    formdata.append("regenerate", false);
+    formdata.append('file1', file1);
+    formdata.append('file2', file2);
+    formdata.append('regenerate', false);
     try {
       const response = await axios.post(
-        "https://sakib30102001.pythonanywhere.com/upload",
+        'https://sakib30102001.pythonanywhere.com/upload',
         formdata,
         {
           headers: {
-            "Content-Type": "multipart/form-data",
+            'Content-Type': 'multipart/form-data',
           },
-          responseType: "blob",
+          responseType: 'blob',
         },
       );
 
@@ -312,17 +312,17 @@ const OmrEvaluation = ({ route, navigation }) => {
           ? JSON.parse(response.headers.marked_index)
           : null;
         let tempObject = {
-          idno: idnoHeader ? idnoHeader : "",
-          name: "",
+          idno: idnoHeader ? idnoHeader : '',
+          name: '',
           setno: setnoHeader ? Number(setnoHeader) : 0,
-          marks: marksHeader ? Number(marksHeader) : "N/A",
+          marks: marksHeader ? Number(marksHeader) : 'N/A',
           // No need to store file URIs - user will always provide new photos for re-evaluation
           ...Object.fromEntries(
             new Array(formData.questionsCount)
               .fill(null)
               .map((_, i) => [
                 `Q${i + 1}`,
-                markedIndexHeader ? markedIndexHeader[i].toString() : "0",
+                markedIndexHeader ? markedIndexHeader[i].toString() : '0',
               ]),
           ),
         };
@@ -331,7 +331,7 @@ const OmrEvaluation = ({ route, navigation }) => {
           tempObject,
         }));
         student = tempObject;
-        const lastIndex = localFilePath.lastIndexOf("/");
+        const lastIndex = localFilePath.lastIndexOf('/');
         const customDirectoryPath = localFilePath.substring(0, lastIndex);
         const directoryExists = await RNFS.exists(customDirectoryPath);
         if (!directoryExists) {
@@ -344,8 +344,8 @@ const OmrEvaluation = ({ route, navigation }) => {
         reader.readAsDataURL(response.data);
         reader.onloadend = () => {
           const base64data = reader.result;
-          const base64WithoutPrefix = base64data.split(",")[1];
-          RNFS.writeFile(localPath, base64WithoutPrefix, "base64")
+          const base64WithoutPrefix = base64data.split(',')[1];
+          RNFS.writeFile(localPath, base64WithoutPrefix, 'base64')
             .then(async () => {
               setStudent(prevStudent => ({
                 ...prevStudent,
@@ -354,11 +354,11 @@ const OmrEvaluation = ({ route, navigation }) => {
               student.localPath = localPath;
               if (Number(idnoHeader) == -1 || errorHeader) {
                 openPDF(localPath);
-                if (errorHeader && errorHeader.includes("Page")) {
+                if (errorHeader && errorHeader.includes('Page')) {
                   errorFileDelete = true;
                   setErrorFileDelete(true);
                 } else {
-                  navigation.navigate("StudentInformation", {
+                  navigation.navigate('StudentInformation', {
                     formData,
                     localFilePath,
                     index,
@@ -367,13 +367,13 @@ const OmrEvaluation = ({ route, navigation }) => {
                     allowBack: false,
                     msg: errorHeader
                       ? errorHeader
-                      : "Please Manully Enter Student Name!",
+                      : 'Please Manully Enter Student Name!',
                   });
                 }
               } else if (marksHeader) {
                 saveToLocalStorage(student);
               } else {
-                ToastAndroid.show("Error Evaluating!", ToastAndroid.LONG);
+                ToastAndroid.show('Error Evaluating!', ToastAndroid.LONG);
               }
             })
             .catch(err => {
@@ -384,13 +384,13 @@ const OmrEvaluation = ({ route, navigation }) => {
         };
       } else {
         setIsLoading(false);
-        ToastAndroid.show("No Response!", ToastAndroid.LONG);
-        console.log("No Response");
+        ToastAndroid.show('No Response!', ToastAndroid.LONG);
+        console.log('No Response');
       }
     } catch (error) {
       setIsLoading(false);
-      ToastAndroid.show("Error Getting PDF!", ToastAndroid.LONG);
-      console.log("Error fetching PDF:", error);
+      ToastAndroid.show('Error Getting PDF!', ToastAndroid.LONG);
+      console.log('Error fetching PDF:', error);
     }
   };
 

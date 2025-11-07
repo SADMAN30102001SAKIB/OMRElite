@@ -1,38 +1,38 @@
-import React, { useState, useEffect } from "react";
+import React, {useState, useEffect} from 'react';
 import {
   ActivityIndicator,
   View,
   Alert,
   ScrollView,
   ToastAndroid,
-} from "react-native";
-import FileViewer from "react-native-file-viewer";
-import RNFS from "react-native-fs";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import axios from "axios";
-import ReportGenerationForm from "../components/ReportGenerationForm";
+} from 'react-native';
+import FileViewer from 'react-native-file-viewer';
+import RNFS from 'react-native-fs';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
+import ReportGenerationForm from '../components/ReportGenerationForm';
 import {
   checkStoragePermissions,
   requestStoragePermissions,
-} from "../utils/permissions";
+} from '../utils/permissions';
 
-const ReportGeneration = ({ route, navigation }) => {
-  const { omrData, localPath, index, students } = route.params;
+const ReportGeneration = ({route, navigation}) => {
+  const {omrData, localPath, index, students} = route.params;
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     isSerial: true,
     isID: omrData.isRoll,
     isName: omrData.isName || !omrData.isRoll,
     isSet: omrData.setCount > 1,
-    sortBy: "set",
+    sortBy: 'set',
     isLeftAddionalData: true,
-    totalSet: omrData.setCount > 1 ? "A" : "none",
-    rEmail: "",
+    totalSet: omrData.setCount > 1 ? 'A' : 'none',
+    rEmail: '',
   });
 
   useEffect(() => {
     if (!students.length) {
-      Alert.alert("Attention", "There are no students");
+      Alert.alert('Attention', 'There are no students');
     }
   }, []);
 
@@ -50,8 +50,8 @@ const ReportGeneration = ({ route, navigation }) => {
       const granted = await requestStoragePermissions();
       if (!granted) {
         Alert.alert(
-          "Permission Required",
-          "Storage permission is required to generate reports.",
+          'Permission Required',
+          'Storage permission is required to generate reports.',
         );
         return;
       }
@@ -81,16 +81,16 @@ const ReportGeneration = ({ route, navigation }) => {
     };
 
     let newTotalSet =
-      formData.totalSet != "none"
+      formData.totalSet != 'none'
         ? formData.totalSet
             .replace(
               /[ABCD]/g,
-              match => ({ A: "1", B: "2", C: "3", D: "4" }[match]),
+              match => ({A: '1', B: '2', C: '3', D: '4'}[match]),
             )
-            .split("")
+            .split('')
             .sort()
-            .join("")
-        : "1";
+            .join('')
+        : '1';
 
     let setStudent1 = 0;
     let setStudent2 = 0;
@@ -118,19 +118,19 @@ const ReportGeneration = ({ route, navigation }) => {
           }
 
           k++;
-          formdata["roll_number" + k] = Number(students[j].idno);
-          formdata["name" + k] = students[j].name;
-          formdata["set" + k] = ["A", "B", "C", "D"][
+          formdata['roll_number' + k] = Number(students[j].idno);
+          formdata['name' + k] = students[j].name;
+          formdata['set' + k] = ['A', 'B', 'C', 'D'][
             Number(students[j].setno) - 1
           ];
-          formdata["mark" + k] = Number(students[j].marks);
+          formdata['mark' + k] = Number(students[j].marks);
 
-          tempObj["roll_number" + k] = Number(students[j].idno);
-          tempObj["name" + k] = students[j].name;
-          tempObj["set" + k] = ["A", "B", "C", "D"][
+          tempObj['roll_number' + k] = Number(students[j].idno);
+          tempObj['name' + k] = students[j].name;
+          tempObj['set' + k] = ['A', 'B', 'C', 'D'][
             Number(students[j].setno) - 1
           ];
-          tempObj["mark" + k] = Number(students[j].marks);
+          tempObj['mark' + k] = Number(students[j].marks);
 
           totalStudents++;
           if (students[j].marks >= totalMarks * 0.8) {
@@ -148,24 +148,24 @@ const ReportGeneration = ({ route, navigation }) => {
 
     above80 =
       above80 +
-      " (" +
+      ' (' +
       ((above80 / (totalStudents ? totalStudents : 1)) * 100).toFixed(2) +
-      "%)";
+      '%)';
     sixtyTo79 =
       sixtyTo79 +
-      " (" +
+      ' (' +
       ((sixtyTo79 / (totalStudents ? totalStudents : 1)) * 100).toFixed(2) +
-      "%)";
+      '%)';
     fortyTo59 =
       fortyTo59 +
-      " (" +
+      ' (' +
       ((fortyTo59 / (totalStudents ? totalStudents : 1)) * 100).toFixed(2) +
-      "%)";
+      '%)';
     below40 =
       below40 +
-      " (" +
+      ' (' +
       ((below40 / (totalStudents ? totalStudents : 1)) * 100).toFixed(2) +
-      "%)";
+      '%)';
 
     formdata.setStudent1 = setStudent1;
     formdata.setStudent2 = setStudent2;
@@ -188,15 +188,15 @@ const ReportGeneration = ({ route, navigation }) => {
     setIsLoading(true);
     try {
       const response = await axios.post(
-        "https://report-gen-server.vercel.app/generate_report",
+        'https://report-gen-server.vercel.app/generate_report',
         formdata,
         {
-          responseType: "blob",
+          responseType: 'blob',
         },
       );
       if (response.data) {
         let localFilePath;
-        const lastIndex = localPath.lastIndexOf("/");
+        const lastIndex = localPath.lastIndexOf('/');
         const originalDirectoryPath = localPath.substring(0, lastIndex);
         const directoryExists = await RNFS.exists(originalDirectoryPath);
         if (!directoryExists) {
@@ -208,40 +208,40 @@ const ReportGeneration = ({ route, navigation }) => {
         reader.readAsDataURL(response.data);
         reader.onloadend = () => {
           const base64data = reader.result;
-          const base64WithoutPrefix = base64data.split(",")[1];
-          RNFS.writeFile(localFilePath, base64WithoutPrefix, "base64")
+          const base64WithoutPrefix = base64data.split(',')[1];
+          RNFS.writeFile(localFilePath, base64WithoutPrefix, 'base64')
             .then(async () => {
               (await RNFS.exists(localFilePath)) &&
                 FileViewer.open(localFilePath).catch(error => {
                   ToastAndroid.show(
                     "Can't Open PDF!\n" +
-                      "Go Manually Open It in Your Device From This Path:\n" +
+                      'Go Manually Open It in Your Device From This Path:\n' +
                       localFilePath.substring(
-                        localFilePath.indexOf("Download"),
+                        localFilePath.indexOf('Download'),
                       ),
                     ToastAndroid.LONG,
                   );
-                  console.log("Error opening PDF:", error);
+                  console.log('Error opening PDF:', error);
                 });
-              const existingHistory = await AsyncStorage.getItem("pdfHistory");
+              const existingHistory = await AsyncStorage.getItem('pdfHistory');
               const pdfHistory = JSON.parse(existingHistory);
               pdfHistory[index].reports.push({
                 name:
-                  formData.totalSet != "none"
-                    ? "for SET: (" +
-                      formData.totalSet.split("").sort().join(", ") +
-                      ")"
-                    : "for " +
+                  formData.totalSet != 'none'
+                    ? 'for SET: (' +
+                      formData.totalSet.split('').sort().join(', ') +
+                      ')'
+                    : 'for ' +
                       (setStudent1 + setStudent2 + setStudent3 + setStudent4) +
-                      " Students",
+                      ' Students',
                 path: localFilePath,
                 ...tempObj,
               });
               await AsyncStorage.setItem(
-                "pdfHistory",
+                'pdfHistory',
                 JSON.stringify(pdfHistory),
               );
-              navigation.navigate("ReportHistory", {
+              navigation.navigate('ReportHistory', {
                 formData: omrData,
                 localFilePath: localPath,
                 index,
@@ -251,19 +251,19 @@ const ReportGeneration = ({ route, navigation }) => {
             })
             .catch(err => {
               setIsLoading(false);
-              ToastAndroid.show("Error Saving PDF!", ToastAndroid.LONG);
-              console.log("Error Saving PDF:", err.message);
+              ToastAndroid.show('Error Saving PDF!', ToastAndroid.LONG);
+              console.log('Error Saving PDF:', err.message);
             });
         };
       } else {
         setIsLoading(false);
-        ToastAndroid.show("No Response!", ToastAndroid.LONG);
-        console.log("No Response");
+        ToastAndroid.show('No Response!', ToastAndroid.LONG);
+        console.log('No Response');
       }
     } catch (error) {
       setIsLoading(false);
-      ToastAndroid.show("Error Getting PDF!", ToastAndroid.LONG);
-      console.log("Error fetching PDF:", error);
+      ToastAndroid.show('Error Getting PDF!', ToastAndroid.LONG);
+      console.log('Error fetching PDF:', error);
     }
   };
 
@@ -274,8 +274,8 @@ const ReportGeneration = ({ route, navigation }) => {
       const granted = await requestStoragePermissions();
       if (!granted) {
         Alert.alert(
-          "Permission Required",
-          "Storage permission is required to generate CSV files.",
+          'Permission Required',
+          'Storage permission is required to generate CSV files.',
         );
         return;
       }
@@ -286,7 +286,7 @@ const ReportGeneration = ({ route, navigation }) => {
         formData.rEmail.trim(),
       )
     ) {
-      Alert.alert("", "Please Enter a Valid Email Address!");
+      Alert.alert('', 'Please Enter a Valid Email Address!');
       return;
     }
 
@@ -301,16 +301,16 @@ const ReportGeneration = ({ route, navigation }) => {
     formdata.rEmail = formData.rEmail;
 
     let newTotalSet =
-      formData.totalSet != "none"
+      formData.totalSet != 'none'
         ? formData.totalSet
             .replace(
               /[ABCD]/g,
-              match => ({ A: "1", B: "2", C: "3", D: "4" }[match]),
+              match => ({A: '1', B: '2', C: '3', D: '4'}[match]),
             )
-            .split("")
+            .split('')
             .sort()
-            .join("")
-        : "1";
+            .join('')
+        : '1';
 
     let setStudent1 = 0;
     let setStudent2 = 0;
@@ -332,12 +332,12 @@ const ReportGeneration = ({ route, navigation }) => {
           }
 
           k++;
-          formdata["roll_number" + k] = Number(students[j].idno);
-          formdata["name" + k] = students[j].name;
-          formdata["set" + k] = ["A", "B", "C", "D"][
+          formdata['roll_number' + k] = Number(students[j].idno);
+          formdata['name' + k] = students[j].name;
+          formdata['set' + k] = ['A', 'B', 'C', 'D'][
             Number(students[j].setno) - 1
           ];
-          formdata["mark" + k] = Number(students[j].marks);
+          formdata['mark' + k] = Number(students[j].marks);
         }
       }
     }
@@ -350,21 +350,21 @@ const ReportGeneration = ({ route, navigation }) => {
     setIsLoading(true);
     try {
       const response = await axios.post(
-        "https://report-gen-server.vercel.app/generate_report_csv",
+        'https://report-gen-server.vercel.app/generate_report_csv',
         formdata,
       );
       if (response.data) {
         setIsLoading(false);
-        Alert.alert("", response.data);
+        Alert.alert('', response.data);
       } else {
         setIsLoading(false);
-        ToastAndroid.show("No Response!", ToastAndroid.LONG);
-        console.log("No Response");
+        ToastAndroid.show('No Response!', ToastAndroid.LONG);
+        console.log('No Response');
       }
     } catch (error) {
       setIsLoading(false);
-      ToastAndroid.show("Error Getting PDF!", ToastAndroid.LONG);
-      console.log("Error fetching PDF:", error);
+      ToastAndroid.show('Error Getting PDF!', ToastAndroid.LONG);
+      console.log('Error fetching PDF:', error);
     }
   };
 
@@ -376,10 +376,10 @@ const ReportGeneration = ({ route, navigation }) => {
       {isLoading ? (
         <View
           style={{
-            backgroundColor: "#111",
+            backgroundColor: '#111',
             flex: 1,
-            justifyContent: "center",
-            alignItems: "center",
+            justifyContent: 'center',
+            alignItems: 'center',
           }}>
           <ActivityIndicator size="large" color="#007bff" />
         </View>

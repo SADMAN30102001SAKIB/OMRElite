@@ -1,0 +1,56 @@
+# Node
+node_modules/
+
+# Bundle artifacts
+*.jsbundle
+
+# Native
+*.orig.*
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+
+# Metro
+.metro-health-check*
+
+# Debug
+npm-debug.*
+yarn-debug.*
+yarn-error.*
+android/*.log
+
+# Misc
+.DS_Store
+*.pem
+
+# Local env files
+.env*.local
+
+# TypeScript
+*.tsbuildinfo
+
+# Android/IntelliJ
+build/
+.idea
+.gradle
+local.properties
+*.iml
+*.hprof
+.cxx/
+*.keystore
+!omrelite-release-key.keystore
+!debug.keystore
+
+# Android - Build outputs only
+android/app/build/
+android/.gradle/
+android/app/.cxx/
+android/captures/
+
+# iOS - Build outputs only
+ios/build/
+ios/Pods/
+*.xcworkspace
+!default.xcworkspace

@@ -1,22 +1,22 @@
-import React, { useState, useEffect } from "react";
-import { ActivityIndicator, View, Alert, ToastAndroid } from "react-native";
-import FileViewer from "react-native-file-viewer";
-import RNFS from "react-native-fs";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import axios from "axios";
-import ReportHistoryList from "../components/ReportHistoryList";
+import React, {useState, useEffect} from 'react';
+import {ActivityIndicator, View, Alert, ToastAndroid} from 'react-native';
+import FileViewer from 'react-native-file-viewer';
+import RNFS from 'react-native-fs';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
+import ReportHistoryList from '../components/ReportHistoryList';
 import {
   checkStoragePermissions,
   requestStoragePermissions,
-} from "../utils/permissions";
+} from '../utils/permissions';
 
-const ReportHistory = ({ route, navigation }) => {
-  const { formData, localFilePath, index, students } = route.params;
+const ReportHistory = ({route, navigation}) => {
+  const {formData, localFilePath, index, students} = route.params;
   const [reportItems, setReportItems] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    const unsubscribe = navigation.addListener("focus", () => {
+    const unsubscribe = navigation.addListener('focus', () => {
       fetchStudent();
     });
     return unsubscribe;
@@ -25,22 +25,22 @@ const ReportHistory = ({ route, navigation }) => {
   const fetchStudent = async () => {
     setIsLoading(true);
     try {
-      const historyJson = await AsyncStorage.getItem("pdfHistory");
+      const historyJson = await AsyncStorage.getItem('pdfHistory');
       const history = JSON.parse(historyJson);
       setReportItems(history[index].reports);
       setIsLoading(false);
     } catch (error) {
       setIsLoading(false);
-      await AsyncStorage.setItem("pdfHistory", JSON.stringify([]));
+      await AsyncStorage.setItem('pdfHistory', JSON.stringify([]));
       await Delete(
         `${RNFS.DownloadDirectoryPath}/OMRElite (!!!DO NOT DELETE!!!)`,
       );
       ToastAndroid.show(
-        "History deleted because of corrupted data!",
+        'History deleted because of corrupted data!',
         ToastAndroid.LONG,
       );
-      navigation.navigate("Home");
-      console.log("Error fetching student from local storage:", error);
+      navigation.navigate('Home');
+      console.log('Error fetching student from local storage:', error);
     }
   };
 
@@ -52,8 +52,8 @@ const ReportHistory = ({ route, navigation }) => {
         const granted = await requestStoragePermissions();
         if (!granted) {
           Alert.alert(
-            "Permission Required",
-            "Storage permission is required to delete files.",
+            'Permission Required',
+            'Storage permission is required to delete files.',
           );
           return;
         }
@@ -63,51 +63,51 @@ const ReportHistory = ({ route, navigation }) => {
       if (directoryExists) {
         await RNFS.unlink(directoryPath);
       } else {
-        console.log("Directory does not exist:", directoryPath);
+        console.log('Directory does not exist:', directoryPath);
       }
     } catch (error) {
-      console.log("Error deleting directory:", error);
+      console.log('Error deleting directory:', error);
     }
   };
 
   const deleteReportItem = async idx => {
     Alert.alert(
-      "Delete Report?",
-      "Are you sure you want to delete this report? This action cannot be undone.",
+      'Delete Report?',
+      'Are you sure you want to delete this report? This action cannot be undone.',
       [
         {
-          text: "NO",
+          text: 'NO',
           onPress: () => {},
-          style: "cancel",
+          style: 'cancel',
         },
         {
-          text: "YES",
+          text: 'YES',
           onPress: async () => {
             setIsLoading(true);
             try {
               let updatedReports = [...reportItems];
               await Delete(updatedReports[idx].path);
               updatedReports.splice(idx, 1);
-              const historyJson = await AsyncStorage.getItem("pdfHistory");
+              const historyJson = await AsyncStorage.getItem('pdfHistory');
               const history = JSON.parse(historyJson);
               history[index].reports = updatedReports;
               setReportItems(updatedReports);
-              await AsyncStorage.setItem("pdfHistory", JSON.stringify(history));
+              await AsyncStorage.setItem('pdfHistory', JSON.stringify(history));
 
               setIsLoading(false);
               ToastAndroid.show(
-                "Item deleted successfully!",
+                'Item deleted successfully!',
                 ToastAndroid.SHORT,
               );
             } catch (error) {
               setIsLoading(false);
-              ToastAndroid.show("Failed to delete item!", ToastAndroid.LONG);
-              console.log("Error deleting student item:", error);
+              ToastAndroid.show('Failed to delete item!', ToastAndroid.LONG);
+              console.log('Error deleting student item:', error);
             }
           },
         },
       ],
-      { cancelable: false },
+      {cancelable: false},
     );
   };
 
@@ -123,11 +123,11 @@ const ReportHistory = ({ route, navigation }) => {
     formdata.isLeftAddionalData = reportItems[idx].isLeftAddionalData;
     formdata.totalSet = reportItems[idx].totalSet;
 
-    for (let i = 1; reportItems[idx]["roll_number" + i]; i++) {
-      formdata["roll_number" + i] = reportItems[idx]["roll_number" + i];
-      formdata["name" + i] = reportItems[idx]["name" + i];
-      formdata["set" + i] = reportItems[idx]["set" + i];
-      formdata["mark" + i] = reportItems[idx]["mark" + i];
+    for (let i = 1; reportItems[idx]['roll_number' + i]; i++) {
+      formdata['roll_number' + i] = reportItems[idx]['roll_number' + i];
+      formdata['name' + i] = reportItems[idx]['name' + i];
+      formdata['set' + i] = reportItems[idx]['set' + i];
+      formdata['mark' + i] = reportItems[idx]['mark' + i];
     }
     formdata.setStudent1 = reportItems[idx].setStudent1;
     formdata.setStudent2 = reportItems[idx].setStudent2;
@@ -141,15 +141,15 @@ const ReportHistory = ({ route, navigation }) => {
     setIsLoading(true);
     try {
       const response = await axios.post(
-        "https://report-gen-server.vercel.app/generate_report",
+        'https://report-gen-server.vercel.app/generate_report',
         formdata,
         {
-          responseType: "blob",
+          responseType: 'blob',
         },
       );
       if (response.data) {
         let path;
-        const lastIndex = localFilePath.lastIndexOf("/");
+        const lastIndex = localFilePath.lastIndexOf('/');
         const originalDirectoryPath = localFilePath.substring(0, lastIndex);
         const directoryExists = await RNFS.exists(originalDirectoryPath);
         if (!directoryExists) {
@@ -161,49 +161,49 @@ const ReportHistory = ({ route, navigation }) => {
         reader.readAsDataURL(response.data);
         reader.onloadend = () => {
           const base64data = reader.result;
-          const base64WithoutPrefix = base64data.split(",")[1];
-          RNFS.writeFile(path, base64WithoutPrefix, "base64")
+          const base64WithoutPrefix = base64data.split(',')[1];
+          RNFS.writeFile(path, base64WithoutPrefix, 'base64')
             .then(async () => {
               (await RNFS.exists(path)) &&
                 FileViewer.open(path).catch(error => {
-                  ToastAndroid.show("Error opening PDF", ToastAndroid.LONG);
-                  console.log("Error opening PDF:", error);
+                  ToastAndroid.show('Error opening PDF', ToastAndroid.LONG);
+                  console.log('Error opening PDF:', error);
                 });
-              const existingHistory = await AsyncStorage.getItem("pdfHistory");
+              const existingHistory = await AsyncStorage.getItem('pdfHistory');
               const pdfHistory = JSON.parse(existingHistory);
               pdfHistory[index].reports[idx].path = path;
               setReportItems(pdfHistory[index].reports);
               await AsyncStorage.setItem(
-                "pdfHistory",
+                'pdfHistory',
                 JSON.stringify(pdfHistory),
               );
               setIsLoading(false);
             })
             .catch(err => {
               setIsLoading(false);
-              ToastAndroid.show("Error Saving PDF!", ToastAndroid.LONG);
-              console.log("Error Saving PDF:", err.message);
+              ToastAndroid.show('Error Saving PDF!', ToastAndroid.LONG);
+              console.log('Error Saving PDF:', err.message);
             });
         };
       } else {
         setIsLoading(false);
-        ToastAndroid.show("No Response!", ToastAndroid.LONG);
-        console.log("No Response");
+        ToastAndroid.show('No Response!', ToastAndroid.LONG);
+        console.log('No Response');
       }
     } catch (error) {
       setIsLoading(false);
-      ToastAndroid.show("Error Getting PDF!", ToastAndroid.LONG);
-      console.log("Error fetching PDF:", error);
+      ToastAndroid.show('Error Getting PDF!', ToastAndroid.LONG);
+      console.log('Error fetching PDF:', error);
     }
   };
 
   return isLoading ? (
     <View
       style={{
-        backgroundColor: "#111",
+        backgroundColor: '#111',
         flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
+        justifyContent: 'center',
+        alignItems: 'center',
       }}>
       <ActivityIndicator size="large" color="#007bff" />
     </View>

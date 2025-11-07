@@ -1,33 +1,33 @@
-import React, { useState, useEffect } from "react";
+import React, {useState, useEffect} from 'react';
 import {
   ActivityIndicator,
   View,
   Alert,
   ScrollView,
   ToastAndroid,
-} from "react-native";
-import FileViewer from "react-native-file-viewer";
-import RNFS from "react-native-fs";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import axios from "axios";
-import OmrGenerationForm from "../components/OmrGenerationForm";
+} from 'react-native';
+import FileViewer from 'react-native-file-viewer';
+import RNFS from 'react-native-fs';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
+import OmrGenerationForm from '../components/OmrGenerationForm';
 import {
   checkStoragePermissions,
   requestStoragePermissions,
-} from "../utils/permissions";
+} from '../utils/permissions';
 
-const OmrGeneration = ({ route, navigation }) => {
-  const { omrData, localPath, idx, students, reports } = route.params;
+const OmrGeneration = ({route, navigation}) => {
+  const {omrData, localPath, idx, students, reports} = route.params;
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
-    iName: "",
-    iColor: "black",
-    iFont: "Helvetica-Bold",
+    iName: '',
+    iColor: 'black',
+    iFont: 'Helvetica-Bold',
     isIUnderline: true,
     iSize: 16,
-    pName: "",
-    pColor: "black",
-    pFont: "Helvetica-BoldOblique",
+    pName: '',
+    pColor: 'black',
+    pFont: 'Helvetica-BoldOblique',
     isPUnderline: false,
     pSize: 9,
     isName: true,
@@ -44,8 +44,8 @@ const OmrGeneration = ({ route, navigation }) => {
   useEffect(() => {
     if (students.length) {
       Alert.alert(
-        "Attention",
-        "Access To Some Settings is Restricted. Student History Needs to Be Fully Cleared For Full Access!",
+        'Attention',
+        'Access To Some Settings is Restricted. Student History Needs to Be Fully Cleared For Full Access!',
       );
     }
     if (omrData) {
@@ -54,7 +54,7 @@ const OmrGeneration = ({ route, navigation }) => {
   }, []);
 
   useEffect(() => {
-    const unsubscribeFocus = navigation.addListener("focus", () => {
+    const unsubscribeFocus = navigation.addListener('focus', () => {
       setIsLoading(false);
     });
     return () => unsubscribeFocus();
@@ -69,12 +69,12 @@ const OmrGeneration = ({ route, navigation }) => {
 
   const saveToLocalStorage = async examHistory => {
     try {
-      const existingHistory = await AsyncStorage.getItem("pdfHistory");
+      const existingHistory = await AsyncStorage.getItem('pdfHistory');
       const pdfHistory = existingHistory ? JSON.parse(existingHistory) : [];
       idx !== null
         ? (pdfHistory[idx] = examHistory)
         : pdfHistory.push(examHistory);
-      await AsyncStorage.setItem("pdfHistory", JSON.stringify(pdfHistory));
+      await AsyncStorage.setItem('pdfHistory', JSON.stringify(pdfHistory));
 
       // Check permission before file operations
       const hasPermissions = await checkStoragePermissions();
@@ -82,17 +82,17 @@ const OmrGeneration = ({ route, navigation }) => {
         FileViewer.open(examHistory.localFilePath).catch(error => {
           ToastAndroid.show(
             "Can't Open PDF!\n" +
-              "Go Manually Open It in Your Device From This Path:\n" +
+              'Go Manually Open It in Your Device From This Path:\n' +
               examHistory.localFilePath.substring(
-                examHistory.localFilePath.indexOf("Download"),
+                examHistory.localFilePath.indexOf('Download'),
               ),
             ToastAndroid.LONG,
           );
-          console.log("Error opening PDF:", error);
+          console.log('Error opening PDF:', error);
         });
       }
 
-      navigation.navigate("OmrEvaluation", {
+      navigation.navigate('OmrEvaluation', {
         formData: examHistory.formData,
         localFilePath: examHistory.localFilePath,
         index: idx !== null ? idx : pdfHistory.length - 1,
@@ -101,8 +101,8 @@ const OmrGeneration = ({ route, navigation }) => {
       });
     } catch (error) {
       setIsLoading(false);
-      ToastAndroid.show("Error Saving Data!", ToastAndroid.LONG);
-      console.log("Error saving to local storage:", error);
+      ToastAndroid.show('Error Saving Data!', ToastAndroid.LONG);
+      console.log('Error saving to local storage:', error);
     }
   };
 
@@ -113,8 +113,8 @@ const OmrGeneration = ({ route, navigation }) => {
       const granted = await requestStoragePermissions();
       if (!granted) {
         Alert.alert(
-          "Permission Required",
-          "Storage permission is required to save OMR sheets. Please grant permission and try again.",
+          'Permission Required',
+          'Storage permission is required to save OMR sheets. Please grant permission and try again.',
         );
         return;
       }
@@ -126,29 +126,29 @@ const OmrGeneration = ({ route, navigation }) => {
       !formData.questionsCount ||
       (formData.isRoll && !formData.rollDigit)
     ) {
-      Alert.alert("", "Please Input All Fields!");
+      Alert.alert('', 'Please Input All Fields!');
       return;
     }
     if (!(formData.questionsCount >= 1 && formData.questionsCount <= 100)) {
-      Alert.alert("", "Questions Out Of Range!");
+      Alert.alert('', 'Questions Out Of Range!');
       return;
     }
     if (
       formData.isRoll &&
       !(formData.rollDigit >= 1 && formData.rollDigit <= 11)
     ) {
-      Alert.alert("", "ID Number Out Of Range!");
+      Alert.alert('', 'ID Number Out Of Range!');
       return;
     }
     if (isNaN(Number(formData.iSize)) || Number(formData.iSize) <= 0) {
       Alert.alert(
-        "",
-        "Text Size Of Institute Name Must Be A Positive(+) Number!",
+        '',
+        'Text Size Of Institute Name Must Be A Positive(+) Number!',
       );
       return;
     }
     if (isNaN(Number(formData.pSize)) || Number(formData.pSize) <= 0) {
-      Alert.alert("", "Text Size Of Exam Name Must Be A Positive(+) Number!");
+      Alert.alert('', 'Text Size Of Exam Name Must Be A Positive(+) Number!');
       return;
     }
 
@@ -172,10 +172,10 @@ const OmrGeneration = ({ route, navigation }) => {
     setIsLoading(true);
     try {
       const response = await axios.post(
-        "https://omr-gen-server.vercel.app/generate-pdf",
+        'https://omr-gen-server.vercel.app/generate-pdf',
         formdata,
         {
-          responseType: "blob",
+          responseType: 'blob',
         },
       );
       if (response.data) {
@@ -192,7 +192,7 @@ const OmrGeneration = ({ route, navigation }) => {
           }
           localFilePath = `${customDirectoryPath}/OMR_${new Date().getTime()}.pdf`;
         } else {
-          const lastIndex = localPath.lastIndexOf("/");
+          const lastIndex = localPath.lastIndexOf('/');
           const originalDirectoryPath = localPath.substring(0, lastIndex);
           const directoryExists = await RNFS.exists(originalDirectoryPath);
           if (!directoryExists) {
@@ -205,10 +205,10 @@ const OmrGeneration = ({ route, navigation }) => {
               }
             } catch (error) {
               ToastAndroid.show(
-                "An Unexpected Error Occured!",
+                'An Unexpected Error Occured!',
                 ToastAndroid.LONG,
               );
-              console.log("Error deleting file:", error);
+              console.log('Error deleting file:', error);
             }
           }
           localFilePath = `${originalDirectoryPath}/OMR_${new Date().getTime()}.pdf`;
@@ -217,8 +217,8 @@ const OmrGeneration = ({ route, navigation }) => {
         reader.readAsDataURL(response.data);
         reader.onloadend = () => {
           const base64data = reader.result;
-          const base64WithoutPrefix = base64data.split(",")[1];
-          RNFS.writeFile(localFilePath, base64WithoutPrefix, "base64")
+          const base64WithoutPrefix = base64data.split(',')[1];
+          RNFS.writeFile(localFilePath, base64WithoutPrefix, 'base64')
             .then(async () => {
               const examHistory = {
                 formData: formData,
@@ -229,12 +229,12 @@ const OmrGeneration = ({ route, navigation }) => {
               for (let i = 1; i <= formData.setCount; i++) {
                 for (let j = 1; j <= formData.questionsCount; j++) {
                   if (!omrData) {
-                    examHistory.formData["set" + i + "Q" + j] = "-1";
+                    examHistory.formData['set' + i + 'Q' + j] = '-1';
                   } else {
-                    examHistory.formData["set" + i + "Q" + j] = omrData[
-                      "set" + i + "Q" + j
+                    examHistory.formData['set' + i + 'Q' + j] = omrData[
+                      'set' + i + 'Q' + j
                     ]
-                      ? omrData["set" + i + "Q" + j].toString()
+                      ? omrData['set' + i + 'Q' + j].toString()
                       : (-formData.wqCase).toString();
                   }
                 }
@@ -243,30 +243,30 @@ const OmrGeneration = ({ route, navigation }) => {
             })
             .catch(err => {
               setIsLoading(false);
-              const errorMsg = err.message?.toLowerCase() || "";
+              const errorMsg = err.message?.toLowerCase() || '';
               if (
-                errorMsg.includes("permission") ||
-                errorMsg.includes("eacces")
+                errorMsg.includes('permission') ||
+                errorMsg.includes('eacces')
               ) {
                 Alert.alert(
-                  "Permission Error",
-                  "Unable to save PDF. Please check storage permissions in your device settings.",
+                  'Permission Error',
+                  'Unable to save PDF. Please check storage permissions in your device settings.',
                 );
               } else {
-                ToastAndroid.show("Error Saving PDF!", ToastAndroid.LONG);
+                ToastAndroid.show('Error Saving PDF!', ToastAndroid.LONG);
               }
-              console.log("Error Saving PDF:", err.message);
+              console.log('Error Saving PDF:', err.message);
             });
         };
       } else {
         setIsLoading(false);
-        ToastAndroid.show("No Response!", ToastAndroid.LONG);
-        console.log("No Response");
+        ToastAndroid.show('No Response!', ToastAndroid.LONG);
+        console.log('No Response');
       }
     } catch (error) {
       setIsLoading(false);
-      ToastAndroid.show("Error Getting PDF!", ToastAndroid.LONG);
-      console.log("Error fetching PDF:", error);
+      ToastAndroid.show('Error Getting PDF!', ToastAndroid.LONG);
+      console.log('Error fetching PDF:', error);
     }
   };
 
@@ -278,10 +278,10 @@ const OmrGeneration = ({ route, navigation }) => {
       {isLoading ? (
         <View
           style={{
-            backgroundColor: "#111",
+            backgroundColor: '#111',
             flex: 1,
-            justifyContent: "center",
-            alignItems: "center",
+            justifyContent: 'center',
+            alignItems: 'center',
           }}>
           <ActivityIndicator size="large" color="#007bff" />
         </View>

@@ -143,7 +143,7 @@ Press `y` to accept all licenses.
 ```bash
 git clone https://github.com/SADMAN30102001SAKIB/OMRElite.git
 cd OMRElite
-cd "Frontend (react native)"
+cd "OMREliteRN74"
 ```
 
 ---
@@ -189,7 +189,7 @@ If you see `unauthorized`, disconnect USB, revoke USB debugging authorizations o
 **This is the easiest and most reliable way to run your app!**
 
 ```bash
-npm start
+npm run clean; npm start
 ```
 
 Metro bundler will start and show:
@@ -217,7 +217,7 @@ r - reload app
 **Method 1: npm run android**
 
 ```bash
-npm run android
+npm run clean; npm run android
 ```
 
 Starts Metro + builds + installs + launches automatically.
@@ -225,7 +225,7 @@ Starts Metro + builds + installs + launches automatically.
 **Method 2: Stable build (if daemon crashes)**
 
 ```bash
-npm run android:stable
+npm run clean; npm run android:stable
 ```
 
 Bypasses Gradle daemon issues on some systems.
@@ -314,11 +314,11 @@ Press `y` for all prompts.
 Use the stable build method that disables the daemon:
 
 ```bash
-# Terminal 1 - Start Metro
-npm start
+# Terminal 1 - Build without daemon
+npm run clean; npm run android:stable
 
-# Terminal 2 - Build without daemon
-npm run android:stable
+# Terminal 2 - Start Metro
+npm start
 ```
 
 Or run Gradle directly with `--no-daemon` flag:
@@ -328,6 +328,20 @@ cd android
 .\gradlew.bat clean --no-daemon
 .\gradlew.bat app:installDebug --no-daemon
 ```
+
+**If daemon still crashes, reduce JVM memory:**
+
+Edit `android/gradle.properties` and change this line:
+
+```properties
+# From:
+org.gradle.jvmargs=-Xmx1536m -XX:MaxMetaspaceSize=384m -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-8
+
+# To (lower memory):
+org.gradle.jvmargs=-Xmx768m -XX:MaxMetaspaceSize=256m -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-8
+```
+
+Then rebuild with `--no-daemon` flag.
 
 **Why this happens:**
 
@@ -343,7 +357,7 @@ cd android
 
 ```bash
 # Kill the process using port 8081
-npx react-native start --reset-cache
+npm run start:reset
 ```
 
 ---
@@ -368,7 +382,7 @@ After successful build:
 **Just one command:**
 
 ```bash
-npm start
+npm run clean; npm start
 ```
 
 Then press **`a`** in the Metro terminal to run on Android.
@@ -517,32 +531,25 @@ After successful setup, you should be able to:
 ## 🎯 Quick Command Reference
 
 ```bash
-# MAIN COMMAND - Use this for everything!
-npm start
-# Then press 'a' to run on Android
-
-# Alternative commands (rarely needed)
-npm run android              # All-in-one: Metro + build + install
-npm run android:stable       # Bypass daemon crashes
-
-# Troubleshooting
-cd android
-.\gradlew.bat clean --no-daemon  # Clean build cache
-cd ..
-
 # Device management
 adb devices                  # List connected devices
-adb logcat                   # View Android system logs
 
+# MAIN COMMAND - Use this for everything!
+npm run clean; npm start
 # Metro commands (press in Metro terminal)
 a - Run on Android
 r - Reload app
 d - Developer menu
+# Then press 'a' to run on Android
+
+# Alternative commands (rarely needed)
+npm run clean; npm run android              # All-in-one: Metro + build + install
+npm run clean; npm run android:stable       # Bypass daemon crashes
 ```
 
 # Restart Metro bundler with cache reset
 
-npm start -- --reset-cache
+npm run start:reset
 
 ```
 

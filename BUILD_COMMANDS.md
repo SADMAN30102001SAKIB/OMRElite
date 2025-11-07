@@ -52,13 +52,11 @@ android {
 
 ##### Then run the following commands in your terminal:
 ```
-cd "Frontend (react native)"
+cd OMREliteRN74
 
-npx react-native set-icon --path "path/to/your/app-logo.png" --background "#FFFFFF"
+./setup-logo.ps1
 
-cd android
-./gradlew clean
-./gradlew assembleRelease
-cd..
+npm run clean
+npm run build:android
 adb install -r android/app/build/outputs/apk/release/app-release.apk
 ```
