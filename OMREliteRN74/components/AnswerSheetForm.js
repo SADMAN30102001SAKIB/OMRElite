@@ -52,7 +52,7 @@ const QuestionItem = React.memo(
           ]}
           selectedValue={value}
           onValueChange={newValue => {
-            if (!value.includes('-') && value == newValue) {
+            if (!value.includes('-') && value === newValue) {
               newValue = (-newOmrData.wqCase).toString();
             } else if (!value.includes('-') && value.includes(newValue)) {
               newValue = value.replace(newValue, '');
@@ -112,7 +112,7 @@ const AnswerSheetForm = ({
         )}
         keyExtractor={item => item.toString()}
         style={
-          newOmrData.setCount == 1
+          newOmrData.setCount === 1
             ? {...styles.scroll, marginTop: '25%'}
             : styles.scroll
         }

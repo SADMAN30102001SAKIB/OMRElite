@@ -22,11 +22,11 @@ const StudentHistoryList = ({
 
   const filteredStudentItems = studentItems.filter(item => {
     if (
-      (set == 0 || item.setno == set) &&
-      ((item.idno != -1
+      (set === 0 || item.setno === set) &&
+      ((item.idno !== -1
         ? item.idno.toLowerCase().includes(searchBy.toLowerCase())
         : item.name.toLowerCase().includes(searchBy.toLowerCase())) ||
-        searchBy == '')
+        searchBy === '')
     ) {
       return true;
     } else {
@@ -49,9 +49,9 @@ const StudentHistoryList = ({
           <CustomCheckBox
             options={['All', 'A', 'B', 'C', 'D']
               .slice(0, formData.setCount + 1)
-              .map((item, index) => ({
+              .map((item, idx) => ({
                 label: item,
-                value: index.toString(),
+                value: idx.toString(),
               }))}
             selectedValue={set.toString()}
             onValueChange={newValue => {
@@ -67,11 +67,11 @@ const StudentHistoryList = ({
       <ScrollView>
         {studentItems.map(
           (item, idx) =>
-            (set == 0 || item.setno == set) &&
-            ((item.idno != -1
+            (set === 0 || item.setno === set) &&
+            ((item.idno !== -1
               ? item.idno.toLowerCase().includes(searchBy.toLowerCase())
               : item.name.toLowerCase().includes(searchBy.toLowerCase())) ||
-              searchBy == '') && (
+              searchBy === '') && (
               <View key={idx} style={styles.historyItem}>
                 <TouchableOpacity
                   onPress={() => {
@@ -94,7 +94,7 @@ const StudentHistoryList = ({
                     }}
                     numberOfLines={1}
                     ellipsizeMode="tail">
-                    {item.idno != -1
+                    {item.idno !== -1
                       ? 'ID: ' + item.idno
                       : 'Name: ' + item.name}{' '}
                     | Score: {item.marks}

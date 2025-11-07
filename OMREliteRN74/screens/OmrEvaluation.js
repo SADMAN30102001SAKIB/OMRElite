@@ -30,6 +30,7 @@ const OmrEvaluation = ({route, navigation}) => {
   let [errorFileDelete, setErrorFileDelete] = useState(false);
   const [appState, setAppState] = useState(AppState.currentState);
 
+  /* eslint-disable react-hooks/exhaustive-deps */
   useEffect(() => {
     const subscription = AppState.addEventListener(
       'change',
@@ -56,13 +57,16 @@ const OmrEvaluation = ({route, navigation}) => {
       subscription.remove();
     };
   }, [appState]);
+  /* eslint-enable react-hooks/exhaustive-deps */
 
+  /* eslint-disable react-hooks/exhaustive-deps */
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       fetchData();
     });
     return unsubscribe;
   }, [navigation]);
+  /* eslint-enable react-hooks/exhaustive-deps */
 
   const fetchData = async () => {
     // setIsLoading(true);
@@ -79,7 +83,7 @@ const OmrEvaluation = ({route, navigation}) => {
     }
   };
 
-  const openPDF = async localFilePath => {
+  const openPDF = async pdfFilePath => {
     // Check permissions before file operations
     const hasPermissions = await checkStoragePermissions();
     if (!hasPermissions) {
@@ -93,19 +97,19 @@ const OmrEvaluation = ({route, navigation}) => {
       }
     }
 
-    const directoryExists = await RNFS.exists(localFilePath);
+    const directoryExists = await RNFS.exists(pdfFilePath);
     if (directoryExists) {
-      FileViewer.open(localFilePath).catch(async error => {
+      FileViewer.open(pdfFilePath).catch(async error => {
         ToastAndroid.show(
           "Can't Open PDF!\n" +
             'Go Manually Open It in Your Device From This Path: ' +
-            localFilePath.substring(localFilePath.indexOf('Download')),
+            pdfFilePath.substring(pdfFilePath.indexOf('Download')),
           ToastAndroid.LONG,
         );
         if (errorFileDelete) {
           Alert.alert('Error!', errorHeader.replace(/\|\|/g, '\n'));
-          const hasPermissions = await checkStoragePermissions();
-          if (hasPermissions) {
+          const hasStoragePermissions = await checkStoragePermissions();
+          if (hasStoragePermissions) {
             await RNFS.unlink(localPath);
           }
           setErrorFileDelete(false);
@@ -184,7 +188,7 @@ const OmrEvaluation = ({route, navigation}) => {
     }
   };
 
-  const saveToLocalStorage = async student => {
+  const saveToLocalStorage = async studentData => {
     // Check permissions before file operations
     const hasPermissions = await checkStoragePermissions();
     if (!hasPermissions) {
@@ -201,20 +205,22 @@ const OmrEvaluation = ({route, navigation}) => {
     const existingHistory = await AsyncStorage.getItem('pdfHistory');
     const pdfHistory = JSON.parse(existingHistory);
     idx = pdfHistory[index].students.findIndex(
-      obj => obj.idno === student.idno,
+      obj => obj.idno === studentData.idno,
     );
     setIdx(
-      pdfHistory[index].students.findIndex(obj => obj.idno === student.idno),
+      pdfHistory[index].students.findIndex(
+        obj => obj.idno === studentData.idno,
+      ),
     );
     if (idx !== -1) {
       Alert.alert(
-        'StudentID: ' + student.idno + ' Already Evaluated!',
+        'StudentID: ' + studentData.idno + ' Already Evaluated!',
         'Do you want to overwrite?',
         [
           {
             text: 'NO',
             onPress: async () => {
-              await RNFS.unlink(student.localPath);
+              await RNFS.unlink(studentData.localPath);
             },
             style: 'cancel',
           },
@@ -222,7 +228,7 @@ const OmrEvaluation = ({route, navigation}) => {
             text: 'YES',
             onPress: async () => {
               await RNFS.unlink(pdfHistory[index].students[idx].localPath);
-              pdfHistory[index].students[idx] = student;
+              pdfHistory[index].students[idx] = studentData;
               await AsyncStorage.setItem(
                 'pdfHistory',
                 JSON.stringify(pdfHistory),
@@ -234,7 +240,7 @@ const OmrEvaluation = ({route, navigation}) => {
         {cancelable: false},
       );
     } else {
-      pdfHistory[index].students.push(student);
+      pdfHistory[index].students.push(studentData);
       await AsyncStorage.setItem('pdfHistory', JSON.stringify(pdfHistory));
       openPDF(localPath);
     }
@@ -352,7 +358,7 @@ const OmrEvaluation = ({route, navigation}) => {
                 localPath: localPath,
               }));
               student.localPath = localPath;
-              if (Number(idnoHeader) == -1 || errorHeader) {
+              if (Number(idnoHeader) === -1 || errorHeader) {
                 openPDF(localPath);
                 if (errorHeader && errorHeader.includes('Page')) {
                   errorFileDelete = true;

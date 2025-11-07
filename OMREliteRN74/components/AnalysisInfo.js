@@ -12,7 +12,7 @@ const AnalysisInfo = ({omrData, students}) => {
   const sixtyTo79 = new Array(omrData.setCount).fill(0);
   const fortyTo59 = new Array(omrData.setCount).fill(0);
   const below40 = new Array(omrData.setCount).fill(0);
-  totalStudents = new Array(omrData.setCount).fill(0);
+  const totalStudents = new Array(omrData.setCount).fill(0);
   const maxScore = new Array(omrData.setCount).fill(
     students.length ? Number.MIN_SAFE_INTEGER : 0,
   );
@@ -31,28 +31,28 @@ const AnalysisInfo = ({omrData, students}) => {
 
   for (let i = 1; i <= omrData.setCount; i++) {
     for (let j = 0; j < students.length; j++) {
-      if (students[j].setno == i && students[j].marks > maxScore[i - 1]) {
+      if (students[j].setno === i && students[j].marks > maxScore[i - 1]) {
         maxScore[i - 1] = students[j].marks;
       }
-      if (students[j].setno == i && students[j].marks < minScore[i - 1]) {
+      if (students[j].setno === i && students[j].marks < minScore[i - 1]) {
         minScore[i - 1] = students[j].marks;
       }
-      if (students[j].setno == i) {
+      if (students[j].setno === i) {
         totalStudents[i - 1]++;
       }
-      if (students[j].setno == i && students[j].marks >= totalMarks * 0.8) {
+      if (students[j].setno === i && students[j].marks >= totalMarks * 0.8) {
         above80[i - 1]++;
       } else if (
-        students[j].setno == i &&
+        students[j].setno === i &&
         students[j].marks >= totalMarks * 0.6
       ) {
         sixtyTo79[i - 1]++;
       } else if (
-        students[j].setno == i &&
+        students[j].setno === i &&
         students[j].marks >= totalMarks * 0.4
       ) {
         fortyTo59[i - 1]++;
-      } else if (students[j].setno == i) {
+      } else if (students[j].setno === i) {
         below40[i - 1]++;
       }
     }
@@ -70,17 +70,17 @@ const AnalysisInfo = ({omrData, students}) => {
 
     for (let j = 1; j <= omrData.questionsCount; j++) {
       for (let k = 0; k < students.length; k++) {
-        if (students[k].setno == i && students[k]['Q' + j] == '0') {
+        if (students[k].setno === i && students[k]['Q' + j] === '0') {
           blankCount[i - 1][j - 1]++;
         } else {
           if (
-            students[k].setno == i &&
+            students[k].setno === i &&
             compareStrings(omrData['set' + i + 'Q' + j], students[k]['Q' + j])
           ) {
             correctCount[i - 1][j - 1]++;
           }
           if (
-            students[k].setno == i &&
+            students[k].setno === i &&
             !compareStrings(omrData['set' + i + 'Q' + j], students[k]['Q' + j])
           ) {
             wrongCount[i - 1][j - 1]++;
@@ -377,7 +377,7 @@ const AnalysisInfo = ({omrData, students}) => {
               }))}
             selectedValue={idx.toString()}
             onValueChange={newValue => {
-              setIdx(parseInt(newValue));
+              setIdx(parseInt(newValue, 10));
             }}
           />
         </View>

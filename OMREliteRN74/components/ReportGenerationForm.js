@@ -155,11 +155,11 @@ const ReportGenerationForm = ({
               selectedValue={formData.totalSet}
               onValueChange={newValue => {
                 if (
-                  formData.totalSet != newValue &&
+                  formData.totalSet !== newValue &&
                   formData.totalSet.includes(newValue)
                 ) {
                   newValue = formData.totalSet.replace(newValue, '');
-                } else if (formData.totalSet != newValue) {
+                } else if (formData.totalSet !== newValue) {
                   newValue = newValue + formData.totalSet;
                 }
                 handleInputChange('totalSet', newValue);

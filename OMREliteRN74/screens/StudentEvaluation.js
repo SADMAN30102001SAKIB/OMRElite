@@ -50,6 +50,7 @@ const StudentEvaluation = ({route, navigation}) => {
     return () => {
       subscription.remove();
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [appState]);
 
   const openPDF = async () => {
@@ -77,8 +78,8 @@ const StudentEvaluation = ({route, navigation}) => {
         );
         if (errorFileDelete) {
           Alert.alert('Error', errorHeader);
-          const hasPermissions = await checkStoragePermissions();
-          if (hasPermissions) {
+          const hasStoragePermissions = await checkStoragePermissions();
+          if (hasStoragePermissions) {
             await RNFS.unlink(localPath);
           }
           setErrorFileDelete(false);

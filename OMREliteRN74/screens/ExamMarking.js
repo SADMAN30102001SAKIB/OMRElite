@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {View} from 'react-native';
+import {View, Alert} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import ExamMarkingForm from '../components/ExamMarkingForm';
 
@@ -9,8 +9,8 @@ const ExamMarking = ({route, navigation}) => {
 
   const handleInputChange = (name, value) => {
     if (
-      (name == 'negativeMark' && Number(value) > 0) ||
-      (name == 'mpq' && Number(value) < 0)
+      (name === 'negativeMark' && Number(value) > 0) ||
+      (name === 'mpq' && Number(value) < 0)
     ) {
       value = -Number(value);
     }
@@ -49,20 +49,20 @@ const ExamMarking = ({route, navigation}) => {
         }
       } else {
         if (Number(studentData['Q' + i])) {
-          if (Number(newOmrData['set' + studentData.setno + 'Q' + i]) == -2) {
+          if (Number(newOmrData['set' + studentData.setno + 'Q' + i]) === -2) {
             studentData.marks += newOmrData.mpq;
           }
           if (
-            Number(newOmrData['set' + studentData.setno + 'Q' + i]) == -4 ||
-            Number(newOmrData['set' + studentData.setno + 'Q' + i]) == -5
+            Number(newOmrData['set' + studentData.setno + 'Q' + i]) === -4 ||
+            Number(newOmrData['set' + studentData.setno + 'Q' + i]) === -5
           ) {
             studentData.marks += newOmrData.negativeMark;
           }
         } else {
           if (
-            Number(newOmrData['set' + studentData.setno + 'Q' + i]) == -2 ||
-            Number(newOmrData['set' + studentData.setno + 'Q' + i]) == -3 ||
-            Number(newOmrData['set' + studentData.setno + 'Q' + i]) == -5
+            Number(newOmrData['set' + studentData.setno + 'Q' + i]) === -2 ||
+            Number(newOmrData['set' + studentData.setno + 'Q' + i]) === -3 ||
+            Number(newOmrData['set' + studentData.setno + 'Q' + i]) === -5
           ) {
             studentData.marks += newOmrData.mpq;
           }
@@ -79,7 +79,7 @@ const ExamMarking = ({route, navigation}) => {
       isNaN(Number(newOmrData.mpq)) ||
       (newOmrData.isNegative && isNaN(Number(newOmrData.negativeMark)))
     ) {
-      alert('Please Input Carefully!');
+      Alert.alert('Input Error', 'Please Input Carefully!');
       return;
     } else {
       newOmrData.mpq = Number(newOmrData.mpq);

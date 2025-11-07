@@ -20,6 +20,7 @@ const ReportHistory = ({route, navigation}) => {
       fetchStudent();
     });
     return unsubscribe;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [navigation]);
 
   const fetchStudent = async () => {

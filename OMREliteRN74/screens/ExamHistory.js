@@ -12,6 +12,7 @@ const ExamHistory = ({navigation}) => {
   const [historyItems, setHistoryItems] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
+  /* eslint-disable react-hooks/exhaustive-deps */
   useEffect(() => {
     fetchHistory();
     const unsubscribe = navigation.addListener('focus', () => {
@@ -19,6 +20,7 @@ const ExamHistory = ({navigation}) => {
     });
     return unsubscribe;
   }, [navigation]);
+  /* eslint-enable react-hooks/exhaustive-deps */
 
   const fetchHistory = async () => {
     setIsLoading(true);

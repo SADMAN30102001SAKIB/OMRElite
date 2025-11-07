@@ -34,6 +34,7 @@ const ReportGeneration = ({route, navigation}) => {
     if (!students.length) {
       Alert.alert('Attention', 'There are no students');
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleInputChange = (name, value) => {
@@ -81,16 +82,16 @@ const ReportGeneration = ({route, navigation}) => {
     };
 
     let newTotalSet =
-      formData.totalSet != 'none'
+      formData.totalSet !== 'none'
         ? formData.totalSet
             .replace(
               /[ABCD]/g,
               match => ({A: '1', B: '2', C: '3', D: '4'}[match]),
             )
             .split('')
+            .map(Number)
             .sort()
-            .join('')
-        : '1';
+        : [1];
 
     let setStudent1 = 0;
     let setStudent2 = 0;
@@ -106,12 +107,12 @@ const ReportGeneration = ({route, navigation}) => {
 
     for (let i = 0; i < newTotalSet.length; i++) {
       for (let j = 0; j < students.length; j++) {
-        if (students[j].setno == newTotalSet[i]) {
-          if (i == 0) {
+        if (students[j].setno === newTotalSet[i]) {
+          if (i === 0) {
             setStudent1++;
-          } else if (i == 1) {
+          } else if (i === 1) {
             setStudent2++;
-          } else if (i == 2) {
+          } else if (i === 2) {
             setStudent3++;
           } else {
             setStudent4++;
@@ -227,7 +228,7 @@ const ReportGeneration = ({route, navigation}) => {
               const pdfHistory = JSON.parse(existingHistory);
               pdfHistory[index].reports.push({
                 name:
-                  formData.totalSet != 'none'
+                  formData.totalSet !== 'none'
                     ? 'for SET: (' +
                       formData.totalSet.split('').sort().join(', ') +
                       ')'
@@ -301,16 +302,16 @@ const ReportGeneration = ({route, navigation}) => {
     formdata.rEmail = formData.rEmail;
 
     let newTotalSet =
-      formData.totalSet != 'none'
+      formData.totalSet !== 'none'
         ? formData.totalSet
             .replace(
               /[ABCD]/g,
               match => ({A: '1', B: '2', C: '3', D: '4'}[match]),
             )
             .split('')
+            .map(Number)
             .sort()
-            .join('')
-        : '1';
+        : [1];
 
     let setStudent1 = 0;
     let setStudent2 = 0;
@@ -320,12 +321,12 @@ const ReportGeneration = ({route, navigation}) => {
 
     for (let i = 0; i < newTotalSet.length; i++) {
       for (let j = 0; j < students.length; j++) {
-        if (students[j].setno == newTotalSet[i]) {
-          if (i == 0) {
+        if (students[j].setno === newTotalSet[i]) {
+          if (i === 0) {
             setStudent1++;
-          } else if (i == 1) {
+          } else if (i === 1) {
             setStudent2++;
-          } else if (i == 2) {
+          } else if (i === 2) {
             setStudent3++;
           } else {
             setStudent4++;

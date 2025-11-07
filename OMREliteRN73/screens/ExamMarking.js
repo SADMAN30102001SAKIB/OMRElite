@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View } from "react-native";
+import { View, Alert } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import ExamMarkingForm from "../components/ExamMarkingForm";
 
@@ -79,7 +79,7 @@ const ExamMarking = ({ route, navigation }) => {
       isNaN(Number(newOmrData.mpq)) ||
       (newOmrData.isNegative && isNaN(Number(newOmrData.negativeMark)))
     ) {
-      alert("Please Input Carefully!");
+      Alert.alert("Input Error", "Please Input Carefully!");
       return;
     } else {
       newOmrData.mpq = Number(newOmrData.mpq);

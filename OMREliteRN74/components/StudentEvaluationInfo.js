@@ -1,13 +1,8 @@
 import React, {useState} from 'react';
-import {View, Text, TouchableOpacity, Alert} from 'react-native';
+import {View, Text, TouchableOpacity} from 'react-native';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
-import RNFS from 'react-native-fs';
 import styles from '../componentStyles/OmrEvaluationInfoStyle';
-import {
-  checkStoragePermissions,
-  requestStoragePermissions,
-  requestCameraPermission,
-} from '../utils/permissions';
+import {requestCameraPermission} from '../utils/permissions';
 
 const StudentEvaluationInfo = ({
   omrData,
@@ -81,8 +76,8 @@ const StudentEvaluationInfo = ({
         }
 
         if (
-          (omrData.questionsCount > 35 && source.length == 2) ||
-          (omrData.questionsCount <= 35 && source.length == 1)
+          (omrData.questionsCount > 35 && source.length === 2) ||
+          (omrData.questionsCount <= 35 && source.length === 1)
         ) {
           handleSubmit(source);
         }
@@ -124,8 +119,8 @@ const StudentEvaluationInfo = ({
         }
 
         if (
-          (omrData.questionsCount > 35 && source.length == 2) ||
-          (omrData.questionsCount <= 35 && source.length == 1)
+          (omrData.questionsCount > 35 && source.length === 2) ||
+          (omrData.questionsCount <= 35 && source.length === 1)
         ) {
           handleSubmit(source);
         }
@@ -137,6 +132,7 @@ const StudentEvaluationInfo = ({
     launchCamera(options, handleCameraResponse);
   };
 
+  // eslint-disable-next-line no-unused-vars
   const debug = () => {
     for (let j = 1; j <= omrData.questionsCount; j++) {
       console.log('Q' + j, student['Q' + j]);

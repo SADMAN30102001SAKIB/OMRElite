@@ -3,10 +3,7 @@ import {BackHandler, Alert, AppState, ScrollView} from 'react-native';
 import RNFS from 'react-native-fs';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import StudentInformationForm from '../components/StudentInformationForm';
-import {
-  checkStoragePermissions,
-  requestStoragePermissions,
-} from '../utils/permissions';
+import {checkStoragePermissions} from '../utils/permissions';
 
 const StudentInformation = ({route, navigation}) => {
   let {formData, localFilePath, index, student, idx, allowBack, msg} =
@@ -18,6 +15,7 @@ const StudentInformation = ({route, navigation}) => {
     if (!allowBack) {
       Alert.alert('', msg.replace(/\|\|/g, '\n'));
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -39,6 +37,7 @@ const StudentInformation = ({route, navigation}) => {
     return () => {
       subscription.remove();
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [appState]);
 
   useEffect(() => {
@@ -77,6 +76,7 @@ const StudentInformation = ({route, navigation}) => {
     );
 
     return () => backHandler.remove();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [studentData, allowBack, navigation]);
 
   const handleInputChange = (name, value) => {
@@ -115,20 +115,20 @@ const StudentInformation = ({route, navigation}) => {
         }
       } else {
         if (Number(studentData['Q' + i])) {
-          if (Number(formData['set' + studentData.setno + 'Q' + i]) == -2) {
+          if (Number(formData['set' + studentData.setno + 'Q' + i]) === -2) {
             studentData.marks += formData.mpq;
           }
           if (
-            Number(formData['set' + studentData.setno + 'Q' + i]) == -4 ||
-            Number(formData['set' + studentData.setno + 'Q' + i]) == -5
+            Number(formData['set' + studentData.setno + 'Q' + i]) === -4 ||
+            Number(formData['set' + studentData.setno + 'Q' + i]) === -5
           ) {
             studentData.marks += formData.negativeMark;
           }
         } else {
           if (
-            Number(formData['set' + studentData.setno + 'Q' + i]) == -2 ||
-            Number(formData['set' + studentData.setno + 'Q' + i]) == -3 ||
-            Number(formData['set' + studentData.setno + 'Q' + i]) == -5
+            Number(formData['set' + studentData.setno + 'Q' + i]) === -2 ||
+            Number(formData['set' + studentData.setno + 'Q' + i]) === -3 ||
+            Number(formData['set' + studentData.setno + 'Q' + i]) === -5
           ) {
             studentData.marks += formData.mpq;
           }
@@ -143,11 +143,11 @@ const StudentInformation = ({route, navigation}) => {
     const pdfHistory = JSON.parse(existingHistory);
 
     if (
-      (formData.isRoll && Number(studentData.idno) == Number(student.idno)) ||
-      (!formData.isRoll && studentData.name.trim() == student.name.trim())
+      (formData.isRoll && Number(studentData.idno) === Number(student.idno)) ||
+      (!formData.isRoll && studentData.name.trim() === student.name.trim())
     ) {
       calculateMarks();
-      idx != null
+      idx !== null
         ? (pdfHistory[index].students[idx] = studentData)
         : pdfHistory[index].students.push(studentData);
       await AsyncStorage.setItem('pdfHistory', JSON.stringify(pdfHistory));
@@ -203,7 +203,7 @@ const StudentInformation = ({route, navigation}) => {
                 }
                 calculateMarks();
                 pdfHistory[index].students[foundIdx] = studentData;
-                idx != null && pdfHistory[index].students.splice(idx, 1);
+                idx !== null && pdfHistory[index].students.splice(idx, 1);
                 await AsyncStorage.setItem(
                   'pdfHistory',
                   JSON.stringify(pdfHistory),
@@ -240,7 +240,7 @@ const StudentInformation = ({route, navigation}) => {
         );
       } else {
         calculateMarks();
-        idx != null
+        idx !== null
           ? (pdfHistory[index].students[idx] = studentData)
           : pdfHistory[index].students.push(studentData);
         await AsyncStorage.setItem('pdfHistory', JSON.stringify(pdfHistory));
@@ -274,7 +274,7 @@ const StudentInformation = ({route, navigation}) => {
       (!formData.isRoll && !studentData.name.trim()) ||
       (formData.isRoll &&
         (isNaN(studentData.idno) ||
-          studentData.idno.length != formData.rollDigit ||
+          studentData.idno.length !== formData.rollDigit ||
           Number(studentData.idno) < 0)) ||
       studentData.idno.includes('+') ||
       !studentData.setno

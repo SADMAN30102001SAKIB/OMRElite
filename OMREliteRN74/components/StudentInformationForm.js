@@ -34,7 +34,7 @@ const QuestionItem = React.memo(
         }}>
         <Text
           style={
-            value != '0'
+            value !== '0'
               ? compareStrings(ansValue, value)
                 ? {
                     ...styles.label,
@@ -72,11 +72,11 @@ const QuestionItem = React.memo(
           ]}
           selectedValue={value}
           onValueChange={newValue => {
-            if (value != '0' && value == newValue) {
+            if (value !== '0' && value === newValue) {
               newValue = '0';
-            } else if (value != '0' && value.includes(newValue)) {
+            } else if (value !== '0' && value.includes(newValue)) {
               newValue = value.replace(newValue, '');
-            } else if (value != '0') {
+            } else if (value !== '0') {
               newValue = newValue + value;
             }
             handleInputChange(questionKey, newValue);
@@ -122,6 +122,7 @@ const StudentInformationForm = ({
   const handleSetChange = useCallback(newValue => {
     handleInputChange('setno', newValue);
     setSet(parseInt(newValue, 10));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const startIndex = currentPage * questionsPerPage;
@@ -138,7 +139,7 @@ const StudentInformationForm = ({
             <Text
               style={
                 studentData.idno &&
-                studentData.idno.length == formData.rollDigit
+                studentData.idno.length === formData.rollDigit
                   ? {...styles.label}
                   : {...styles.label, color: '#ff5500'}
               }>

@@ -43,20 +43,20 @@ const AnswerSheet = ({route, navigation}) => {
         }
       } else {
         if (Number(studentData['Q' + i])) {
-          if (Number(newOmrData['set' + studentData.setno + 'Q' + i]) == -2) {
+          if (Number(newOmrData['set' + studentData.setno + 'Q' + i]) === -2) {
             studentData.marks += newOmrData.mpq;
           }
           if (
-            Number(newOmrData['set' + studentData.setno + 'Q' + i]) == -4 ||
-            Number(newOmrData['set' + studentData.setno + 'Q' + i]) == -5
+            Number(newOmrData['set' + studentData.setno + 'Q' + i]) === -4 ||
+            Number(newOmrData['set' + studentData.setno + 'Q' + i]) === -5
           ) {
             studentData.marks += newOmrData.negativeMark;
           }
         } else {
           if (
-            Number(newOmrData['set' + studentData.setno + 'Q' + i]) == -2 ||
-            Number(newOmrData['set' + studentData.setno + 'Q' + i]) == -3 ||
-            Number(newOmrData['set' + studentData.setno + 'Q' + i]) == -5
+            Number(newOmrData['set' + studentData.setno + 'Q' + i]) === -2 ||
+            Number(newOmrData['set' + studentData.setno + 'Q' + i]) === -3 ||
+            Number(newOmrData['set' + studentData.setno + 'Q' + i]) === -5
           ) {
             studentData.marks += newOmrData.mpq;
           }

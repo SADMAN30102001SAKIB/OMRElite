@@ -300,7 +300,7 @@ const OmrGenerationForm = ({
                   placeholder="ex: 7"
                   keyboardType="numeric"
                   onChangeText={text =>
-                    handleInputChange('rollDigit', parseInt(text))
+                    handleInputChange('rollDigit', parseInt(text, 10))
                   }
                   style={styles.input}
                   value={
@@ -318,7 +318,7 @@ const OmrGenerationForm = ({
               <Text style={styles.label}>Number of Sets:</Text>
               <RadioButton.Group
                 onValueChange={newValue =>
-                  handleInputChange('setCount', parseInt(newValue))
+                  handleInputChange('setCount', parseInt(newValue, 10))
                 }
                 value={String(formData.setCount)}>
                 <View style={styles.radioButton}>
@@ -355,7 +355,7 @@ const OmrGenerationForm = ({
                 placeholder="ex: 25"
                 keyboardType="numeric"
                 onChangeText={text =>
-                  handleInputChange('questionsCount', parseInt(text))
+                  handleInputChange('questionsCount', parseInt(text, 10))
                 }
                 style={styles.input}
                 value={

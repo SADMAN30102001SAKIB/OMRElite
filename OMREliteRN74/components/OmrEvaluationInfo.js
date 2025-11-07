@@ -79,8 +79,8 @@ const OmrEvaluationInfo = ({
         }
 
         if (
-          (omrData.questionsCount > 35 && source.length == 2) ||
-          (omrData.questionsCount <= 35 && source.length == 1)
+          (omrData.questionsCount > 35 && source.length === 2) ||
+          (omrData.questionsCount <= 35 && source.length === 1)
         ) {
           handleSubmit(source);
         }
@@ -122,8 +122,8 @@ const OmrEvaluationInfo = ({
         }
 
         if (
-          (omrData.questionsCount > 35 && source.length == 2) ||
-          (omrData.questionsCount <= 35 && source.length == 1)
+          (omrData.questionsCount > 35 && source.length === 2) ||
+          (omrData.questionsCount <= 35 && source.length === 1)
         ) {
           handleSubmit(source);
         }
@@ -135,6 +135,7 @@ const OmrEvaluationInfo = ({
     launchCamera(options, handleCameraResponse);
   };
 
+  // eslint-disable-next-line no-unused-vars
   const debug = async () => {
     for (let i = 1; i <= omrData.setCount; i++) {
       for (let j = 1; j <= omrData.questionsCount; j++) {

@@ -28,9 +28,10 @@ const ExamHistoryList = ({historyItems, deleteHistoryItem, navigation}) => {
     const day = new Date(Number(numberPart)).getDate();
     const month = new Date(Number(numberPart)).getMonth() + 1;
     const year = new Date(Number(numberPart)).getFullYear();
+    let formattedDate;
 
     if (
-      prev ==
+      prev ===
       (formattedDate = `${day.toString().padStart(2, '0')}/${month
         .toString()
         .padStart(2, '0')}/${year}`)
@@ -38,6 +39,7 @@ const ExamHistoryList = ({historyItems, deleteHistoryItem, navigation}) => {
       return '';
     }
 
+    // eslint-disable-next-line no-unused-vars
     prev = formattedDate = `${day.toString().padStart(2, '0')}/${month
       .toString()
       .padStart(2, '0')}/${year}`;
@@ -48,7 +50,7 @@ const ExamHistoryList = ({historyItems, deleteHistoryItem, navigation}) => {
   const filteredHistoryItems = historyItems.filter(item => {
     if (
       item.formData.pName.toLowerCase().includes(searchBy.toLowerCase()) ||
-      searchBy == ''
+      searchBy === ''
     ) {
       return true;
     } else {
@@ -76,7 +78,7 @@ const ExamHistoryList = ({historyItems, deleteHistoryItem, navigation}) => {
             (item.formData.pName
               .toLowerCase()
               .includes(searchBy.toLowerCase()) ||
-              searchBy == '') && (
+              searchBy === '') && (
               <View key={originalIndex}>
                 {pathToDate(item.localFilePath) && (
                   <Text

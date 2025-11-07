@@ -51,6 +51,7 @@ const OmrGeneration = ({route, navigation}) => {
     if (omrData) {
       setFormData(omrData);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
