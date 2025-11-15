@@ -11,7 +11,6 @@ How?
 I) Creating customizable OMR Sheets (the OMR PDF can be printed for examination)
 II) Evaluating those papers with mobile camera in a short amount of time using computer vision
 III) Generating customizable report of all evaluated students (available as a PDF or send it to teacher's email as a .csv file)
-#### [Check Here](https://youtu.be/F7PN6prPl0g?si=3p7yAwGtiqWsPqlr) to See the Demo Video
 
 ## Architecture
 ![App Architecture](architecture.png)
@@ -22,7 +21,7 @@ III) Generating customizable report of all evaluated students (available as a PD
 * There are lots of analysis, like individual student analysis, overall exam analysis. 
 * Searching, filtering by name/ID/set etc.
 
-Ummmm, with all these, now it's not even a OMR (Optical Mark Recognition) anymore, right? I think we should call It AMR (Artificial Mark Recognition). JK! But the app has limitations, which I'll try to improve time to time.
+Ummmm, with all these, now it's not even an OMR (Optical Mark Recognition) anymore, right? I think we should call It AMR (Artificial Mark Recognition). JK! But the app has limitations, which I'll try to improve time to time.
 
 ## All right, now future goals for OMRElite
 ### Major:
