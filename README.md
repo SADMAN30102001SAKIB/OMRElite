@@ -12,7 +12,7 @@ i. Creating customizable OMR Sheets (the OMR PDF can be printed for examination)
 ii. Evaluating those papers with mobile camera in a short amount of time using computer vision.</br>
 iii. Generating customizable report of all evaluated students (available as a PDF or send it to teacher's email as a .csv file).
 
-#### [Click Here](https://youtu.be/AUjXJHea0jA) to Watch the Demo Video
+### [Click Here](https://youtu.be/AUjXJHea0jA) to Watch the Demo Video
 
 ## Architecture
 ![App Architecture](architecture.png)
