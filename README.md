@@ -20,7 +20,7 @@ III) Generating customizable report of all evaluated students (available as a PD
 * There are lots of analysis, like individual student analysis, overall exam analysis. 
 * Searching, filtering by name/ID/set etc.
 
-Ummmm, with all these, now it's not even a OMR (Optical Mark Recognition) anymore, right? I think we should call It AMR (Artificial Mark Recognition). JK! But the app has limitations, which I'll try to improve time to time.
+Ummmm, with all these, now it's not even an OMR (Optical Mark Recognition) anymore, right? I think we should call It AMR (Artificial Mark Recognition). JK! But the app has limitations, which I'll try to improve time to time.
 
 ## All right, now future goals for OMRElite
 ### Major:
