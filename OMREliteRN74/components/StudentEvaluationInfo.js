@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
 import {View, Text, TouchableOpacity} from 'react-native';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
-import styles from '../componentStyles/OmrEvaluationInfoStyle';
 import {requestCameraPermission} from '../utils/permissions';
 
 const StudentEvaluationInfo = ({
@@ -146,71 +145,54 @@ const StudentEvaluationInfo = ({
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.topBox}>
+    <View className="flex-1 bg-[#111] p-[5%]">
+      <View className="bg-[#1a1a1a] rounded-xl mb-[3%]">
         {omrData.isRoll ? (
           <View
-            style={
-              omrData.isName
-                ? {
-                    borderTopLeftRadius: 10,
-                    borderTopRightRadius: 10,
-                    padding: '3%',
-                    backgroundColor: '#050505',
-                  }
-                : {
-                    borderRadius: 10,
-                    padding: '3%',
-                    backgroundColor: '#050505',
-                  }
-            }>
-            <Text style={styles.label}>Student ID: </Text>
-            <Text style={styles.text}>{student.idno}</Text>
+            className={`p-[3%] bg-[#050505] ${
+              omrData.isName ? 'rounded-t-xl' : 'rounded-xl'
+            }`}>
+            <Text className="text-white text-base font-bold mb-[1%]">
+              Student ID:{' '}
+            </Text>
+            <Text className="text-white text-base">{student.idno}</Text>
           </View>
         ) : null}
 
         {omrData.isName || !omrData.isRoll ? (
           <View
-            style={
-              omrData.isRoll
-                ? {
-                    marginBottom: '5%',
-                    borderBottomLeftRadius: 10,
-                    borderBottomRightRadius: 10,
-                    padding: '3%',
-                    backgroundColor: '#050505',
-                  }
-                : {
-                    marginBottom: '5%',
-                    borderRadius: 10,
-                    padding: '3%',
-                    backgroundColor: '#050505',
-                  }
-            }>
-            <Text style={styles.label}>Student Name: </Text>
-            <Text style={styles.text}>{student.name}</Text>
+            className={`p-[3%] bg-[#050505] ${
+              omrData.isRoll ? 'mb-[5%] rounded-b-xl' : 'mb-[5%] rounded-xl'
+            }`}>
+            <Text className="text-white text-base font-bold mb-[1%]">
+              Student Name:{' '}
+            </Text>
+            <Text className="text-white text-base">{student.name}</Text>
           </View>
         ) : null}
 
         {omrData.setCount > 1 ? (
-          <View style={styles.fieldBox}>
-            <Text style={styles.label}>SET: </Text>
-            <Text style={styles.text}>{list[student.setno - 1]}</Text>
+          <View className="flex-row justify-between py-[2%] px-[3%] border-b border-gray-700">
+            <Text className="text-white text-base font-bold mb-[1%]">
+              SET:{' '}
+            </Text>
+            <Text className="text-white text-base">
+              {list[student.setno - 1]}
+            </Text>
           </View>
         ) : null}
 
-        <View style={styles.fieldBox}>
-          <Text style={styles.label}>Score: </Text>
-          <Text style={styles.text}>{student.marks}</Text>
+        <View className="flex-row justify-between py-[2%] px-[3%] border-b border-gray-700">
+          <Text className="text-white text-base font-bold mb-[1%]">
+            Score:{' '}
+          </Text>
+          <Text className="text-white text-base">{student.marks}</Text>
         </View>
 
-        <View style={styles.buttonGroup}>
-          <View style={{...styles.button, marginRight: '28%'}}>
+        <View className="flex-row justify-around mt-[3%]">
+          <View className="flex-1 mx-[2%]">
             <TouchableOpacity
-              style={{
-                ...styles.submitButton,
-                backgroundColor: '#00ff5f',
-              }}
+              className="rounded-[50px] px-[5%] py-[4%] bg-primary justify-center items-center"
               onPress={() =>
                 navigation.navigate('StudentInformation', {
                   formData: omrData,
@@ -222,18 +204,14 @@ const StudentEvaluationInfo = ({
                   msg: '',
                 })
               }>
-              <Text style={{...styles.submitButtonText, color: 'black'}}>
-                Edit
-              </Text>
+              <Text className="text-black text-base font-bold">Edit</Text>
             </TouchableOpacity>
           </View>
-          <View style={{...styles.button, marginRight: '11%'}}>
+          <View className="flex-1 mx-[2%]">
             <TouchableOpacity
-              style={{...styles.submitButton, backgroundColor: 'white'}}
+              className="rounded-[50px] px-[5%] py-[4%] bg-white justify-center items-center"
               onPress={openPDF}>
-              <Text style={{...styles.submitButtonText, color: 'black'}}>
-                Open OMR
-              </Text>
+              <Text className="text-black text-base font-bold">Open OMR</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -241,69 +219,37 @@ const StudentEvaluationInfo = ({
 
       {showBox ? (
         <View>
-          <Text
-            style={{
-              ...styles.text,
-              marginTop: '5%',
-              marginLeft: '1.5%',
-            }}>
+          <Text className="text-white mt-[5%] ml-[1.5%] text-base">
             Take
             {omrData.questionsCount > 35
               ? ' 2 pictures (in order)'
               : ' 1 picture'}
             :
           </Text>
-          <View
-            style={{
-              ...styles.buttonGroup,
-              ...styles.topBox,
-              paddingTop: '0%',
-              paddingBottom: '5%',
-            }}>
-            <View style={styles.button}>
+          <View className="bg-[#1a1a1a] rounded-xl mb-[3%] flex-row justify-around pt-0 pb-[5%]">
+            <View className="flex-1 mx-[2%]">
               <TouchableOpacity
-                style={{
-                  ...styles.submitButton,
-                  backgroundColor: '#ee6f2f',
-                }}
+                className="rounded-[50px] px-[5%] py-[4%] bg-[#ee6f2f] justify-center items-center mt-[5%]"
                 onPress={() => takePicture()}>
-                <Text style={{...styles.submitButtonText, color: 'white'}}>
-                  Camera
-                </Text>
+                <Text className="text-white text-base font-bold">Camera</Text>
               </TouchableOpacity>
             </View>
-            <View style={styles.button}>
+            <View className="flex-1 mx-[2%]">
               <TouchableOpacity
-                style={{
-                  ...styles.submitButton,
-                  backgroundColor: '#2f6fee',
-                }}
+                className="rounded-[50px] px-[5%] py-[4%] bg-[#2f6fee] justify-center items-center mt-[5%]"
                 onPress={() => pickImage()}>
-                <Text style={{...styles.submitButtonText, color: 'white'}}>
-                  Gallery
-                </Text>
+                <Text className="text-white text-base font-bold">Gallery</Text>
               </TouchableOpacity>
             </View>
           </View>
         </View>
       ) : (
         <View>
-          <View style={styles.button}>
+          <View className="flex-1 mx-[2%]">
             <TouchableOpacity
-              style={{
-                ...styles.submitButton,
-                borderRadius: 10,
-                backgroundColor: '#ee6f2f',
-                borderWidth: 2,
-                borderColor: 'white',
-                borderStyle: 'dotted',
-              }}
+              className="rounded-xl px-[10%] py-[5%] bg-[#ee6f2f] justify-center items-center border-2 border-white border-dotted"
               onPress={() => setShowBox(true)}>
-              <Text
-                style={{
-                  ...styles.submitButtonText,
-                  color: 'white',
-                }}>
+              <Text className="text-white text-base font-bold">
                 Take/Select New Pictures
               </Text>
             </TouchableOpacity>
@@ -311,106 +257,96 @@ const StudentEvaluationInfo = ({
         </View>
       )}
 
-      <Text
-        style={{
-          ...styles.text,
-          marginTop: '10%',
-          marginLeft: '1.5%',
-        }}>
-        Analysis:
-      </Text>
-      <View style={styles.box}>
-        <View style={{...styles.fieldBox, marginBottom: '5%'}}>
-          <Text style={styles.label}>Touched Questions: </Text>
-          <Text style={styles.text}>{touched}</Text>
+      <Text className="text-white mt-[10%] ml-[1.5%] text-base">Analysis:</Text>
+      <View className="bg-[#1a1a1a] rounded-xl p-[5%] border-2 border-white">
+        <View className="flex-row justify-between py-[2%] px-[3%] mb-[5%]">
+          <Text className="text-white text-base font-bold mb-[1%]">
+            Touched Questions:{' '}
+          </Text>
+          <Text className="text-white text-base">{touched}</Text>
         </View>
-        <View style={{...styles.fieldBox, marginBottom: '5%'}}>
-          <Text style={styles.label}>Blank Answers: </Text>
-          <Text style={styles.text}>{omrData.questionsCount - touched}</Text>
+        <View className="flex-row justify-between py-[2%] px-[3%] mb-[5%]">
+          <Text className="text-white text-base font-bold mb-[1%]">
+            Blank Answers:{' '}
+          </Text>
+          <Text className="text-white text-base">
+            {omrData.questionsCount - touched}
+          </Text>
         </View>
-        <View style={{...styles.fieldBox, marginBottom: '5%'}}>
-          <Text style={styles.label}>Correct Answers: </Text>
+        <View className="flex-row justify-between py-[2%] px-[3%] mb-[5%]">
+          <Text className="text-white text-base font-bold mb-[1%]">
+            Correct Answers:{' '}
+          </Text>
           <Text
-            style={
-              correct ? {...styles.text, color: '#55ff00'} : {...styles.text}
-            }>
+            className={`text-base ${correct ? 'text-success' : 'text-white'}`}>
             {correct}
           </Text>
         </View>
-        <View style={{...styles.fieldBox, marginBottom: '5%'}}>
-          <Text style={styles.label}>Marks For Correct Answer: </Text>
+        <View className="flex-row justify-between py-[2%] px-[3%] mb-[5%]">
+          <Text className="text-white text-base font-bold mb-[1%]">
+            Marks For Correct Answer:{' '}
+          </Text>
 
           {omrData.mpq * correct ? (
-            <Text style={{...styles.text, color: '#55ff00'}}>
+            <Text className="text-success text-base">
               +{omrData.mpq * correct}
             </Text>
           ) : (
-            <Text style={styles.text}>{omrData.mpq * correct}</Text>
+            <Text className="text-white text-base">
+              {omrData.mpq * correct}
+            </Text>
           )}
         </View>
-        <View style={{...styles.fieldBox, marginBottom: '5%'}}>
-          <Text style={styles.label}>Additional Marks: </Text>
+        <View className="flex-row justify-between py-[2%] px-[3%] mb-[5%]">
+          <Text className="text-white text-base font-bold mb-[1%]">
+            Additional Marks:{' '}
+          </Text>
 
           {student.marks - (omrData.mpq * correct + wrong * negativeMark) ? (
-            <Text style={{...styles.text, color: '#55ff00'}}>
+            <Text className="text-success text-base">
               +{student.marks - (omrData.mpq * correct + wrong * negativeMark)}
             </Text>
           ) : (
-            <Text style={styles.text}>0</Text>
+            <Text className="text-white text-base">0</Text>
           )}
         </View>
-        <View style={{...styles.fieldBox, marginBottom: '5%'}}>
-          <Text style={styles.label}>Wrong Answers: </Text>
+        <View className="flex-row justify-between py-[2%] px-[3%] mb-[5%]">
+          <Text className="text-white text-base font-bold mb-[1%]">
+            Wrong Answers:{' '}
+          </Text>
 
           <Text
-            style={
-              wrong ? {...styles.text, color: '#ff5500'} : {...styles.text}
-            }>
+            className={`text-base ${wrong ? 'text-[#ff5500]' : 'text-white'}`}>
             {wrong}
           </Text>
         </View>
-        <View style={{...styles.fieldBox, marginBottom: '5%'}}>
-          <Text style={styles.label}>Multiple Answers Marked: </Text>
+        <View className="flex-row justify-between py-[2%] px-[3%] mb-[5%]">
+          <Text className="text-white text-base font-bold mb-[1%]">
+            Multiple Answers Marked:{' '}
+          </Text>
 
           <Text
-            style={
-              multiple ? {...styles.text, color: '#ff5500'} : {...styles.text}
-            }>
+            className={`text-base ${
+              multiple ? 'text-[#ff5500]' : 'text-white'
+            }`}>
             {multiple}
           </Text>
         </View>
 
         {omrData.isNegative}
-        <View style={styles.fieldBox}>
-          <Text style={styles.label}>Total Negative Marking: </Text>
+        <View className="flex-row justify-between py-[2%] px-[3%]">
+          <Text className="text-white text-base font-bold mb-[1%]">
+            Total Negative Marking:{' '}
+          </Text>
 
           <Text
-            style={
-              wrong * negativeMark
-                ? {...styles.text, color: '#ff5500'}
-                : {...styles.text}
-            }>
+            className={`text-base ${
+              wrong * negativeMark ? 'text-[#ff5500]' : 'text-white'
+            }`}>
             {wrong * negativeMark}
           </Text>
         </View>
       </View>
-
-      {/* <View style={styles.button}>
-        <TouchableOpacity
-          style={{
-            ...styles.submitButton,
-            backgroundColor: "white",
-            borderWidth: 1,
-            borderRadius: 15,
-            borderStyle: "dashed",
-            borderColor: "black",
-          }}
-          onPress={() => debug()}>
-          <Text style={{ ...styles.submitButtonText, color: "black" }}>
-            Debug
-          </Text>
-        </TouchableOpacity>
-      </View> */}
     </View>
   );
 };

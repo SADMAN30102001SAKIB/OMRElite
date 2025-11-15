@@ -1,6 +1,5 @@
 import cv2
 import numpy as np
-
 from mysite.xywh import infoSquare
 
 
@@ -11,9 +10,23 @@ def compareStrings(A, B):
     return True
 
 
-def checkQuestions(questions, ans, isNegative, image, blur, areaList,
-                   areaListSort, squares, num, n, markPerQuestion,
-                   negativeMark, regenerate, realAns, prev):
+def checkQuestions(
+    questions,
+    ans,
+    isNegative,
+    image,
+    blur,
+    areaList,
+    areaListSort,
+    squares,
+    num,
+    n,
+    markPerQuestion,
+    negativeMark,
+    regenerate,
+    realAns,
+    prev,
+):
     x, y, w, h = infoSquare(areaList, areaListSort, squares, num)
     circle_radius = round(w / 14)
     marked_index = []
@@ -104,7 +117,7 @@ def checkQuestions(questions, ans, isNegative, image, blur, areaList,
                 marked_index.append(0)
             else:
                 incremented_list = [x + 1 for x in marked_circle_index]
-                number_str = ''.join(str(x) for x in incremented_list)
+                number_str = "".join(str(x) for x in incremented_list)
                 marked_index.append(int(number_str))
                 if not compareStrings(ans[i], number_str):
                     if isNegative:
@@ -114,7 +127,7 @@ def checkQuestions(questions, ans, isNegative, image, blur, areaList,
         else:
             if len(marked_circle_index):
                 incremented_list = [x + 1 for x in marked_circle_index]
-                number_str = ''.join(str(x) for x in incremented_list)
+                number_str = "".join(str(x) for x in incremented_list)
                 marked_index.append(int(number_str))
                 if int(ans[i]) == -2:
                     marks += markPerQuestion

@@ -1,23 +1,24 @@
 import React from 'react';
 import {View, TouchableOpacity, Text} from 'react-native';
-import styles from '../componentStyles/CustomCheckBoxStyle';
 
 const CustomCheckBox = ({options, selectedValue, onValueChange}) => {
   return (
-    <View style={styles.radioGroup}>
+    <View className="flex-row">
       {options.map((option, idx) => (
         <TouchableOpacity
           key={idx}
-          style={styles.radioButton}
+          className="mr-[3%]"
           onPress={() => onValueChange(option.value)}>
           <View
-            style={[
-              styles.outerCircle,
+            className={
               !selectedValue.includes('-') &&
-                selectedValue.includes(option.value) &&
-                styles.selectedOuterCircle,
-            ]}>
-            <Text style={styles.label}>{option.label}</Text>
+              selectedValue.includes(option.value)
+                ? 'border-2 border-primary bg-primary rounded-lg px-[10%] py-[5%]'
+                : 'border-2 border-white rounded-lg px-[10%] py-[5%]'
+            }>
+            <Text className="text-white text-center text-base font-bold">
+              {option.label}
+            </Text>
           </View>
         </TouchableOpacity>
       ))}

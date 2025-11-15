@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {ActivityIndicator, View, Alert, ToastAndroid} from 'react-native';
+import {SafeAreaView} from 'react-native-safe-area-context';
 import FileViewer from 'react-native-file-viewer';
 import RNFS from 'react-native-fs';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -198,27 +199,25 @@ const ReportHistory = ({route, navigation}) => {
     }
   };
 
-  return isLoading ? (
-    <View
-      style={{
-        backgroundColor: '#111',
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-      }}>
-      <ActivityIndicator size="large" color="#007bff" />
-    </View>
-  ) : (
-    <ReportHistoryList
-      formData={formData}
-      localFilePath={localFilePath}
-      index={index}
-      students={students}
-      reportItems={reportItems}
-      deleteReportItem={deleteReportItem}
-      handleSubmit={handleSubmit}
-      navigation={navigation}
-    />
+  return (
+    <SafeAreaView className="flex-1 bg-[#111]">
+      {isLoading ? (
+        <View className="bg-[#111] flex-1 justify-center items-center">
+          <ActivityIndicator size="large" color="#007bff" />
+        </View>
+      ) : (
+        <ReportHistoryList
+          formData={formData}
+          localFilePath={localFilePath}
+          index={index}
+          students={students}
+          reportItems={reportItems}
+          deleteReportItem={deleteReportItem}
+          handleSubmit={handleSubmit}
+          navigation={navigation}
+        />
+      )}
+    </SafeAreaView>
   );
 };
 

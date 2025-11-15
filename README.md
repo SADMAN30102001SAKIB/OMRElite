@@ -11,8 +11,10 @@ How?
 I) Creating customizable OMR Sheets (the OMR PDF can be printed for examination)
 II) Evaluating those papers with mobile camera in a short amount of time using computer vision
 III) Generating customizable report of all evaluated students (available as a PDF or send it to teacher's email as a .csv file)
+#### [Check Here](https://youtu.be/F7PN6prPl0g?si=3p7yAwGtiqWsPqlr) to See the Demo Video
 
-### Check This Demo Video: https://youtu.be/F7PN6prPl0g?si=3p7yAwGtiqWsPqlr
+## Architecture
+![App Architecture](architecture.png)
 
 ## But there are many minor features as well, like
 * If somehow user deletes the PDFs made by the app (mistakenly or to free up storage), then the app can re-generate those PDFs automatically with 1 click of a button.
@@ -33,6 +35,7 @@ Ummmm, with all these, now it's not even a OMR (Optical Mark Recognition) anymor
 1) Implement a "recycle bin" feature to safely store deleted exams or student data before permanent deletion.
 2) Reduce network latency & improve app performance.
 3) Improve the OMR & App designs.
+
 Anyways, in the last couple of months, I've explored a lot about the android Operating System, Computer Vision & Cross-Platform Apps.
 It's still under development and I'm continuously learning & researching new things & hoping to make OMRElite better 💜.
 ## Update:

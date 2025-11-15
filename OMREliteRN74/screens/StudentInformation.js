@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {BackHandler, Alert, AppState, ScrollView} from 'react-native';
+import {SafeAreaView} from 'react-native-safe-area-context';
 import RNFS from 'react-native-fs';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import StudentInformationForm from '../components/StudentInformationForm';
@@ -291,18 +292,16 @@ const StudentInformation = ({route, navigation}) => {
   };
 
   return (
-    <ScrollView
-      contentContainerStyle={{
-        flexGrow: 1,
-        justifyContent: 'space-between',
-      }}>
-      <StudentInformationForm
-        formData={formData}
-        studentData={studentData}
-        handleInputChange={handleInputChange}
-        handleSave={handleSave}
-      />
-    </ScrollView>
+    <SafeAreaView className="flex-1 bg-[#111]">
+      <ScrollView className="flex-grow justify-between">
+        <StudentInformationForm
+          formData={formData}
+          studentData={studentData}
+          handleInputChange={handleInputChange}
+          handleSave={handleSave}
+        />
+      </ScrollView>
+    </SafeAreaView>
   );
 };
 

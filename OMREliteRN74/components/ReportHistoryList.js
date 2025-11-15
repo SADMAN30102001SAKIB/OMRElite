@@ -13,7 +13,6 @@ import {
   checkStoragePermissions,
   requestStoragePermissions,
 } from '../utils/permissions';
-import styles from '../componentStyles/ExamListStyle';
 
 const ReportHistoryList = ({
   formData,
@@ -26,16 +25,10 @@ const ReportHistoryList = ({
   navigation,
 }) => {
   return (
-    <View style={styles.container}>
-      <View style={{...styles.button, marginTop: '10%'}}>
+    <View className="flex-1 bg-[#111] p-[5%]">
+      <View className="mt-[10%]">
         <TouchableOpacity
-          style={{
-            ...styles.submitButton,
-            borderWidth: 1,
-            borderRadius: 15,
-            borderStyle: 'dashed',
-            borderColor: 'white',
-          }}
+          className="border border-dashed border-white rounded-2xl bg-primary p-[4%]"
           onPress={() => {
             navigation.navigate('ReportGeneration', {
               omrData: formData,
@@ -44,21 +37,19 @@ const ReportHistoryList = ({
               students,
             });
           }}>
-          <Text style={{...styles.submitButtonText}}>Generate Report</Text>
+          <Text className="text-black text-center text-base font-bold">
+            Generate Report
+          </Text>
         </TouchableOpacity>
       </View>
-      <Text
-        style={{
-          ...styles.historyText,
-          marginTop: '10%',
-          marginBottom: '5%',
-          color: '#ccc',
-        }}>
+      <Text className="text-[#ccc] text-base mt-[10%] mb-[5%]">
         History (Total Reports: {reportItems.length}):
       </Text>
       <ScrollView>
         {reportItems.map((item, idx) => (
-          <View key={idx} style={styles.historyItem}>
+          <View
+            key={idx}
+            className="flex-row justify-between items-center my-[2%]">
             <TouchableOpacity
               onPress={async () => {
                 const hasPermissions = await checkStoragePermissions();
@@ -105,15 +96,13 @@ const ReportHistoryList = ({
                   );
                 }
               }}
-              style={{
-                ...styles.historyContent,
-                backgroundColor: idx % 2 ? '#00ff5f' : '#007bff',
-              }}>
+              className={`flex-1 p-[3%] rounded-lg mr-[2%] ${
+                idx % 2 ? 'bg-primary' : 'bg-secondary'
+              }`}>
               <Text
-                style={{
-                  ...styles.historyText,
-                  color: idx % 2 ? 'black' : 'white',
-                }}
+                className={
+                  idx % 2 ? 'text-black text-base' : 'text-white text-base'
+                }
                 numberOfLines={1}
                 ellipsizeMode="tail">
                 {'REPORT - ' + (idx + 1) + ' ' + item.name}
@@ -121,8 +110,8 @@ const ReportHistoryList = ({
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => deleteReportItem(idx)}
-              style={styles.deleteButton}>
-              <Text style={styles.deleteButtonText}>🗑</Text>
+              className="bg-[#ff5500] px-[4%] py-[2%] rounded-lg">
+              <Text className="text-white text-lg">🗑</Text>
             </TouchableOpacity>
           </View>
         ))}

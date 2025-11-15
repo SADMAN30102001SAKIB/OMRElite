@@ -9,6 +9,6 @@ def findSquares(contours):
 
         if len(approx) == 4:
             area = cv2.contourArea(approx)
-            if area > 500:
+            if area > 550:
                 squares.append(approx)
     return squares

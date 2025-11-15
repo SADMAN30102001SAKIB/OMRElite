@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
 import {View, Text, ScrollView, Dimensions, FlatList} from 'react-native';
 import CustomCheckBox from './CustomCheckBox';
-import styles from '../componentStyles/OmrEvaluationInfoStyle';
 
 const AnalysisInfo = ({omrData, students}) => {
   const screenWidth = Dimensions.get('window').width;
@@ -91,86 +90,75 @@ const AnalysisInfo = ({omrData, students}) => {
   }
 
   const renderItem = ({item, index}) => (
-    <View
-      key={index}
-      style={{
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        marginBottom: '3%',
-      }}>
-      <View style={styles.fieldBox}>
+    <View key={index} className="flex-row justify-between mb-[3%]">
+      <View className="flex-row justify-between py-[2%] px-[3%]">
         <Text
-          style={
+          className={
             omrData[`set${idx + 1}Q${index + 1}`].includes('-')
-              ? {...styles.text, color: '#ff5500', fontSize: 11}
-              : {...styles.text, fontSize: 11}
+              ? 'text-[#ff5500] text-base text-[11px]'
+              : 'text-white text-base text-[11px]'
           }>
           {index + 1 < 10 ? `Q-0${index + 1}` : `Q-${index + 1}`}
         </Text>
-        <Text style={styles.text}> |</Text>
+        <Text className="text-white text-base"> |</Text>
       </View>
-      <View style={styles.fieldBox}>
-        <Text style={{...styles.label, fontSize: 11}}>correct: </Text>
-        <Text style={{...styles.text, color: '#55ff00'}}>
+      <View className="flex-row justify-between py-[2%] px-[3%]">
+        <Text className="text-white text-base font-bold mb-[1%] text-[11px]">
+          correct:{' '}
+        </Text>
+        <Text className="text-success text-base">
           {correctCount[idx][index]}
         </Text>
       </View>
-      <Text style={styles.text}>-</Text>
-      <View style={styles.fieldBox}>
-        <Text style={{...styles.label, fontSize: 11}}>
+      <Text className="text-white text-base">-</Text>
+      <View className="flex-row justify-between py-[2%] px-[3%]">
+        <Text className="text-white text-base font-bold mb-[1%] text-[11px]">
           {'  '}
           wrong:
         </Text>
-        <Text style={{...styles.text, color: '#ff5500'}}>
+        <Text className="text-[#ff5500] text-base">
           {' '}
           {wrongCount[idx][index]}
         </Text>
       </View>
-      <Text style={styles.text}>-</Text>
-      <View style={styles.fieldBox}>
-        <Text style={{...styles.label, fontSize: 11}}>
+      <Text className="text-white text-base">-</Text>
+      <View className="flex-row justify-between py-[2%] px-[3%]">
+        <Text className="text-white text-base font-bold mb-[1%] text-[11px]">
           {'  '}
           blank:
         </Text>
-        <Text style={styles.text}> {item}</Text>
+        <Text className="text-white text-base"> {item}</Text>
       </View>
     </View>
   );
 
   return (
-    <View style={styles.container}>
-      <Text style={{...styles.text, marginTop: '5%'}}>
+    <View className="flex-1 bg-[#111] p-[5%]">
+      <Text className="text-white text-base mt-[5%]">
         Student's Performance:
       </Text>
       {omrData.setCount > 1 && (
-        <Text
-          style={{
-            ...styles.label,
-            marginLeft: '1%',
-            marginBottom: '3%',
-          }}>
+        <Text className="text-white text-base font-bold ml-[1%] mb-[3%]">
           Scroll Horizontally ➤
         </Text>
       )}
       <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
         <View
           style={{
-            ...styles.topBox,
             width: screenWidth - 40,
-            marginRight: maxScore.length > 1 ? 10 : 0,
-            padding: 0,
-            paddingLeft: '3%',
-            paddingTop: '1%',
-          }}>
-          <View style={styles.fieldBox}>
-            <Text style={styles.text}>Total Students: </Text>
-            <Text style={styles.text}>{students.length}</Text>
+          }}
+          className={`bg-[#1a1a1a] rounded-xl p-0 pl-[3%] pt-[1%] ${
+            maxScore.length > 1 ? 'mr-[10px]' : ''
+          }`}>
+          <View className="flex-row justify-between py-[2%] px-[3%]">
+            <Text className="text-white text-base">Total Students: </Text>
+            <Text className="text-white text-base">{students.length}</Text>
           </View>
-          <View style={styles.fieldBox}>
-            <Text style={{...styles.label, fontSize: 10}}>
+          <View className="flex-row justify-between py-[2%] px-[3%]">
+            <Text className="text-white text-base font-bold text-[10px]">
               Exemplary (Above 80%):{' '}
             </Text>
-            <Text style={styles.text}>
+            <Text className="text-white text-base">
               {above80.reduce(
                 (accumulator, currentValue) => accumulator + currentValue,
                 0,
@@ -187,11 +175,11 @@ const AnalysisInfo = ({omrData, students}) => {
                 '%)'}
             </Text>
           </View>
-          <View style={styles.fieldBox}>
-            <Text style={{...styles.label, fontSize: 10}}>
+          <View className="flex-row justify-between py-[2%] px-[3%]">
+            <Text className="text-white text-base font-bold text-[10px]">
               Satisfactory (60 - 79)%:{' '}
             </Text>
-            <Text style={styles.text}>
+            <Text className="text-white text-base">
               {sixtyTo79.reduce(
                 (accumulator, currentValue) => accumulator + currentValue,
                 0,
@@ -208,11 +196,11 @@ const AnalysisInfo = ({omrData, students}) => {
                 '%)'}
             </Text>
           </View>
-          <View style={styles.fieldBox}>
-            <Text style={{...styles.label, fontSize: 10}}>
+          <View className="flex-row justify-between py-[2%] px-[3%]">
+            <Text className="text-white text-base font-bold text-[10px]">
               Developing (40 - 59)%:{' '}
             </Text>
-            <Text style={styles.text}>
+            <Text className="text-white text-base">
               {fortyTo59.reduce(
                 (accumulator, currentValue) => accumulator + currentValue,
                 0,
@@ -229,11 +217,11 @@ const AnalysisInfo = ({omrData, students}) => {
                 '%)'}
             </Text>
           </View>
-          <View style={styles.fieldBox}>
-            <Text style={{...styles.label, fontSize: 10}}>
+          <View className="flex-row justify-between py-[2%] px-[3%]">
+            <Text className="text-white text-base font-bold text-[10px]">
               Unsatisfactory (Below 40%):{' '}
             </Text>
-            <Text style={styles.text}>
+            <Text className="text-white text-base">
               {below40.reduce(
                 (accumulator, currentValue) => accumulator + currentValue,
                 0,
@@ -250,15 +238,19 @@ const AnalysisInfo = ({omrData, students}) => {
                 '%)'}
             </Text>
           </View>
-          <View style={{...styles.fieldBox, marginTop: '5%'}}>
-            <Text style={styles.label}>Highest Score: </Text>
-            <Text style={{...styles.text, color: '#55ff00'}}>
+          <View className="flex-row justify-between py-[2%] px-[3%] mt-[5%]">
+            <Text className="text-white text-base font-bold mb-[1%]">
+              Highest Score:{' '}
+            </Text>
+            <Text className="text-success text-base">
               {Math.max(...maxScore)}
             </Text>
           </View>
-          <View style={{...styles.fieldBox, marginBottom: '5%'}}>
-            <Text style={styles.label}>Lowest Score: </Text>
-            <Text style={{...styles.text, color: '#ff5500'}}>
+          <View className="flex-row justify-between py-[2%] px-[3%] mb-[5%]">
+            <Text className="text-white text-base font-bold mb-[1%]">
+              Lowest Score:{' '}
+            </Text>
+            <Text className="text-[#ff5500] text-base">
               {Math.min(...minScore)}
             </Text>
           </View>
@@ -268,24 +260,21 @@ const AnalysisInfo = ({omrData, students}) => {
             <View
               key={i}
               style={{
-                ...styles.topBox,
                 width: screenWidth - 40,
                 marginRight: i < maxScore.length - 1 ? 10 : 0,
-                padding: 0,
-                paddingLeft: '3%',
-                paddingTop: '1%',
-              }}>
-              <View style={styles.fieldBox}>
-                <Text style={styles.text}>
+              }}
+              className="rounded-lg bg-[#1a1a1a] p-0 pl-[3%] pt-[1%]">
+              <View className="flex-row justify-between py-[2%] px-[3%]">
+                <Text className="text-white text-base">
                   SET {setList[i]} Total Students:{' '}
                 </Text>
-                <Text style={styles.text}>{totalStudents[i]}</Text>
+                <Text className="text-white text-base">{totalStudents[i]}</Text>
               </View>
-              <View style={styles.fieldBox}>
-                <Text style={{...styles.label, fontSize: 10}}>
+              <View className="flex-row justify-between py-[2%] px-[3%]">
+                <Text className="text-white text-base font-bold text-[10px]">
                   Exemplary (Above 80%):{' '}
                 </Text>
-                <Text style={styles.text}>
+                <Text className="text-white text-base">
                   {above80[i] +
                     ' (' +
                     (
@@ -295,11 +284,11 @@ const AnalysisInfo = ({omrData, students}) => {
                     '%)'}
                 </Text>
               </View>
-              <View style={styles.fieldBox}>
-                <Text style={{...styles.label, fontSize: 10}}>
+              <View className="flex-row justify-between py-[2%] px-[3%]">
+                <Text className="text-white text-base font-bold text-[10px]">
                   Satisfactory (60 - 79)%:{' '}
                 </Text>
-                <Text style={styles.text}>
+                <Text className="text-white text-base">
                   {sixtyTo79[i] +
                     ' (' +
                     (
@@ -310,11 +299,11 @@ const AnalysisInfo = ({omrData, students}) => {
                     '%)'}
                 </Text>
               </View>
-              <View style={styles.fieldBox}>
-                <Text style={{...styles.label, fontSize: 10}}>
+              <View className="flex-row justify-between py-[2%] px-[3%]">
+                <Text className="text-white text-base font-bold text-[10px]">
                   Developing (40 - 59)%:{' '}
                 </Text>
-                <Text style={styles.text}>
+                <Text className="text-white text-base">
                   {fortyTo59[i] +
                     ' (' +
                     (
@@ -325,11 +314,11 @@ const AnalysisInfo = ({omrData, students}) => {
                     '%)'}
                 </Text>
               </View>
-              <View style={styles.fieldBox}>
-                <Text style={{...styles.label, fontSize: 10}}>
+              <View className="flex-row justify-between py-[2%] px-[3%]">
+                <Text className="text-white text-base font-bold text-[10px]">
                   Unsatisfactory (Below 40%):{' '}
                 </Text>
-                <Text style={styles.text}>
+                <Text className="text-white text-base">
                   {below40[i] +
                     ' (' +
                     (
@@ -339,15 +328,19 @@ const AnalysisInfo = ({omrData, students}) => {
                     '%)'}
                 </Text>
               </View>
-              <View style={{...styles.fieldBox, marginTop: '5%'}}>
-                <Text style={styles.label}>Highest Score: </Text>
-                <Text style={{...styles.text, color: '#55ff00'}}>
+              <View className="flex-row justify-between py-[2%] px-[3%] mt-[5%]">
+                <Text className="text-white text-base font-bold mb-[1%]">
+                  Highest Score:{' '}
+                </Text>
+                <Text className="text-success text-base">
                   {totalStudents[i] ? value : 0}
                 </Text>
               </View>
-              <View style={{...styles.fieldBox, marginBottom: '5%'}}>
-                <Text style={styles.label}>Lowest Score: </Text>
-                <Text style={{...styles.text, color: '#ff5500'}}>
+              <View className="flex-row justify-between py-[2%] px-[3%] mb-[5%]">
+                <Text className="text-white text-base font-bold mb-[1%]">
+                  Lowest Score:{' '}
+                </Text>
+                <Text className="text-[#ff5500] text-base">
                   {totalStudents[i] ? minScore[i] : 0}
                 </Text>
               </View>
@@ -356,18 +349,15 @@ const AnalysisInfo = ({omrData, students}) => {
       </ScrollView>
 
       <Text
-        style={{
-          ...styles.text,
-          marginTop: '15%',
-          marginBottom: omrData.setCount > 1 ? '0%' : '5%',
-          fontSize: 14,
-        }}>
+        className={`text-white text-base mt-[15%] text-[14px] ${
+          omrData.setCount > 1 ? 'mb-0' : 'mb-[5%]'
+        }`}>
         Question Analysis Of All Students:
       </Text>
 
       {blankCount.length > 1 && (
-        <View style={styles.setContainer}>
-          <Text style={styles.label}>SET: </Text>
+        <View className="flex-row items-center mt-[5%] mb-[3%]">
+          <Text className="text-white text-base font-bold mb-[1%]">SET: </Text>
           <CustomCheckBox
             options={['A', 'B', 'C', 'D']
               .slice(0, omrData.setCount)
@@ -389,10 +379,9 @@ const AnalysisInfo = ({omrData, students}) => {
           renderItem={renderItem}
           keyExtractor={(item, index) => index.toString()}
           style={{
-            ...styles.box,
-            padding: '5%',
             width: screenWidth - 40,
           }}
+          className="rounded-lg bg-[#1a1a1a] p-[5%]"
         />
       </ScrollView>
     </View>

@@ -2,7 +2,6 @@ import React from 'react';
 import {View, Text, Switch, TouchableOpacity, TextInput} from 'react-native';
 import {Picker} from '@react-native-picker/picker';
 import CustomCheckBox from './CustomCheckBox';
-import styles from '../componentStyles/FormStyle';
 
 const ReportGenerationForm = ({
   omrData,
@@ -12,122 +11,88 @@ const ReportGenerationForm = ({
   handleSubmitCSV,
 }) => {
   return (
-    <View
-      style={{
-        ...styles.container,
-        padding: '3%',
-        paddingTop: '20%',
-      }}>
-      <View
-        style={{
-          padding: '5%',
-          borderColor: 'white',
-          borderWidth: 2,
-          borderRadius: 10,
-        }}>
-        <View
-          style={{
-            ...styles.fieldContainer,
-            display: 'flex',
-            flexDirection: 'row',
-          }}>
-          <Text style={styles.label}>Show Student's Performance?</Text>
+    <View className="flex-1 bg-[#111] p-[3%] pt-[20%]">
+      <View className="p-[5%] border-white border-2 rounded-xl">
+        <View className="mb-[4.5%] flex-row">
+          <Text className="text-white text-base">
+            Show Student's Performance?
+          </Text>
           <Switch
             value={formData.isLeftAddionalData}
             onValueChange={value => {
               handleInputChange('isLeftAddionalData', value);
             }}
-            style={styles.switch}
+            className="w-[14%] ml-[5%]"
             trackColor={{false: '#767577', true: '#aaffaa'}}
             thumbColor={formData.isLeftAddionalData ? '#00aa5f' : '#f4f3f4'}
           />
         </View>
-        <Text style={{...styles.label, marginTop: '5%', marginBottom: '2%'}}>
+        <Text className="text-white text-base mt-[5%] mb-[2%]">
           Report Table Info 🔽:
         </Text>
-        <View
-          style={{
-            ...styles.fieldContainer,
-            display: 'flex',
-            flexDirection: 'row',
-          }}>
-          <Text style={styles.label}>Show Serial Column?</Text>
+        <View className="mb-[4.5%] flex-row">
+          <Text className="text-white text-base">Show Serial Column?</Text>
           <Switch
             value={formData.isSerial}
             onValueChange={value => handleInputChange('isSerial', value)}
-            style={styles.switch}
+            className="w-[14%] ml-[5%]"
             trackColor={{false: '#767577', true: '#aaffaa'}}
             thumbColor={formData.isSerial ? '#00aa5f' : '#f4f3f4'}
           />
         </View>
         {omrData.isRoll && (
-          <View
-            style={{
-              ...styles.fieldContainer,
-              display: 'flex',
-              flexDirection: 'row',
-            }}>
-            <Text style={styles.label}>Show ID Column?</Text>
+          <View className="mb-[4.5%] flex-row">
+            <Text className="text-white text-base">Show ID Column?</Text>
             <Switch
               value={formData.isID}
               onValueChange={value => {
                 handleInputChange('sortBy', 'set');
                 handleInputChange('isID', value);
               }}
-              style={styles.switch}
+              className="w-[14%] ml-[5%]"
               trackColor={{false: '#767577', true: '#aaffaa'}}
               thumbColor={formData.isID ? '#00aa5f' : '#f4f3f4'}
             />
           </View>
         )}
         {(omrData.isName || !omrData.isRoll) && (
-          <View
-            style={{
-              ...styles.fieldContainer,
-              display: 'flex',
-              flexDirection: 'row',
-            }}>
-            <Text style={styles.label}>Show Name Column?</Text>
+          <View className="mb-[4.5%] flex-row">
+            <Text className="text-white text-base">Show Name Column?</Text>
             <Switch
               value={formData.isName}
               onValueChange={value => {
                 handleInputChange('sortBy', 'set');
                 handleInputChange('isName', value);
               }}
-              style={styles.switch}
+              className="w-[14%] ml-[5%]"
               trackColor={{false: '#767577', true: '#aaffaa'}}
               thumbColor={formData.isName ? '#00aa5f' : '#f4f3f4'}
             />
           </View>
         )}
         {omrData.setCount > 1 && (
-          <View
-            style={{
-              ...styles.fieldContainer,
-              display: 'flex',
-              flexDirection: 'row',
-            }}>
-            <Text style={styles.label}>Show Set Column?</Text>
+          <View className="mb-[4.5%] flex-row">
+            <Text className="text-white text-base">Show Set Column?</Text>
             <Switch
               value={formData.isSet}
               onValueChange={value => {
                 handleInputChange('sortBy', 'set');
                 handleInputChange('isSet', value);
               }}
-              style={styles.switch}
+              className="w-[14%] ml-[5%]"
               trackColor={{false: '#767577', true: '#aaffaa'}}
               thumbColor={formData.isSet ? '#00aa5f' : '#f4f3f4'}
             />
           </View>
         )}
-        <View style={{marginVertical: '5%'}}>
-          <Text style={styles.label}>Sort By:</Text>
+        <View className="my-[5%]">
+          <Text className="text-white text-base">Sort By:</Text>
           <Picker
             selectedValue={formData.sortBy}
             onValueChange={(itemValue, itemIndex) =>
               handleInputChange('sortBy', itemValue)
             }
-            style={styles.picker}>
+            style={{color: '#fff'}}>
             <Picker.Item
               label={formData.isSet ? 'Question Set' : 'Default'}
               value="set"
@@ -143,8 +108,8 @@ const ReportGenerationForm = ({
         </View>
 
         {omrData.setCount > 1 && (
-          <View style={styles.setContainer}>
-            <Text style={styles.label}>SET: </Text>
+          <View className="my-[6%] flex-row items-center justify-around">
+            <Text className="text-white text-base">SET: </Text>
             <CustomCheckBox
               options={['A', 'B', 'C', 'D']
                 .slice(0, omrData.setCount)
@@ -167,44 +132,42 @@ const ReportGenerationForm = ({
             />
           </View>
         )}
-        <View style={{...styles.button, marginTop: '5%'}}>
-          <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
-            <Text style={styles.submitButtonText}>Generate Report PDF</Text>
+        <View className="w-full flex items-center mt-[5%]">
+          <TouchableOpacity
+            className="rounded-[50px] px-[10%] py-[5%] bg-secondary justify-center items-center mt-[1%]"
+            onPress={handleSubmit}>
+            <Text className="text-white text-base font-bold">
+              Generate Report PDF
+            </Text>
           </TouchableOpacity>
         </View>
       </View>
 
-      <View
-        style={{
-          padding: '5%',
-          marginVertical: '10%',
-          borderColor: 'white',
-          borderWidth: 2,
-          borderRadius: 10,
-        }}>
+      <View className="p-[5%] my-[10%] border-white border-2 rounded-xl">
         <View>
           <Text
-            style={
+            className={`text-base ${
               /^[a-zA-Z0-9]+(\.[a-zA-Z0-9]+)*@gmail\.com$/.test(
                 formData.rEmail.trim(),
               )
-                ? {...styles.label}
-                : {...styles.label, color: '#ff5500'}
-            }>
+                ? 'text-white'
+                : 'text-[#ff5500]'
+            }`}>
             Recipient Email:
           </Text>
           <TextInput
             placeholder="ex: sadman30102001sakib@gamil.com"
+            placeholderTextColor="#999"
             keyboardType="email-address"
             onChangeText={text => handleInputChange('rEmail', text)}
-            style={styles.input}
+            className="text-white border-gray-500 rounded-xl border-2 mb-[2%] pl-[5%]"
           />
         </View>
-        <View style={{...styles.button, marginTop: '5%'}}>
+        <View className="w-full flex items-center mt-[5%]">
           <TouchableOpacity
-            style={styles.submitButton}
+            className="rounded-[50px] px-[10%] py-[5%] bg-secondary justify-center items-center mt-[1%]"
             onPress={handleSubmitCSV}>
-            <Text style={styles.submitButtonText}>Email CSV</Text>
+            <Text className="text-white text-base font-bold">Email CSV</Text>
           </TouchableOpacity>
         </View>
       </View>

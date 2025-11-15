@@ -6,7 +6,6 @@ import {
   TouchableOpacity,
   TextInput,
 } from 'react-native';
-import styles from '../componentStyles/ExamListStyle';
 import CustomCheckBox from './CustomCheckBox';
 
 const StudentHistoryList = ({
@@ -35,17 +34,18 @@ const StudentHistoryList = ({
   });
 
   return (
-    <View style={styles.container}>
+    <View className="flex-1 bg-[#111] p-[5%]">
       <TextInput
         placeholder={`Search By Student ${formData.isRoll ? 'ID' : 'Name'}`}
+        placeholderTextColor="#999"
         onChangeText={val => {
           setSearchBy(val);
         }}
-        style={styles.input}
+        className="text-white border-gray-500 rounded-xl border-2 mb-[3%] p-[3%] text-base"
       />
       {formData.setCount > 1 && (
-        <View style={styles.setContainer}>
-          <Text style={styles.label}>SET: </Text>
+        <View className="flex-row items-center mt-[5%] mb-[3%]">
+          <Text className="text-white text-base font-bold mb-[1%]">SET: </Text>
           <CustomCheckBox
             options={['All', 'A', 'B', 'C', 'D']
               .slice(0, formData.setCount + 1)
@@ -60,8 +60,7 @@ const StudentHistoryList = ({
           />
         </View>
       )}
-      <Text
-        style={{...styles.historyText, marginVertical: '5%', color: '#ccc'}}>
+      <Text className="text-[#ccc] text-base my-[5%]">
         History (Total Students: {filteredStudentItems.length}):
       </Text>
       <ScrollView>
@@ -72,7 +71,9 @@ const StudentHistoryList = ({
               ? item.idno.toLowerCase().includes(searchBy.toLowerCase())
               : item.name.toLowerCase().includes(searchBy.toLowerCase())) ||
               searchBy === '') && (
-              <View key={idx} style={styles.historyItem}>
+              <View
+                key={idx}
+                className="flex-row justify-between items-center my-[2%]">
                 <TouchableOpacity
                   onPress={() => {
                     navigation.navigate('StudentEvaluation', {
@@ -83,15 +84,13 @@ const StudentHistoryList = ({
                       idx,
                     });
                   }}
-                  style={{
-                    ...styles.historyContent,
-                    backgroundColor: idx % 2 ? '#00ff5f' : '#007bff',
-                  }}>
+                  className={`flex-1 p-[3%] rounded-lg mr-[2%] ${
+                    idx % 2 ? 'bg-primary' : 'bg-secondary'
+                  }`}>
                   <Text
-                    style={{
-                      ...styles.historyText,
-                      color: idx % 2 ? 'black' : 'white',
-                    }}
+                    className={
+                      idx % 2 ? 'text-black text-base' : 'text-white text-base'
+                    }
                     numberOfLines={1}
                     ellipsizeMode="tail">
                     {item.idno !== -1
@@ -102,8 +101,8 @@ const StudentHistoryList = ({
                 </TouchableOpacity>
                 <TouchableOpacity
                   onPress={() => deleteStudentItem(idx)}
-                  style={styles.deleteButton}>
-                  <Text style={styles.deleteButtonText}>🗑</Text>
+                  className="bg-[#ff5500] px-[4%] py-[2%] rounded-lg">
+                  <Text className="text-white text-lg">🗑</Text>
                 </TouchableOpacity>
               </View>
             ),

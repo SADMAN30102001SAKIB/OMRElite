@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
-import {View, Alert} from 'react-native';
+import {Alert} from 'react-native';
+import {SafeAreaView} from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import ExamMarkingForm from '../components/ExamMarkingForm';
 
@@ -118,7 +119,7 @@ const ExamMarking = ({route, navigation}) => {
   };
 
   return (
-    <View style={{flex: 1}}>
+    <SafeAreaView className="flex-1 bg-[#111]">
       <ExamMarkingForm
         mpq={newOmrData.mpq}
         isNegative={newOmrData.isNegative}
@@ -128,7 +129,7 @@ const ExamMarking = ({route, navigation}) => {
         handleSave={handleSave}
         students={students}
       />
-    </View>
+    </SafeAreaView>
   );
 };
 

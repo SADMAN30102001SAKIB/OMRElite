@@ -2,7 +2,6 @@ import os
 
 from flask import Flask, make_response, request, send_file
 from flask_cors import CORS
-
 from mysite.delete import deleteFiles
 from mysite.evaluatePage1 import evaluate1
 from mysite.evaluatePage2 import evaluate2

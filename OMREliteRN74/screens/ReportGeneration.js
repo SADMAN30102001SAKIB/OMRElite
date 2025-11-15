@@ -6,6 +6,7 @@ import {
   ScrollView,
   ToastAndroid,
 } from 'react-native';
+import {SafeAreaView} from 'react-native-safe-area-context';
 import FileViewer from 'react-native-file-viewer';
 import RNFS from 'react-native-fs';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -370,30 +371,23 @@ const ReportGeneration = ({route, navigation}) => {
   };
 
   return (
-    <ScrollView
-      contentContainerStyle={{
-        flexGrow: 1,
-      }}>
-      {isLoading ? (
-        <View
-          style={{
-            backgroundColor: '#111',
-            flex: 1,
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}>
-          <ActivityIndicator size="large" color="#007bff" />
-        </View>
-      ) : (
-        <ReportGenerationForm
-          omrData={omrData}
-          formData={formData}
-          handleInputChange={handleInputChange}
-          handleSubmit={handleSubmit}
-          handleSubmitCSV={handleSubmitCSV}
-        />
-      )}
-    </ScrollView>
+    <SafeAreaView className="flex-1 bg-[#111]">
+      <ScrollView className="flex-grow">
+        {isLoading ? (
+          <View className="bg-[#111] flex-1 justify-center items-center">
+            <ActivityIndicator size="large" color="#007bff" />
+          </View>
+        ) : (
+          <ReportGenerationForm
+            omrData={omrData}
+            formData={formData}
+            handleInputChange={handleInputChange}
+            handleSubmit={handleSubmit}
+            handleSubmitCSV={handleSubmitCSV}
+          />
+        )}
+      </ScrollView>
+    </SafeAreaView>
   );
 };
 

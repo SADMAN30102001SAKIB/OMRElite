@@ -7,12 +7,12 @@ import {
   ToastAndroid,
   AppState,
 } from 'react-native';
+import {SafeAreaView} from 'react-native-safe-area-context';
 import FileViewer from 'react-native-file-viewer';
 import RNFS from 'react-native-fs';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import OmrEvaluationInfo from '../components/OmrEvaluationInfo';
-import styles from '../screenStyles/OmrEvaluationStyle';
 import {
   checkStoragePermissions,
   requestStoragePermissions,
@@ -401,29 +401,28 @@ const OmrEvaluation = ({route, navigation}) => {
   };
 
   return (
-    <ScrollView
-      contentContainerStyle={{
-        flexGrow: 1,
-      }}>
-      {isLoading ? (
-        <View style={styles.loader}>
-          <ActivityIndicator size="large" color="#007bff" />
-        </View>
-      ) : (
-        <View style={styles.container}>
-          <OmrEvaluationInfo
-            omrData={formData}
-            localFilePath={localFilePath}
-            index={index}
-            students={studentsState}
-            reports={reportsState}
-            navigation={navigation}
-            openPDF={openPDF}
-            handleSubmit={handleSubmit}
-          />
-        </View>
-      )}
-    </ScrollView>
+    <SafeAreaView className="flex-1 bg-[#111]">
+      <ScrollView className="flex-grow">
+        {isLoading ? (
+          <View className="bg-[#111] flex-1 justify-center items-center">
+            <ActivityIndicator size="large" color="#007bff" />
+          </View>
+        ) : (
+          <View className="bg-[#111] h-full">
+            <OmrEvaluationInfo
+              omrData={formData}
+              localFilePath={localFilePath}
+              index={index}
+              students={studentsState}
+              reports={reportsState}
+              navigation={navigation}
+              openPDF={openPDF}
+              handleSubmit={handleSubmit}
+            />
+          </View>
+        )}
+      </ScrollView>
+    </SafeAreaView>
   );
 };
 

@@ -5,7 +5,9 @@ import {
   Alert,
   ScrollView,
   ToastAndroid,
+  Text,
 } from 'react-native';
+import {SafeAreaView} from 'react-native-safe-area-context';
 import FileViewer from 'react-native-file-viewer';
 import RNFS from 'react-native-fs';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -93,12 +95,23 @@ const OmrGeneration = ({route, navigation}) => {
         });
       }
 
-      navigation.navigate('OmrEvaluation', {
-        formData: examHistory.formData,
-        localFilePath: examHistory.localFilePath,
-        index: idx !== null ? idx : pdfHistory.length - 1,
-        students: examHistory.students,
-        reports: examHistory.reports,
+      // Reset navigation stack: Home -> ExamHistory -> OmrEvaluation
+      navigation.reset({
+        index: 2,
+        routes: [
+          {name: 'Home'},
+          {name: 'ExamHistory'},
+          {
+            name: 'OmrEvaluation',
+            params: {
+              formData: examHistory.formData,
+              localFilePath: examHistory.localFilePath,
+              index: idx !== null ? idx : pdfHistory.length - 1,
+              students: examHistory.students,
+              reports: examHistory.reports,
+            },
+          },
+        ],
       });
     } catch (error) {
       setIsLoading(false);
@@ -272,29 +285,43 @@ const OmrGeneration = ({route, navigation}) => {
   };
 
   return (
-    <ScrollView
-      contentContainerStyle={{
-        flexGrow: 1,
-      }}>
+    <SafeAreaView className="flex-1 bg-[#0a0a0f]">
       {isLoading ? (
-        <View
-          style={{
-            backgroundColor: '#111',
-            flex: 1,
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}>
-          <ActivityIndicator size="large" color="#007bff" />
+        <View className="flex-1 justify-center items-center bg-[#0a0a0f]">
+          {/* Modern Loading Animation */}
+          <View className="items-center">
+            {/* Animated Circle */}
+            <View className="w-24 h-24 rounded-full border-4 border-primary/20 border-t-primary items-center justify-center mb-6">
+              <ActivityIndicator size="large" color="#00ff5f" />
+            </View>
+
+            {/* Loading Text */}
+            <Text className="text-white text-xl font-bold mb-2">
+              Generating OMR Sheet
+            </Text>
+            <Text className="text-white/40 text-sm">
+              Please wait while we create your exam...
+            </Text>
+
+            {/* Progress Dots */}
+            <View className="flex-row gap-x-2 mt-6">
+              <View className="w-2 h-2 rounded-full bg-primary" />
+              <View className="w-2 h-2 rounded-full bg-primary/60" />
+              <View className="w-2 h-2 rounded-full bg-primary/30" />
+            </View>
+          </View>
         </View>
       ) : (
-        <OmrGenerationForm
-          formData={formData}
-          students={students}
-          handleInputChange={handleInputChange}
-          handleSubmit={handleSubmit}
-        />
+        <ScrollView className="flex-1">
+          <OmrGenerationForm
+            formData={formData}
+            students={students}
+            handleInputChange={handleInputChange}
+            handleSubmit={handleSubmit}
+          />
+        </ScrollView>
       )}
-    </ScrollView>
+    </SafeAreaView>
   );
 };
 

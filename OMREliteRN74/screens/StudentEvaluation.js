@@ -7,12 +7,12 @@ import {
   ToastAndroid,
   AppState,
 } from 'react-native';
+import {SafeAreaView} from 'react-native-safe-area-context';
 import FileViewer from 'react-native-file-viewer';
 import RNFS from 'react-native-fs';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import StudentEvaluationInfo from '../components/StudentEvaluationInfo';
-import styles from '../screenStyles/OmrEvaluationStyle';
 import {
   checkStoragePermissions,
   requestStoragePermissions,
@@ -278,13 +278,13 @@ const StudentEvaluation = ({route, navigation}) => {
   };
 
   return (
-    <View style={{flex: 1}}>
+    <SafeAreaView className="flex-1 bg-[#111]">
       {isLoading ? (
-        <View style={styles.loader}>
+        <View className="bg-[#111] flex-1 justify-center items-center">
           <ActivityIndicator size="large" color="#007bff" />
         </View>
       ) : (
-        <ScrollView style={styles.container}>
+        <ScrollView className="bg-[#111] h-full">
           <StudentEvaluationInfo
             omrData={formData}
             localFilePath={localFilePath}
@@ -297,7 +297,7 @@ const StudentEvaluation = ({route, navigation}) => {
           />
         </ScrollView>
       )}
-    </View>
+    </SafeAreaView>
   );
 };
 

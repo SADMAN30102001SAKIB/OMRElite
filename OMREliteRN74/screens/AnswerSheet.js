@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {View} from 'react-native';
+import {SafeAreaView} from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import AnswerSheetForm from '../components/AnswerSheetForm';
 
@@ -91,17 +91,14 @@ const AnswerSheet = ({route, navigation}) => {
   };
 
   return (
-    <View
-      style={{
-        flex: 1,
-      }}>
+    <SafeAreaView className="flex-1 bg-[#111]">
       <AnswerSheetForm
         newOmrData={newOmrData}
         handleInputChange={handleInputChange}
         handleSave={handleSave}
         students={students}
       />
-    </View>
+    </SafeAreaView>
   );
 };
 

@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
 import {View, Text, TouchableOpacity, Alert, FlatList} from 'react-native';
 import CustomCheckBox from './CustomCheckBox';
-import styles from '../componentStyles/FormStyle';
 
 const QuestionItem = React.memo(
   ({index, set, handleInputChange, newOmrData}) => {
@@ -10,37 +9,15 @@ const QuestionItem = React.memo(
     const value = newOmrData[questionKey];
 
     return (
-      <View
-        style={{
-          ...styles.fieldContainer,
-          display: 'flex',
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-        }}>
+      <View className="mb-[4.5%] flex-row items-center justify-between">
         <Text
-          style={
+          className={`text-base p-[1%] mb-[1.5%] ${
             !value.includes('-')
               ? value.length > 1
-                ? {
-                    ...styles.label,
-                    padding: '1%',
-                    marginBottom: '1.5%',
-                    color: '#ffff00',
-                  }
-                : {
-                    ...styles.label,
-                    padding: '1%',
-                    marginBottom: '1.5%',
-                    color: '#55ff00',
-                  }
-              : {
-                  ...styles.label,
-                  padding: '1%',
-                  marginBottom: '1.5%',
-                  color: '#ff5500',
-                }
-          }>
+                ? 'text-[#ffff00]'
+                : 'text-success'
+              : 'text-[#ff5500]'
+          }`}>
           {questionNumber < 10 ? `Q0${questionNumber}:` : `Q${questionNumber}:`}
         </Text>
         <CustomCheckBox
@@ -80,10 +57,10 @@ const AnswerSheetForm = ({
     .map((_, index) => index);
 
   return (
-    <View style={styles.container}>
+    <View className="flex-1 bg-[#111] p-[5%]">
       {newOmrData.setCount > 1 && (
-        <View style={styles.setContainer}>
-          <Text style={styles.label}>SET: </Text>
+        <View className="my-[6%] flex-row items-center justify-around">
+          <Text className="text-white text-base">SET: </Text>
           <CustomCheckBox
             options={['A', 'B', 'C', 'D']
               .slice(0, newOmrData.setCount)
@@ -111,19 +88,14 @@ const AnswerSheetForm = ({
           />
         )}
         keyExtractor={item => item.toString()}
-        style={
-          newOmrData.setCount === 1
-            ? {...styles.scroll, marginTop: '25%'}
-            : styles.scroll
-        }
+        className={`p-[2%] bg-[#181818] rounded-xl border-2 border-white border-solid ${
+          newOmrData.setCount === 1 ? 'mt-[25%]' : ''
+        }`}
       />
 
-      <View style={{...styles.button, marginTop: '10%'}}>
+      <View className="w-full flex items-center mt-[10%]">
         <TouchableOpacity
-          style={{
-            ...styles.submitButton,
-            backgroundColor: '#00ff5f',
-          }}
+          className="rounded-[50px] px-[10%] py-[5%] bg-primary justify-center items-center mt-[1%]"
           onPress={() => {
             students.length
               ? Alert.alert(
@@ -146,7 +118,7 @@ const AnswerSheetForm = ({
                 )
               : handleSave();
           }}>
-          <Text style={{...styles.submitButtonText, color: 'black'}}>Save</Text>
+          <Text className="text-black text-base font-bold">Save</Text>
         </TouchableOpacity>
       </View>
     </View>

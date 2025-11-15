@@ -7,9 +7,7 @@ import {
   Switch,
   TouchableOpacity,
 } from 'react-native';
-import {RadioButton} from 'react-native-paper';
 import {Picker} from '@react-native-picker/picker';
-import styles from '../componentStyles/FormStyle';
 
 const OmrGenerationForm = ({
   formData,
@@ -18,346 +16,378 @@ const OmrGenerationForm = ({
   handleSubmit,
 }) => {
   return (
-    <ScrollView
-      style={{
-        ...styles.container,
-        padding: '3%',
-        paddingTop: '10%',
-      }}>
-      <View
-        style={{
-          padding: '5%',
-          borderColor: 'white',
-          borderWidth: 2,
-          borderRadius: 10,
-        }}>
-        <View style={styles.box}>
-          <View>
+    <ScrollView className="flex-1 bg-[#0a0a0f]">
+      <View className="px-5 py-6">
+        {/* Header */}
+        <View className="mb-6">
+          <Text className="text-white text-2xl font-bold mb-1">
+            Create OMR Sheet
+          </Text>
+          <View className="w-12 h-1 bg-primary rounded-full mb-2" />
+          <Text className="text-white/40 text-sm">
+            Configure your exam settings below
+          </Text>
+        </View>
+
+        {/* Institution Section */}
+        <View className="bg-white/5 rounded-2xl p-5 mb-4 border border-white/10">
+          <Text className="text-white text-lg font-bold mb-4">
+            Institution Details
+          </Text>
+
+          <View className="mb-4">
             <Text
-              style={
-                formData.iName
-                  ? {...styles.label}
-                  : {...styles.label, color: '#ff5500'}
-              }>
-              Institution Name:
+              className={`text-sm font-medium mb-2 ${
+                formData.iName ? 'text-white/60' : 'text-red-500'
+              }`}>
+              Institution Name *
             </Text>
             <TextInput
-              placeholder="Edit"
+              placeholder="Enter institution name"
+              placeholderTextColor="#666"
               onChangeText={text => handleInputChange('iName', text)}
-              style={styles.input}
+              className="bg-white/5 text-white rounded-xl border border-white/20 px-4 py-3"
               value={formData.iName ? formData.iName.toString() : ''}
             />
           </View>
 
-          <View
-            style={{
-              ...styles.fieldContainer,
-              display: 'flex',
-              flexDirection: 'row',
-              marginBottom: '0%',
-            }}>
-            <Text style={styles.label}>Underlined?</Text>
+          <View className="flex-row items-center justify-between mb-4">
+            <Text className="text-white/60 text-sm font-medium">
+              Underlined Text
+            </Text>
             <Switch
               value={formData.isIUnderline}
               onValueChange={value => handleInputChange('isIUnderline', value)}
-              style={styles.switch}
-              trackColor={{false: '#767577', true: '#aaffaa'}}
-              thumbColor={formData.isIUnderline ? '#00aa5f' : '#f4f3f4'}
+              trackColor={{false: '#333', true: '#00ff5f33'}}
+              thumbColor={formData.isIUnderline ? '#00ff5f' : '#666'}
             />
           </View>
 
-          <View
-            style={{
-              display: 'flex',
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-            }}>
+          <View className="mb-4">
             <Text
-              style={
-                formData.iSize
-                  ? styles.label
-                  : {...styles.label, color: '#ff5500'}
-              }>
-              Text Size:
+              className={`text-sm font-medium mb-2 ${
+                formData.iSize ? 'text-white/60' : 'text-red-500'
+              }`}>
+              Text Size
             </Text>
             <TextInput
-              placeholder="ex: 16"
+              placeholder="e.g., 16"
+              placeholderTextColor="#666"
               keyboardType="numeric"
               onChangeText={text => handleInputChange('iSize', text)}
-              style={{
-                ...styles.input,
-                width: '65%',
-                marginTop: '3%',
-              }}
+              className="bg-white/5 text-white rounded-xl border border-white/20 px-4 py-3"
               value={formData.iSize ? formData.iSize.toString() : ''}
             />
           </View>
 
-          <View>
-            <Text style={styles.label}>Text Color Of Institution Name:</Text>
-            <Picker
-              selectedValue={formData.iColor}
-              onValueChange={(itemValue, itemIndex) =>
-                handleInputChange('iColor', itemValue)
-              }
-              style={styles.picker}>
-              <Picker.Item label="Black" value="black" />
-              <Picker.Item label="Red" value="red" />
-              <Picker.Item label="Green" value="green" />
-              <Picker.Item label="Blue" value="blue" />
-              <Picker.Item label="White" value="white" />
-            </Picker>
+          <View className="mb-4">
+            <Text className="text-white/60 text-sm font-medium mb-2">
+              Text Color
+            </Text>
+            <View className="bg-white/5 rounded-xl border border-white/20 overflow-hidden">
+              <Picker
+                selectedValue={formData.iColor}
+                onValueChange={itemValue =>
+                  handleInputChange('iColor', itemValue)
+                }
+                style={{color: '#fff', backgroundColor: 'transparent'}}
+                dropdownIconColor="#00ff5f">
+                <Picker.Item label="Black" value="black" />
+                <Picker.Item label="Red" value="red" />
+                <Picker.Item label="Green" value="green" />
+                <Picker.Item label="Blue" value="blue" />
+                <Picker.Item label="White" value="white" />
+              </Picker>
+            </View>
           </View>
 
           <View>
-            <Text style={styles.label}>Font Of Institution Name:</Text>
-            <Picker
-              selectedValue={formData.iFont}
-              onValueChange={(itemValue, itemIndex) =>
-                handleInputChange('iFont', itemValue)
-              }
-              style={styles.picker}>
-              <Picker.Item label="Helvetica Bold" value="Helvetica-Bold" />
-              <Picker.Item label="Helvetica Italic" value="Helvetica-Oblique" />
-              <Picker.Item
-                label="Helvetica Bold-Italic"
-                value="Helvetica-BoldOblique"
-              />
-              <Picker.Item label="Times New Roman Bold" value="Times-Bold" />
-              <Picker.Item
-                label="Times New Roman Italic"
-                value="Times-Italic"
-              />
-              <Picker.Item
-                label="Times New Roman Bold-Italic"
-                value="Times-BoldItalic"
-              />
-              <Picker.Item label="Courier Bold" value="Courier-Bold" />
-              <Picker.Item label="Courier Italic" value="Courier-Oblique" />
-              <Picker.Item
-                label="Courier Bold-Italic"
-                value="Courier-BoldOblique"
-              />
-            </Picker>
+            <Text className="text-white/60 text-sm font-medium mb-2">Font</Text>
+            <View className="bg-white/5 rounded-xl border border-white/20 overflow-hidden">
+              <Picker
+                selectedValue={formData.iFont}
+                onValueChange={itemValue =>
+                  handleInputChange('iFont', itemValue)
+                }
+                style={{color: '#fff', backgroundColor: 'transparent'}}
+                dropdownIconColor="#00ff5f">
+                <Picker.Item label="Helvetica Bold" value="Helvetica-Bold" />
+                <Picker.Item
+                  label="Helvetica Italic"
+                  value="Helvetica-Oblique"
+                />
+                <Picker.Item
+                  label="Helvetica Bold-Italic"
+                  value="Helvetica-BoldOblique"
+                />
+                <Picker.Item label="Times New Roman Bold" value="Times-Bold" />
+                <Picker.Item
+                  label="Times New Roman Italic"
+                  value="Times-Italic"
+                />
+                <Picker.Item
+                  label="Times New Roman Bold-Italic"
+                  value="Times-BoldItalic"
+                />
+                <Picker.Item label="Courier Bold" value="Courier-Bold" />
+                <Picker.Item label="Courier Italic" value="Courier-Oblique" />
+                <Picker.Item
+                  label="Courier Bold-Italic"
+                  value="Courier-BoldOblique"
+                />
+              </Picker>
+            </View>
           </View>
         </View>
 
-        <View style={styles.box}>
-          <View>
+        {/* Exam Section */}
+        <View className="bg-white/5 rounded-2xl p-5 mb-4 border border-white/10">
+          <Text className="text-white text-lg font-bold mb-4">
+            Exam Details
+          </Text>
+
+          <View className="mb-4">
             <Text
-              style={
-                formData.pName
-                  ? {...styles.label}
-                  : {...styles.label, color: '#ff5500'}
-              }>
-              Exam Name:
+              className={`text-sm font-medium mb-2 ${
+                formData.pName ? 'text-white/60' : 'text-red-500'
+              }`}>
+              Exam Name *
             </Text>
             <TextInput
-              placeholder="Edit"
+              placeholder="Enter exam name"
+              placeholderTextColor="#666"
               onChangeText={text => handleInputChange('pName', text)}
-              style={styles.input}
+              className="bg-white/5 text-white rounded-xl border border-white/20 px-4 py-3"
               value={formData.pName ? formData.pName.toString() : ''}
             />
           </View>
 
-          <View
-            style={{
-              ...styles.fieldContainer,
-              display: 'flex',
-              flexDirection: 'row',
-              marginBottom: '0%',
-            }}>
-            <Text style={styles.label}>Underlined?</Text>
+          <View className="flex-row items-center justify-between mb-4">
+            <Text className="text-white/60 text-sm font-medium">
+              Underlined Text
+            </Text>
             <Switch
               value={formData.isPUnderline}
               onValueChange={value => handleInputChange('isPUnderline', value)}
-              style={styles.switch}
-              trackColor={{false: '#767577', true: '#aaffaa'}}
-              thumbColor={formData.isPUnderline ? '#00aa5f' : '#f4f3f4'}
+              trackColor={{false: '#333', true: '#00ff5f33'}}
+              thumbColor={formData.isPUnderline ? '#00ff5f' : '#666'}
             />
           </View>
 
-          <View
-            style={{
-              display: 'flex',
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-            }}>
+          <View className="mb-4">
             <Text
-              style={
-                formData.pSize
-                  ? styles.label
-                  : {...styles.label, color: '#ff5500'}
-              }>
-              Text Size:
+              className={`text-sm font-medium mb-2 ${
+                formData.pSize ? 'text-white/60' : 'text-red-500'
+              }`}>
+              Text Size
             </Text>
             <TextInput
-              placeholder="ex: 9"
+              placeholder="e.g., 9"
+              placeholderTextColor="#666"
               keyboardType="numeric"
               onChangeText={text => handleInputChange('pSize', text)}
-              style={{
-                ...styles.input,
-                width: '65%',
-                marginTop: '3%',
-              }}
+              className="bg-white/5 text-white rounded-xl border border-white/20 px-4 py-3"
               value={formData.pSize ? formData.pSize.toString() : ''}
             />
           </View>
 
-          <View>
-            <Text style={styles.label}>Text Color Of Exam Name:</Text>
-            <Picker
-              selectedValue={formData.pColor}
-              onValueChange={(itemValue, itemIndex) =>
-                handleInputChange('pColor', itemValue)
-              }
-              style={styles.picker}>
-              <Picker.Item label="Black" value="black" />
-              <Picker.Item label="Red" value="red" />
-              <Picker.Item label="Green" value="green" />
-              <Picker.Item label="Blue" value="blue" />
-              <Picker.Item label="White" value="white" />
-            </Picker>
+          <View className="mb-4">
+            <Text className="text-white/60 text-sm font-medium mb-2">
+              Text Color
+            </Text>
+            <View className="bg-white/5 rounded-xl border border-white/20 overflow-hidden">
+              <Picker
+                selectedValue={formData.pColor}
+                onValueChange={itemValue =>
+                  handleInputChange('pColor', itemValue)
+                }
+                style={{color: '#fff', backgroundColor: 'transparent'}}
+                dropdownIconColor="#00ff5f">
+                <Picker.Item label="Black" value="black" />
+                <Picker.Item label="Red" value="red" />
+                <Picker.Item label="Green" value="green" />
+                <Picker.Item label="Blue" value="blue" />
+                <Picker.Item label="White" value="white" />
+              </Picker>
+            </View>
           </View>
 
           <View>
-            <Text style={styles.label}>Font Of Exam Name:</Text>
-            <Picker
-              selectedValue={formData.pFont}
-              onValueChange={(itemValue, itemIndex) =>
-                handleInputChange('pFont', itemValue)
-              }
-              style={styles.picker}>
-              <Picker.Item label="Helvetica Bold" value="Helvetica-Bold" />
-              <Picker.Item label="Helvetica Italic" value="Helvetica-Oblique" />
-              <Picker.Item
-                label="Helvetica Bold-Italic"
-                value="Helvetica-BoldOblique"
-              />
-              <Picker.Item label="Times New Roman Bold" value="Times-Bold" />
-              <Picker.Item
-                label="Times New Roman Italic"
-                value="Times-Italic"
-              />
-              <Picker.Item
-                label="Times New Roman Bold-Italic"
-                value="Times-BoldItalic"
-              />
-              <Picker.Item label="Courier Bold" value="Courier-Bold" />
-              <Picker.Item label="Courier Italic" value="Courier-Oblique" />
-              <Picker.Item
-                label="Courier Bold-Italic"
-                value="Courier-BoldOblique"
-              />
-            </Picker>
+            <Text className="text-white/60 text-sm font-medium mb-2">Font</Text>
+            <View className="bg-white/5 rounded-xl border border-white/20 overflow-hidden">
+              <Picker
+                selectedValue={formData.pFont}
+                onValueChange={itemValue =>
+                  handleInputChange('pFont', itemValue)
+                }
+                style={{color: '#fff', backgroundColor: 'transparent'}}
+                dropdownIconColor="#00ff5f">
+                <Picker.Item label="Helvetica Bold" value="Helvetica-Bold" />
+                <Picker.Item
+                  label="Helvetica Italic"
+                  value="Helvetica-Oblique"
+                />
+                <Picker.Item
+                  label="Helvetica Bold-Italic"
+                  value="Helvetica-BoldOblique"
+                />
+                <Picker.Item label="Times New Roman Bold" value="Times-Bold" />
+                <Picker.Item
+                  label="Times New Roman Italic"
+                  value="Times-Italic"
+                />
+                <Picker.Item
+                  label="Times New Roman Bold-Italic"
+                  value="Times-BoldItalic"
+                />
+                <Picker.Item label="Courier Bold" value="Courier-Bold" />
+                <Picker.Item label="Courier Italic" value="Courier-Oblique" />
+                <Picker.Item
+                  label="Courier Bold-Italic"
+                  value="Courier-BoldOblique"
+                />
+              </Picker>
+            </View>
           </View>
         </View>
 
+        {/* Configuration Section */}
         {!students.length && (
-          <View>
-            <View
-              style={{
-                ...styles.fieldContainer,
-                display: 'flex',
-                flexDirection: 'row',
-              }}>
-              <Text style={styles.label}>Show Name Field?</Text>
+          <View className="bg-white/5 rounded-2xl p-5 mb-4 border border-white/10">
+            <Text className="text-white text-lg font-bold mb-4">
+              Sheet Configuration
+            </Text>
+
+            <View className="flex-row items-center justify-between mb-4">
+              <Text className="text-white/60 text-sm font-medium">
+                Show Name Field
+              </Text>
               <Switch
                 value={formData.isName}
                 onValueChange={value => handleInputChange('isName', value)}
-                style={styles.switch}
-                trackColor={{false: '#767577', true: '#aaffaa'}}
-                thumbColor={formData.isName ? '#00aa5f' : '#f4f3f4'}
+                trackColor={{false: '#333', true: '#00ff5f33'}}
+                thumbColor={formData.isName ? '#00ff5f' : '#666'}
               />
             </View>
 
-            <View style={{display: 'flex', flexDirection: 'row'}}>
-              <Text style={styles.label}>Show ID Box?</Text>
+            <View className="flex-row items-center justify-between mb-4">
+              <Text className="text-white/60 text-sm font-medium">
+                Show ID Box
+              </Text>
               <Switch
                 value={formData.isRoll}
                 onValueChange={value => handleInputChange('isRoll', value)}
-                style={styles.switch}
-                trackColor={{false: '#767577', true: '#aaffaa'}}
-                thumbColor={formData.isRoll ? '#00aa5f' : '#f4f3f4'}
+                trackColor={{false: '#333', true: '#00ff5f33'}}
+                thumbColor={formData.isRoll ? '#00ff5f' : '#666'}
               />
             </View>
 
-            {formData.isRoll ? (
-              <View style={styles.fieldContainer}>
+            {formData.isRoll && (
+              <View className="mb-4">
                 <Text
-                  style={
+                  className={`text-sm font-medium mb-2 ${
                     formData.rollDigit &&
                     formData.rollDigit > 0 &&
                     formData.rollDigit < 12
-                      ? {...styles.label}
-                      : {...styles.label, color: '#ff5500'}
-                  }>
-                  Number of Digits In ID (1 - 11):
+                      ? 'text-white/60'
+                      : 'text-red-500'
+                  }`}>
+                  Number of Digits in ID (1-11) *
                 </Text>
                 <TextInput
-                  placeholder="ex: 7"
+                  placeholder="e.g., 7"
+                  placeholderTextColor="#666"
                   keyboardType="numeric"
                   onChangeText={text =>
                     handleInputChange('rollDigit', parseInt(text, 10))
                   }
-                  style={styles.input}
+                  className="bg-white/5 text-white rounded-xl border border-white/20 px-4 py-3"
                   value={
                     formData.rollDigit ? formData.rollDigit.toString() : ''
                   }
                 />
               </View>
-            ) : null}
+            )}
 
-            <View
-              style={{
-                ...styles.fieldContainer,
-                marginTop: formData.isRoll ? 0 : 20,
-              }}>
-              <Text style={styles.label}>Number of Sets:</Text>
-              <RadioButton.Group
-                onValueChange={newValue =>
-                  handleInputChange('setCount', parseInt(newValue, 10))
-                }
-                value={String(formData.setCount)}>
-                <View style={styles.radioButton}>
-                  <View style={styles.radioButtonRow}>
-                    <RadioButton value="2" color="#00aa5f" />
-                    <Text>2</Text>
-                  </View>
-                  <View style={styles.radioButtonRow}>
-                    <RadioButton value="3" color="#00aa5f" />
-                    <Text>3</Text>
-                  </View>
-                  <View style={styles.radioButtonRow}>
-                    <RadioButton value="4" color="#00aa5f" />
-                    <Text>4</Text>
-                  </View>
-                  <View style={styles.radioButtonRow}>
-                    <RadioButton value="1" color="#00aa5f" />
-                    <Text>None</Text>
-                  </View>
-                </View>
-              </RadioButton.Group>
+            <View className="mb-4">
+              <Text className="text-white/60 text-sm font-medium mb-3">
+                Number of Sets
+              </Text>
+              <View className="flex-row gap-x-2">
+                <TouchableOpacity
+                  onPress={() => handleInputChange('setCount', 2)}
+                  className={`flex-1 items-center rounded-xl px-3 py-3 border ${
+                    formData.setCount === 2
+                      ? 'bg-primary/20 border-primary'
+                      : 'bg-white/5 border-white/10'
+                  }`}>
+                  <Text
+                    className={`text-sm font-medium ${
+                      formData.setCount === 2 ? 'text-primary' : 'text-white'
+                    }`}>
+                    2
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => handleInputChange('setCount', 3)}
+                  className={`flex-1 items-center rounded-xl px-3 py-3 border ${
+                    formData.setCount === 3
+                      ? 'bg-primary/20 border-primary'
+                      : 'bg-white/5 border-white/10'
+                  }`}>
+                  <Text
+                    className={`text-sm font-medium ${
+                      formData.setCount === 3 ? 'text-primary' : 'text-white'
+                    }`}>
+                    3
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => handleInputChange('setCount', 4)}
+                  className={`flex-1 items-center rounded-xl px-3 py-3 border ${
+                    formData.setCount === 4
+                      ? 'bg-primary/20 border-primary'
+                      : 'bg-white/5 border-white/10'
+                  }`}>
+                  <Text
+                    className={`text-sm font-medium ${
+                      formData.setCount === 4 ? 'text-primary' : 'text-white'
+                    }`}>
+                    4
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => handleInputChange('setCount', 1)}
+                  className={`flex-1 items-center rounded-xl px-3 py-3 border ${
+                    formData.setCount === 1
+                      ? 'bg-primary/20 border-primary'
+                      : 'bg-white/5 border-white/10'
+                  }`}>
+                  <Text
+                    className={`text-sm font-medium ${
+                      formData.setCount === 1 ? 'text-primary' : 'text-white'
+                    }`}>
+                    None
+                  </Text>
+                </TouchableOpacity>
+              </View>
             </View>
 
-            <View style={styles.fieldContainer}>
+            <View>
               <Text
-                style={
-                  formData.questionsCount
-                    ? {...styles.label}
-                    : {...styles.label, color: '#ff5500'}
-                }>
-                Number of Questions (1 - 100):
+                className={`text-sm font-medium mb-2 ${
+                  formData.questionsCount ? 'text-white/60' : 'text-red-500'
+                }`}>
+                Number of Questions (1-100) *
               </Text>
               <TextInput
-                placeholder="ex: 25"
+                placeholder="e.g., 25"
+                placeholderTextColor="#666"
                 keyboardType="numeric"
                 onChangeText={text =>
                   handleInputChange('questionsCount', parseInt(text, 10))
                 }
-                style={styles.input}
+                className="bg-white/5 text-white rounded-xl border border-white/20 px-4 py-3"
                 value={
                   formData.questionsCount
                     ? formData.questionsCount.toString()
@@ -367,12 +397,14 @@ const OmrGenerationForm = ({
             </View>
           </View>
         )}
-      </View>
 
-      <View style={{...styles.button, marginTop: '5%'}}>
-        <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
-          <Text style={styles.submitButtonText}>
-            {students.length ? 'Re-Generate' : 'Generate'}
+        {/* Generate Button */}
+        <TouchableOpacity
+          onPress={handleSubmit}
+          activeOpacity={0.7}
+          className="bg-primary rounded-2xl py-5 mb-6">
+          <Text className="text-black text-center text-lg font-bold">
+            {students.length ? 'Re-Generate OMR' : 'Generate OMR Sheet'}
           </Text>
         </TouchableOpacity>
       </View>

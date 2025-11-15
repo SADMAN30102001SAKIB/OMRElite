@@ -8,7 +8,6 @@ import {
 } from 'react-native';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import {requestCameraPermission} from '../utils/permissions';
-import styles from '../componentStyles/OmrEvaluationInfoStyle';
 
 const OmrEvaluationInfo = ({
   omrData,
@@ -155,85 +154,87 @@ const OmrEvaluationInfo = ({
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.topBox}>
-        <View
-          style={{
-            borderTopLeftRadius: 10,
-            borderTopRightRadius: 10,
-            padding: '3%',
-            backgroundColor: '#050505',
-          }}>
-          <Text style={styles.label}>Institution Name: </Text>
+    <View className="flex-1 bg-[#111] p-[5%]">
+      <View className="bg-[#1a1a1a] rounded-xl mb-[3%]">
+        <View className="rounded-t-xl p-[3%] bg-[#050505]">
+          <Text className="text-white text-base font-bold mb-[1%]">
+            Institution Name:{' '}
+          </Text>
           <Text
-            style={{
-              ...styles.text,
-              textDecorationLine: omrData.isIUnderline ? 'underline' : 'none',
-            }}>
+            className={`text-white text-base ${
+              omrData.isIUnderline ? 'underline' : ''
+            }`}>
             {omrData.iName}
           </Text>
         </View>
 
-        <View
-          style={{
-            marginBottom: '5%',
-            borderBottomLeftRadius: 10,
-            borderBottomRightRadius: 10,
-            padding: '3%',
-            backgroundColor: '#050505',
-          }}>
-          <Text style={styles.label}>Exam Name: </Text>
+        <View className="mb-[5%] rounded-b-xl p-[3%] bg-[#050505]">
+          <Text className="text-white text-base font-bold mb-[1%]">
+            Exam Name:{' '}
+          </Text>
           <Text
-            style={{
-              ...styles.text,
-              textDecorationLine: omrData.isPUnderline ? 'underline' : 'none',
-            }}>
+            className={`text-white text-base ${
+              omrData.isPUnderline ? 'underline' : ''
+            }`}>
             {omrData.pName}
           </Text>
         </View>
 
-        <View style={styles.fieldBox}>
-          <Text style={styles.label}>Name Field: </Text>
+        <View className="flex-row justify-between py-[2%] px-[3%] border-b border-gray-700">
+          <Text className="text-white text-base font-bold mb-[1%]">
+            Name Field:{' '}
+          </Text>
           <Text
-            style={
-              omrData.isName
-                ? {...styles.text, color: '#55ff00'}
-                : {...styles.text, color: '#ff5500'}
-            }>
+            className={`text-base ${
+              omrData.isName ? 'text-success' : 'text-[#ff5500]'
+            }`}>
             {omrData.isName ? 'YES' : 'NO'}
           </Text>
         </View>
 
+        {omrData.isRoll && (
+          <View className="flex-row justify-between py-[2%] px-[3%] border-b border-gray-700">
+            <Text className="text-white text-base font-bold mb-[1%]">
+              ID Digits:{' '}
+            </Text>
+            <Text className="text-white text-base">{omrData.rollDigit}</Text>
+          </View>
+        )}
         {omrData.isRoll ? (
-          <View style={styles.fieldBox}>
-            <Text style={styles.label}>ID Digits: </Text>
-            <Text style={styles.text}>{omrData.rollDigit}</Text>
+          <View className="flex-row justify-between py-[2%] px-[3%] border-b border-gray-700">
+            <Text className="text-white text-base font-bold mb-[1%]">
+              ID Field:{' '}
+            </Text>
+            <Text className="text-success text-base">YES</Text>
           </View>
         ) : (
-          <View style={styles.fieldBox}>
-            <Text style={styles.label}>ID Field: </Text>
-            <Text style={{...styles.text, color: '#ff5500'}}>NO</Text>
+          <View className="flex-row justify-between py-[2%] px-[3%] border-b border-gray-700">
+            <Text className="text-white text-base font-bold mb-[1%]">
+              ID Field:{' '}
+            </Text>
+            <Text className="text-[#ff5500] text-base">NO</Text>
           </View>
         )}
 
-        <View style={styles.fieldBox}>
-          <Text style={styles.label}>Number of Sets: </Text>
-          <Text style={styles.text}>
+        <View className="flex-row justify-between py-[2%] px-[3%] border-b border-gray-700">
+          <Text className="text-white text-base font-bold mb-[1%]">
+            Number of Sets:{' '}
+          </Text>
+          <Text className="text-white text-base">
             {omrData.setCount > 1 ? omrData.setCount : 'None'}
           </Text>
         </View>
 
-        <View style={styles.fieldBox}>
-          <Text style={styles.label}>Number of Questions: </Text>
-          <Text style={styles.text}>{omrData.questionsCount}</Text>
+        <View className="flex-row justify-between py-[2%] px-[3%] border-b border-gray-700">
+          <Text className="text-white text-base font-bold mb-[1%]">
+            Number of Questions:{' '}
+          </Text>
+          <Text className="text-white text-base">{omrData.questionsCount}</Text>
         </View>
-        <View style={{...styles.buttonGroup, justifyContent: 'space-evenly'}}>
-          <View style={{...styles.button, marginLeft: '5%'}}>
+        <View className="flex-row justify-evenly mt-[3%]">
+          <View className="flex-1 mx-[2%]">
             <TouchableOpacity
-              style={{
-                ...styles.submitButton,
-                backgroundColor: '#00ff5f',
-              }}
+              className="rounded-[50px] px-[5%] py-[4%] bg-primary justify-center items-center"
               onPress={() =>
                 navigation.navigate('OmrGeneration', {
                   omrData,
@@ -243,22 +244,14 @@ const OmrEvaluationInfo = ({
                   reports,
                 })
               }>
-              <Text
-                style={{
-                  ...styles.submitButtonText,
-                  color: 'black',
-                }}>
-                Edit
-              </Text>
+              <Text className="text-black text-base font-bold">Edit</Text>
             </TouchableOpacity>
           </View>
-          <View style={{...styles.button, marginRight: '15%'}}>
+          <View className="flex-1 mx-[2%]">
             <TouchableOpacity
               onPress={() => openPDF(localFilePath)}
-              style={{...styles.submitButton, backgroundColor: 'white'}}>
-              <Text style={{...styles.submitButtonText, color: 'black'}}>
-                Open OMR
-              </Text>
+              className="rounded-[50px] px-[5%] py-[4%] bg-white justify-center items-center">
+              <Text className="text-black text-base font-bold">Open OMR</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -266,180 +259,140 @@ const OmrEvaluationInfo = ({
 
       {showBox || students.length ? (
         <View>
-          <Text
-            style={{
-              ...styles.text,
-              marginTop: '5%',
-              marginLeft: '1.5%',
-              fontSize: 15,
-            }}>
+          <Text className="text-white mt-[5%] ml-[1.5%] text-[15px]">
             Evaluate with
             {omrData.questionsCount > 35
               ? ' 2 pictures (in order)'
               : ' 1 picture'}
             :
           </Text>
-          <View
-            style={{
-              ...styles.buttonGroup,
-              ...styles.topBox,
-              paddingTop: '0%',
-              paddingBottom: '5%',
-            }}>
-            <View style={styles.button}>
+          <View className="bg-[#1a1a1a] rounded-xl mb-[3%] flex-row justify-around pt-0 pb-[5%]">
+            <View className="flex-1 mx-[2%]">
               <TouchableOpacity
-                style={{
-                  ...styles.submitButton,
-                  backgroundColor: '#ee6f2f',
-                }}
+                className="rounded-[50px] px-[5%] py-[4%] bg-[#ee6f2f] justify-center items-center mt-[5%]"
                 onPress={() => takePicture()}>
-                <Text style={{...styles.submitButtonText, color: 'white'}}>
-                  Camera
-                </Text>
+                <Text className="text-white text-base font-bold">Camera</Text>
               </TouchableOpacity>
             </View>
-            <View style={styles.button}>
+            <View className="flex-1 mx-[2%]">
               <TouchableOpacity
-                style={{
-                  ...styles.submitButton,
-                  backgroundColor: '#2f6fee',
-                }}
+                className="rounded-[50px] px-[5%] py-[4%] bg-[#2f6fee] justify-center items-center mt-[5%]"
                 onPress={() => pickImage()}>
-                <Text style={{...styles.submitButtonText, color: 'white'}}>
-                  Gallery
-                </Text>
+                <Text className="text-white text-base font-bold">Gallery</Text>
               </TouchableOpacity>
             </View>
           </View>
         </View>
       ) : (
-        <View style={styles.button}>
+        <View className="flex-1 mx-[2%]">
           <TouchableOpacity
-            style={{
-              ...styles.submitButton,
-              backgroundColor: '#ee6f2f',
-              borderRadius: 10,
-              borderWidth: 2,
-              borderColor: 'white',
-              borderStyle: 'dotted',
-            }}
+            className="rounded-[50px] px-[10%] py-[5%] bg-[#ee6f2f] justify-center items-center border-2 border-white border-dotted"
             onPress={() => setShowBox(true)}>
-            <Text
-              style={{
-                ...styles.submitButtonText,
-                color: 'white',
-              }}>
-              Evaluate
-            </Text>
+            <Text className="text-white text-base font-bold">Evaluate</Text>
           </TouchableOpacity>
         </View>
       )}
 
-      <Text
-        style={{
-          ...styles.text,
-          marginTop: '15%',
-          marginLeft: '1.5%',
-          fontSize: 13,
-        }}>
+      <Text className="text-white mt-[15%] ml-[1.5%] text-[13px]">
         Scroll Horizontally For More Options ➤
       </Text>
-      <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-        <View style={{width: screenWidth - 40, marginRight: 10}}>
-          <Text style={{...styles.text, marginTop: '1%'}}>Answer Sheet:</Text>
-          <View style={styles.box}>
-            <View>
-              {count.map((item, i) => (
-                <View key={i} style={{marginBottom: '10%'}}>
-                  {omrData.setCount > 1 && (
-                    <Text style={styles.text}>SET {setList[i]}:</Text>
-                  )}
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      justifyContent: 'space-between',
-                    }}>
-                    <View style={styles.fieldBox}>
-                      <Text style={styles.label}>Ans Exist: </Text>
-                      <Text style={styles.text}>
-                        {omrData.questionsCount - item}
-                      </Text>
-                    </View>
-                    <Text style={styles.text}>|</Text>
-                    <View style={styles.fieldBox}>
-                      <Text style={styles.label}>No-Ans: </Text>
-                      <Text style={{...styles.text, color: '#ff5500'}}>
-                        {item}
-                      </Text>
-                    </View>
-                  </View>
-                  <View style={styles.fieldBox}>
-                    <Text style={styles.label}> Single-Ans: </Text>
-                    <Text style={{...styles.text, color: '#55ff00'}}>
-                      {omrData.questionsCount - item - list[i]}
+      <ScrollView horizontal className="max-h-[250px]">
+        <View
+          className="flex-row"
+          style={{width: screenWidth - 40, marginRight: 10}}>
+          {count.map((item, i) => {
+            return (
+              <View key={i} className="mb-[10%]">
+                {omrData.setCount > 1 && (
+                  <Text className="text-white text-base">
+                    SET {setList[i]}:
+                  </Text>
+                )}
+                <View className="flex-row justify-between">
+                  <View className="flex-row justify-between py-[2%] px-[3%]">
+                    <Text className="text-white text-base font-bold mb-[1%]">
+                      Ans Exist:{' '}
+                    </Text>
+                    <Text className="text-white text-base">
+                      {omrData.questionsCount - item}
                     </Text>
                   </View>
-                  <View style={styles.fieldBox}>
-                    <Text style={styles.label}> Multiple-Ans: </Text>
-                    <Text style={{...styles.text, color: '#ffff00'}}>
-                      {list[i]}
+                  <Text className="text-white text-base">|</Text>
+                  <View className="flex-row justify-between py-[2%] px-[3%]">
+                    <Text className="text-white text-base font-bold mb-[1%]">
+                      No-Ans:{' '}
                     </Text>
+                    <Text className="text-[#ff5500] text-base">{item}</Text>
                   </View>
                 </View>
-              ))}
-            </View>
-
-            <View style={styles.button}>
-              <TouchableOpacity
-                style={styles.submitButton}
-                onPress={() =>
-                  navigation.navigate('AnswerSheet', {
-                    omrData,
-                    localFilePath,
-                    index,
-                    students,
-                    reports,
-                  })
-                }>
-                <Text style={styles.submitButtonText}>Edit</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
+                <View className="flex-row justify-between py-[2%] px-[3%]">
+                  <Text className="text-white text-base font-bold mb-[1%]">
+                    {' '}
+                    Single-Ans:{' '}
+                  </Text>
+                  <Text className="text-success text-base">
+                    {omrData.questionsCount - item - list[i]}
+                  </Text>
+                </View>
+                <View className="flex-row justify-between py-[2%] px-[3%]">
+                  <Text className="text-white text-base font-bold mb-[1%]">
+                    {' '}
+                    Multiple-Ans:{' '}
+                  </Text>
+                  <Text className="text-yellow-400 text-base">{list[i]}</Text>
+                </View>
+              </View>
+            );
+          })}
         </View>
+
+        <View className="flex-1 mx-[2%]">
+          <TouchableOpacity
+            className="rounded-[50px] px-[10%] py-[5%] bg-secondary justify-center items-center"
+            onPress={() =>
+              navigation.navigate('AnswerSheet', {
+                omrData,
+                localFilePath,
+              })
+            }>
+            <Text className="text-white text-base font-bold">Answer Key</Text>
+          </TouchableOpacity>
+        </View>
+
         <View style={{width: screenWidth - 40}}>
-          <Text style={{...styles.text, marginTop: '1%'}}>Exam Marking:</Text>
-          <View style={styles.box}>
-            <View style={styles.fieldBox}>
-              <Text style={styles.label}>Marks Per Question: </Text>
-              <Text style={{...styles.text, color: '#55ff00'}}>
-                +{omrData.mpq}
+          <View className="mb-[10%]">
+            <View className="flex-row justify-between py-[2%] px-[3%]">
+              <Text className="text-white text-base font-bold mb-[1%]">
+                Mark For Each Question:{' '}
+              </Text>
+              <Text className="text-success text-base">{omrData.mpq}</Text>
+            </View>
+            <View className="flex-row justify-between py-[2%] px-[3%]">
+              <Text className="text-white text-base font-bold mb-[1%]">
+                Wrong Marking:{' '}
+              </Text>
+              <Text
+                className={`text-base ${
+                  omrData.wrongCase > 1 ? 'text-success' : 'text-[#ff5500]'
+                }`}>
+                {wqCaseArr[omrData.wrongCase]}
               </Text>
             </View>
 
-            <View style={{marginBottom: '5%'}}>
-              <Text style={styles.label}>No-Ans Condition: </Text>
-              <Text style={styles.text}>{wqCaseArr[omrData.wqCase - 1]}</Text>
-            </View>
-
-            <View style={styles.fieldBox}>
-              <Text style={styles.label}>Negative Marking: </Text>
-              <Text style={styles.text}>
-                {omrData.isNegative ? 'YES' : 'NO'}
-              </Text>
-            </View>
-
-            {omrData.isNegative ? (
-              <View style={styles.fieldBox}>
-                <Text style={styles.label}>Negative Mark Per Mistake: </Text>
-                <Text style={{...styles.text, color: '#ff5500'}}>
+            {omrData.negativeMark !== 0 ? (
+              <View className="flex-row justify-between py-[2%] px-[3%]">
+                <Text className="text-white text-base font-bold mb-[1%]">
+                  Negative Mark Per Mistake:{' '}
+                </Text>
+                <Text className="text-[#ff5500] text-base">
                   {omrData.negativeMark}
                 </Text>
               </View>
             ) : null}
 
-            <View style={styles.button}>
+            <View className="flex-1 mx-[2%]">
               <TouchableOpacity
-                style={styles.submitButton}
+                className="rounded-[50px] px-[10%] py-[5%] bg-secondary justify-center items-center"
                 onPress={() =>
                   navigation.navigate('ExamMarking', {
                     omrData,
@@ -449,40 +402,17 @@ const OmrEvaluationInfo = ({
                     reports,
                   })
                 }>
-                <Text style={styles.submitButtonText}>Edit</Text>
+                <Text className="text-white text-base font-bold">Edit</Text>
               </TouchableOpacity>
             </View>
           </View>
         </View>
       </ScrollView>
 
-      {/* <View style={styles.button}>
-        <TouchableOpacity
-          style={{
-            ...styles.submitButton,
-            backgroundColor: "white",
-            borderWidth: 1,
-            borderRadius: 15,
-            borderStyle: "dashed",
-            borderColor: "black",
-          }}
-          onPress={() => debug()}>
-          <Text style={{ ...styles.submitButtonText, color: "black" }}>
-            Debug
-          </Text>
-        </TouchableOpacity>
-      </View> */}
-
-      <View style={{...styles.buttonGroup, marginTop: '10%'}}>
-        <View style={styles.button}>
+      <View className="flex-row justify-around mt-[10%]">
+        <View className="flex-1 mx-[2%]">
           <TouchableOpacity
-            style={{
-              ...styles.submitButton,
-              borderWidth: 1,
-              borderRadius: 15,
-              borderStyle: 'dashed',
-              borderColor: 'white',
-            }}
+            className="rounded-[15px] px-[10%] py-[5%] bg-secondary justify-center items-center border border-white border-dashed"
             onPress={() => {
               navigation.navigate('ReportHistory', {
                 formData: omrData,
@@ -491,41 +421,26 @@ const OmrEvaluationInfo = ({
                 students,
               });
             }}>
-            <Text style={{...styles.submitButtonText}}>Reports</Text>
+            <Text className="text-white text-base font-bold">Reports</Text>
           </TouchableOpacity>
         </View>
-        <View style={styles.button}>
+        <View className="flex-1 mx-[2%]">
           <TouchableOpacity
-            style={{
-              ...styles.submitButton,
-              borderWidth: 1,
-              borderRadius: 15,
-              borderStyle: 'dashed',
-              borderColor: 'white',
-            }}
+            className="rounded-[15px] px-[10%] py-[5%] bg-secondary justify-center items-center border border-white border-dashed"
             onPress={() => {
               navigation.navigate('Analysis', {
                 formData: omrData,
                 students,
               });
             }}>
-            <Text style={{...styles.submitButtonText}}>Analysis</Text>
+            <Text className="text-white text-base font-bold">Analysis</Text>
           </TouchableOpacity>
         </View>
       </View>
 
-      <View style={styles.button}>
+      <View className="flex-1 mx-[2%]">
         <TouchableOpacity
-          style={{
-            ...styles.submitButton,
-            borderWidth: 1,
-            borderRadius: 15,
-            borderStyle: 'dashed',
-            borderColor: 'white',
-            backgroundColor: '#ee6f2f',
-            marginLeft: '2%',
-            marginTop: '5%',
-          }}
+          className="rounded-[15px] px-[10%] py-[5%] bg-[#ee6f2f] justify-center items-center border border-white border-dashed ml-[2%] mt-[5%]"
           onPress={() => {
             navigation.navigate('StudentHistory', {
               formData: omrData,
@@ -534,7 +449,7 @@ const OmrEvaluationInfo = ({
               students,
             });
           }}>
-          <Text style={{...styles.submitButtonText}}>
+          <Text className="text-white text-base font-bold">
             Student Evaluation History
           </Text>
         </TouchableOpacity>

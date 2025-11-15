@@ -1,13 +1,29 @@
 import cv2
-
 from mysite.questionbox import checkQuestions
 from mysite.xywh import infoSquare
 
 
-def evaluate1(totalQuestions, markPerQuestion, isNegative, negativeMark,
-              ansList, outputpath, mark, image, blur, areaList, areaListSort,
-              squares, q1Index, q2Index, markIndex, setno, regenerate, realAns,
-              realMarks):
+def evaluate1(
+    totalQuestions,
+    markPerQuestion,
+    isNegative,
+    negativeMark,
+    ansList,
+    outputpath,
+    mark,
+    image,
+    blur,
+    areaList,
+    areaListSort,
+    squares,
+    q1Index,
+    q2Index,
+    markIndex,
+    setno,
+    regenerate,
+    realAns,
+    realMarks,
+):
     marks = 0
     marked_index = []
     if totalQuestions - 15 < 0:
@@ -17,9 +33,22 @@ def evaluate1(totalQuestions, markPerQuestion, isNegative, negativeMark,
         questions = 15
         totalQuestions -= 15
     tempMarks, temp_marked_index = checkQuestions(
-        questions, ansList[setno - 1][0], isNegative, image, blur, areaList,
-        areaListSort, squares, q1Index, 15, markPerQuestion, negativeMark,
-        regenerate, realAns, 0)
+        questions,
+        ansList[setno - 1][0],
+        isNegative,
+        image,
+        blur,
+        areaList,
+        areaListSort,
+        squares,
+        q1Index,
+        15,
+        markPerQuestion,
+        negativeMark,
+        regenerate,
+        realAns,
+        0,
+    )
     marks += tempMarks
     marked_index = marked_index + temp_marked_index
 
@@ -31,9 +60,22 @@ def evaluate1(totalQuestions, markPerQuestion, isNegative, negativeMark,
         totalQuestions -= 20
     if questions > 0:
         tempMarks, temp_marked_index = checkQuestions(
-            questions, ansList[setno - 1][1], isNegative, image, blur,
-            areaList, areaListSort, squares, q2Index, 20, markPerQuestion,
-            negativeMark, regenerate, realAns, 15)
+            questions,
+            ansList[setno - 1][1],
+            isNegative,
+            image,
+            blur,
+            areaList,
+            areaListSort,
+            squares,
+            q2Index,
+            20,
+            markPerQuestion,
+            negativeMark,
+            regenerate,
+            realAns,
+            15,
+        )
         marks += tempMarks
         marked_index = marked_index + temp_marked_index
 

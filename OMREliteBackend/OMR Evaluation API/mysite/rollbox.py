@@ -1,11 +1,11 @@
 import cv2
 import numpy as np
-
 from mysite.xywh import infoSquare
 
 
-def checkRoll(digits, image, blur, areaList, areaListSort, squares, num,
-              regenerate, realIdNo):
+def checkRoll(
+    digits, image, blur, areaList, areaListSort, squares, num, regenerate, realIdNo
+):
     x, y, w, h = infoSquare(areaList, areaListSort, squares, num)
     circle_radius = round(w / 22)
     marked_index = []
@@ -53,7 +53,8 @@ def checkRoll(digits, image, blur, areaList, areaListSort, squares, num,
                 )
         if len(marked_circle_index) != 1:
             marked_index.append(-1)
-            if not regenerate: break
+            if not regenerate:
+                break
         else:
             marked_index.append(marked_circle_index[0])
         # print(end="\n")

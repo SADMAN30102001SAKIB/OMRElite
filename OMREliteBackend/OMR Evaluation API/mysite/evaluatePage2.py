@@ -1,5 +1,4 @@
 import cv2
-
 from mysite.area import findArea
 from mysite.detect import detectSquares
 from mysite.find import findSquares
@@ -7,8 +6,18 @@ from mysite.imgpre import imagePreprocess
 from mysite.questionbox import checkQuestions
 
 
-def evaluate2(image_path, totalQuestions, markPerQuestion, isNegative,
-              negativeMark, ansList, outputpath, setno, regenerate, realAns):
+def evaluate2(
+    image_path,
+    totalQuestions,
+    markPerQuestion,
+    isNegative,
+    negativeMark,
+    ansList,
+    outputpath,
+    setno,
+    regenerate,
+    realAns,
+):
     image, blur, contours = imagePreprocess(image_path)
 
     totalQuestions -= 35
@@ -22,10 +31,14 @@ def evaluate2(image_path, totalQuestions, markPerQuestion, isNegative,
     if len(squares) != box:
         detectSquares(outputpath, image, squares)
         return (
-            "Page-2 Doesn't Match With The OMR Specification! Expected " +
-            str(box) + " Box, Got " + str(len(squares)) +
-            " Box!||||(i) Please Ensure That This Is The Correct OMR Of This Exam.||(ii)Try Changing The Camera Angle, Keep The Camera Straight With The OMR.||(iii) Try Improving The Lighting/Quality Of The Picture.",
-            -1, [])
+            "Page-2 Doesn't Match With The OMR Specification! Expected "
+            + str(box)
+            + " Box, Got "
+            + str(len(squares))
+            + " Box!||||(i) Please Ensure That This Is The Correct OMR Of This Exam.||(ii)Try Changing The Camera Angle, Keep The Camera Straight With The OMR.||(iii) Try Improving The Lighting/Quality Of The Picture.",
+            -1,
+            [],
+        )
 
     areaList, areaListSort = findArea(squares)
 
@@ -38,9 +51,22 @@ def evaluate2(image_path, totalQuestions, markPerQuestion, isNegative,
         questions = 25
         totalQuestions -= 25
     tempMarks, temp_marked_index = checkQuestions(
-        questions, ansList[setno - 1][2], isNegative, image, blur, areaList,
-        areaListSort, squares, 1, 25, markPerQuestion, negativeMark,
-        regenerate, realAns, 35)
+        questions,
+        ansList[setno - 1][2],
+        isNegative,
+        image,
+        blur,
+        areaList,
+        areaListSort,
+        squares,
+        1,
+        25,
+        markPerQuestion,
+        negativeMark,
+        regenerate,
+        realAns,
+        35,
+    )
     marks += tempMarks
     marked_index = marked_index + temp_marked_index
 
@@ -52,9 +78,22 @@ def evaluate2(image_path, totalQuestions, markPerQuestion, isNegative,
         totalQuestions -= 22
     if questions > 0:
         tempMarks, temp_marked_index = checkQuestions(
-            questions, ansList[setno - 1][3], isNegative, image, blur,
-            areaList, areaListSort, squares, 2, 22, markPerQuestion,
-            negativeMark, regenerate, realAns, 60)
+            questions,
+            ansList[setno - 1][3],
+            isNegative,
+            image,
+            blur,
+            areaList,
+            areaListSort,
+            squares,
+            2,
+            22,
+            markPerQuestion,
+            negativeMark,
+            regenerate,
+            realAns,
+            60,
+        )
         marks += tempMarks
         marked_index = marked_index + temp_marked_index
 
@@ -66,9 +105,22 @@ def evaluate2(image_path, totalQuestions, markPerQuestion, isNegative,
         totalQuestions -= 18
     if questions > 0:
         tempMarks, temp_marked_index = checkQuestions(
-            questions, ansList[setno - 1][4], isNegative, image, blur,
-            areaList, areaListSort, squares, 3, 18, markPerQuestion,
-            negativeMark, regenerate, realAns, 82)
+            questions,
+            ansList[setno - 1][4],
+            isNegative,
+            image,
+            blur,
+            areaList,
+            areaListSort,
+            squares,
+            3,
+            18,
+            markPerQuestion,
+            negativeMark,
+            regenerate,
+            realAns,
+            82,
+        )
         marks += tempMarks
         marked_index = marked_index + temp_marked_index
 

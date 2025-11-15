@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
-import {ActivityIndicator, View, Alert, ToastAndroid} from 'react-native';
+import {ActivityIndicator, View, Alert, ToastAndroid, Text} from 'react-native';
+import {SafeAreaView} from 'react-native-safe-area-context';
 import RNFS from 'react-native-fs';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import ExamHistoryList from '../components/ExamHistoryList';
@@ -134,22 +135,29 @@ const ExamHistory = ({navigation}) => {
     );
   };
 
-  return isLoading ? (
-    <View
-      style={{
-        backgroundColor: '#111',
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-      }}>
-      <ActivityIndicator size="large" color="#007bff" />
-    </View>
-  ) : (
-    <ExamHistoryList
-      historyItems={historyItems}
-      deleteHistoryItem={deleteHistoryItem}
-      navigation={navigation}
-    />
+  return (
+    <SafeAreaView className="flex-1 bg-[#0a0a0f]">
+      {isLoading ? (
+        <View className="flex-1 justify-center items-center bg-[#0a0a0f]">
+          {/* Modern Loading Animation */}
+          <View className="items-center">
+            <View className="w-24 h-24 rounded-full border-4 border-primary/20 border-t-primary items-center justify-center mb-6">
+              <ActivityIndicator size="large" color="#00ff5f" />
+            </View>
+            <Text className="text-white text-xl font-bold mb-2">
+              Loading History
+            </Text>
+            <Text className="text-white/40 text-sm">Please wait...</Text>
+          </View>
+        </View>
+      ) : (
+        <ExamHistoryList
+          historyItems={historyItems}
+          deleteHistoryItem={deleteHistoryItem}
+          navigation={navigation}
+        />
+      )}
+    </SafeAreaView>
   );
 };
 

@@ -1,7 +1,6 @@
 import React, {useState, useCallback} from 'react';
 import {View, Text, TouchableOpacity, TextInput, Alert} from 'react-native';
 import CustomCheckBox from './CustomCheckBox';
-import styles from '../componentStyles/FormStyle';
 
 const QuestionItem = React.memo(
   ({index, handleInputChange, studentData, formData}) => {
@@ -23,44 +22,17 @@ const QuestionItem = React.memo(
     };
 
     return (
-      <View
-        style={{
-          ...styles.fieldContainer,
-          marginBottom: '1%',
-          display: 'flex',
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-        }}>
+      <View className="mb-[1%] flex-row items-center justify-between">
         <Text
-          style={
+          className={`p-[1%] mb-[1.5%] text-base ${
             value !== '0'
               ? compareStrings(ansValue, value)
-                ? {
-                    ...styles.label,
-                    padding: '1%',
-                    marginBottom: '1.5%',
-                    color: '#55ff00',
-                  }
-                : {
-                    ...styles.label,
-                    padding: '1%',
-                    marginBottom: '1.5%',
-                    color: '#ff5500',
-                  }
+                ? 'text-success'
+                : 'text-[#ff5500]'
               : ansValue && ansValue.includes('-')
-              ? {
-                  ...styles.label,
-                  padding: '1%',
-                  marginBottom: '1.5%',
-                  color: '#55ff00',
-                }
-              : {
-                  ...styles.label,
-                  padding: '1%',
-                  marginBottom: '1.5%',
-                }
-          }>
+              ? 'text-success'
+              : 'text-white'
+          }`}>
           {questionNumber < 10 ? `A0${questionNumber}:` : `A${questionNumber}:`}
         </Text>
         <CustomCheckBox
@@ -132,63 +104,54 @@ const StudentInformationForm = ({
     .slice(startIndex, endIndex);
 
   return (
-    <View style={styles.container}>
-      <View style={{...styles.topContainer, marginVertical: '5%'}}>
+    <View className="flex-1 bg-[#111] justify-between p-[5%]">
+      <View className="bg-[#181818] p-[5%] rounded-xl border-2 border-white my-[5%]">
         {formData.isRoll ? (
           <View>
             <Text
-              style={
+              className={`text-base ${
                 studentData.idno &&
                 studentData.idno.length === formData.rollDigit
-                  ? {...styles.label}
-                  : {...styles.label, color: '#ff5500'}
-              }>
+                  ? 'text-white'
+                  : 'text-[#ff5500]'
+              }`}>
               Student ID of {formData.rollDigit} Digit:
             </Text>
             <TextInput
               placeholder={studentData.idno ? 'Edit' : 'Enter Student ID'}
+              placeholderTextColor="#999"
               keyboardType="numeric"
               onChangeText={text => handleInputChange('idno', text)}
-              style={styles.input}
+              className="text-white border-gray-500 rounded-xl border-2 mb-[2%] pl-[5%]"
               value={studentData.idno}
             />
           </View>
         ) : null}
 
         {(formData.isName || !formData.isRoll) && (
-          <View
-            style={{
-              marginBottom: '6%',
-            }}>
+          <View className="mb-[6%]">
             <Text
-              style={
+              className={`text-base ${
                 studentData.name || formData.isRoll
-                  ? {...styles.label}
-                  : {...styles.label, color: '#ff5500'}
-              }>
+                  ? 'text-white'
+                  : 'text-[#ff5500]'
+              }`}>
               Student Name:
             </Text>
             <TextInput
               placeholder="Edit"
+              placeholderTextColor="#999"
               onChangeText={text => handleInputChange('name', text)}
-              style={styles.input}
+              className="text-white border-gray-500 rounded-xl border-2 mb-[2%] pl-[5%]"
               value={studentData.name ? studentData.name : ''}
             />
           </View>
         )}
 
-        <View
-          style={{
-            ...styles.fieldContainer,
-          }}>
+        <View>
           {list.length > 1 && (
-            <View
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-around',
-              }}>
-              <Text style={{...styles.label, marginBottom: '1%'}}>
+            <View className="flex items-center justify-around">
+              <Text className="text-white text-base mb-[1%]">
                 Marked Set By Examinee 🔽:
               </Text>
               <CustomCheckBox
@@ -204,12 +167,9 @@ const StudentInformationForm = ({
         </View>
       </View>
 
-      <View style={{...styles.button, marginBottom: '5%'}}>
+      <View className="w-full flex items-center mb-[5%]">
         <TouchableOpacity
-          style={{
-            ...styles.submitButton,
-            backgroundColor: '#00ff5f',
-          }}
+          className="rounded-[50px] px-[10%] py-[5%] bg-primary justify-center items-center"
           onPress={() => {
             Alert.alert(
               'Are you sure?',
@@ -230,18 +190,15 @@ const StudentInformationForm = ({
               {cancelable: false},
             );
           }}>
-          <Text style={{...styles.submitButtonText, color: 'black'}}>Save</Text>
+          <Text className="text-black text-base font-bold">Save</Text>
         </TouchableOpacity>
       </View>
 
-      <Text style={{marginBottom: '1%', color: 'white'}}>
-        Marked Ans By Examinee ⏬:
-      </Text>
+      <Text className="mb-[1%] text-white">Marked Ans By Examinee ⏬:</Text>
       <View
-        style={{
-          ...styles.scroll,
-          marginTop: formData.questionsCount > 10 ? '0%' : '5%',
-        }}>
+        className={`${
+          formData.questionsCount > 10 ? 'mt-0' : 'mt-[5%]'
+        } max-h-[400px]`}>
         {questionsToShow.map((_, index) => (
           <QuestionItem
             key={index}
@@ -253,22 +210,11 @@ const StudentInformationForm = ({
         ))}
       </View>
 
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'space-around',
-        }}>
+      <View className="flex-row justify-around">
         {currentPage > 0 && (
           <View>
-            <TouchableOpacity
-              onPress={handleHardPrev}
-              style={{paddingTop: '20%'}}>
-              <Text
-                style={{
-                  ...styles.submitButtonText,
-                  fontSize: 35,
-                  transform: [{rotate: '180deg'}],
-                }}>
+            <TouchableOpacity onPress={handleHardPrev} className="pt-[20%]">
+              <Text className="text-white text-base font-bold text-[35px] rotate-180">
                 {'⇶'}
               </Text>
             </TouchableOpacity>
@@ -276,13 +222,8 @@ const StudentInformationForm = ({
         )}
         {currentPage > 0 && (
           <View>
-            <TouchableOpacity onPress={handlePrev} style={{paddingTop: '20%'}}>
-              <Text
-                style={{
-                  ...styles.submitButtonText,
-                  fontSize: 35,
-                  transform: [{rotate: '180deg'}],
-                }}>
+            <TouchableOpacity onPress={handlePrev} className="pt-[20%]">
+              <Text className="text-white text-base font-bold text-[35px] rotate-180">
                 {'➣'}
               </Text>
             </TouchableOpacity>
@@ -291,11 +232,7 @@ const StudentInformationForm = ({
         {currentPage < totalPages - 1 && (
           <View>
             <TouchableOpacity onPress={handleNext}>
-              <Text
-                style={{
-                  ...styles.submitButtonText,
-                  fontSize: 35,
-                }}>
+              <Text className="text-white text-base font-bold text-[35px]">
                 {'➣'}
               </Text>
             </TouchableOpacity>
@@ -304,11 +241,7 @@ const StudentInformationForm = ({
         {currentPage < totalPages - 1 && (
           <View>
             <TouchableOpacity onPress={handleHardNext}>
-              <Text
-                style={{
-                  ...styles.submitButtonText,
-                  fontSize: 35,
-                }}>
+              <Text className="text-white text-base font-bold text-[35px]">
                 {'⇶'}
               </Text>
             </TouchableOpacity>

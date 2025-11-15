@@ -1,11 +1,11 @@
 import cv2
 import numpy as np
-
 from mysite.xywh import infoSquare
 
 
-def checkSet(image, blur, areaList, areaListSort, squares, num, n, realSetNo,
-             regenerate):
+def checkSet(
+    image, blur, areaList, areaListSort, squares, num, n, realSetNo, regenerate
+):
     x, y, w, h = infoSquare(areaList, areaListSort, squares, num)
 
     circle_radius = round(h / 10)
@@ -27,9 +27,7 @@ def checkSet(image, blur, areaList, areaListSort, squares, num, n, realSetNo,
             marked_circle_index.append(i)
             cv2.circle(
                 image,
-                (round(
-                    (2 * x + w) / 2), round(
-                        (2 * y + (2 * i + 1) * h / 4) / 2)),
+                (round((2 * x + w) / 2), round((2 * y + (2 * i + 1) * h / 4) / 2)),
                 circle_radius,
                 (200, 0, 255),
                 -1,
@@ -37,9 +35,7 @@ def checkSet(image, blur, areaList, areaListSort, squares, num, n, realSetNo,
         if regenerate and i + 1 == realSetNo:
             cv2.circle(
                 image,
-                (round(
-                    (2 * x + w) / 2), round(
-                        (2 * y + (2 * i + 1) * h / 4) / 2)),
+                (round((2 * x + w) / 2), round((2 * y + (2 * i + 1) * h / 4) / 2)),
                 circle_radius,
                 (200, 0, 255),
                 -1,

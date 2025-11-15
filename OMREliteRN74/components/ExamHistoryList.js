@@ -6,7 +6,6 @@ import {
   TouchableOpacity,
   TextInput,
 } from 'react-native';
-import styles from '../componentStyles/ExamListStyle';
 
 const ExamHistoryList = ({historyItems, deleteHistoryItem, navigation}) => {
   const [searchBy, setSearchBy] = useState('');
@@ -59,76 +58,84 @@ const ExamHistoryList = ({historyItems, deleteHistoryItem, navigation}) => {
   });
 
   return (
-    <View style={styles.container}>
-      <TextInput
-        placeholder="Search By Exam Name"
-        onChangeText={val => {
-          setSearchBy(val);
-        }}
-        style={styles.input}
-      />
-      <Text
-        style={{...styles.historyText, marginVertical: '5%', color: '#ccc'}}>
-        History (Total Exams: {filteredHistoryItems.length}):
-      </Text>
-      <ScrollView>
-        {reversedItems.map((item, index) => {
-          const originalIndex = historyItems.length - 1 - index;
-          return (
-            (item.formData.pName
-              .toLowerCase()
-              .includes(searchBy.toLowerCase()) ||
-              searchBy === '') && (
-              <View key={originalIndex}>
-                {pathToDate(item.localFilePath) && (
-                  <Text
-                    style={
-                      index
-                        ? {
-                            fontSize: 16,
-                            fontWeight: 'bold',
-                            marginTop: '5%',
-                          }
-                        : {fontSize: 16, fontWeight: 'bold'}
-                    }>
-                    {prev}
-                  </Text>
-                )}
-                <View style={styles.historyItem}>
-                  <TouchableOpacity
-                    onPress={() => {
-                      navigation.navigate('OmrEvaluation', {
-                        formData: item.formData,
-                        localFilePath: item.localFilePath,
-                        index: originalIndex,
-                        students: item.students,
-                      });
-                    }}
-                    style={{
-                      ...styles.historyContent,
-                      backgroundColor:
-                        originalIndex % 2 ? '#00ff5f' : '#007bff',
-                    }}>
+    <View className="flex-1 bg-[#0a0a0f] px-5 py-6">
+      {/* Header */}
+      <View className="mb-6">
+        <Text className="text-white text-2xl font-bold mb-1">Exam History</Text>
+        <View className="w-12 h-1 bg-primary rounded-full mb-2" />
+        <Text className="text-white/40 text-sm">
+          Total Exams: {filteredHistoryItems.length}
+        </Text>
+      </View>
+
+      {/* Search Bar */}
+      <View className="mb-5">
+        <TextInput
+          placeholder="Search by exam name..."
+          placeholderTextColor="#666"
+          onChangeText={val => setSearchBy(val)}
+          className="bg-white/5 text-white rounded-xl border border-white/20 px-4 py-3"
+        />
+      </View>
+
+      {/* History List */}
+      <ScrollView showsVerticalScrollIndicator={false}>
+        {filteredHistoryItems.length === 0 ? (
+          <View className="items-center justify-center py-20">
+            <Text className="text-white/40 text-lg mb-2">📝</Text>
+            <Text className="text-white/40 text-base">No exams found</Text>
+          </View>
+        ) : (
+          reversedItems.map((item, index) => {
+            const originalIndex = historyItems.length - 1 - index;
+            return (
+              (item.formData.pName
+                .toLowerCase()
+                .includes(searchBy.toLowerCase()) ||
+                searchBy === '') && (
+                <View key={originalIndex}>
+                  {pathToDate(item.localFilePath) && (
                     <Text
-                      style={{
-                        ...styles.historyText,
-                        color: originalIndex % 2 ? 'black' : 'white',
-                      }}
-                      numberOfLines={1}
-                      ellipsizeMode="tail">
-                      {item.formData.pName}
+                      className={`text-primary text-sm font-bold mb-3 ${
+                        index ? 'mt-6' : ''
+                      }`}>
+                      📅 {prev}
                     </Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    onPress={() => deleteHistoryItem(originalIndex)}
-                    style={styles.deleteButton}>
-                    <Text style={styles.deleteButtonText}>🗑</Text>
-                  </TouchableOpacity>
+                  )}
+                  <View className="flex-row items-stretch mb-3">
+                    <TouchableOpacity
+                      onPress={() => {
+                        navigation.navigate('OmrEvaluation', {
+                          formData: item.formData,
+                          localFilePath: item.localFilePath,
+                          index: originalIndex,
+                          students: item.students,
+                        });
+                      }}
+                      activeOpacity={0.7}
+                      className="flex-1 bg-white/5 border-2 border-primary/40 rounded-xl px-4 py-3 mr-2">
+                      <Text
+                        className="text-white text-base font-medium"
+                        numberOfLines={1}
+                        ellipsizeMode="tail">
+                        {item.formData.pName}
+                      </Text>
+                      <Text className="text-white/40 text-xs mt-1">
+                        {item.formData.iName}
+                      </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      onPress={() => deleteHistoryItem(originalIndex)}
+                      activeOpacity={0.7}
+                      className="bg-red-500/20 border-2 border-red-500 px-4 rounded-xl items-center justify-center">
+                      <Text className="text-red-500 text-lg">🗑️</Text>
+                    </TouchableOpacity>
+                  </View>
                 </View>
-              </View>
-            )
-          );
-        })}
+              )
+            );
+          })
+        )}
       </ScrollView>
     </View>
   );
