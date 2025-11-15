@@ -23,24 +23,29 @@ iii. Generating customizable report of all evaluated students (available as a PD
 * There are lots of analysis, like individual student analysis, overall exam analysis. 
 * Searching, filtering by name/ID/set etc.
 
-Ummmm, with all these, now it's not even an OMR (Optical Mark Recognition) anymore, right? I think we should call It AMR (Artificial Mark Recognition). JK! But the app has limitations, which I'll try to improve time to time.
+Ummmm, with all these, now it's not even an OMR (Optical Mark Recognition) anymore, right? I think we should call It AMR (Artificial Mark Recognition). JK 😆! But the app has limitations, which I'll try to improve time to time.
 
 ## All right, now future goals for OMRElite
 ### Major:
-1) Integration Database for creating accounts so that users can log in to any device with their credentials & all their previous work will be visible.
-2) Create a mechanism for joining students via a "joining code", so that students can join with that "code" & view their own evaluated OMR & overall report.
-3) Currently the user has to manually click on capture to get the image. so will try to automate it such a way that the app auto captures the OMR page as soon as the camera detects the page. 
-4) Creating a Web Version of the app
+1) Integrating a database for **creating accounts** so that users can log in to any device with their credentials & all their previous work will be visible.
+2) Create a mechanism for joining students via a **joining code**, so that students can join with that **code** & view their own evaluated OMR & overall report.
+3) Teacher can select multiple OMRs from gallery and **batch process** them.
+4) **Perspective correction & auto-framing:** 
+    * Currently the user has to manually click on capture to get the image. 
+    * So, i'll try to automate it such a way that the app auto captures the OMR page as soon as the camera detects low blur/frame stability + right perspective/angle before snap. Use stability over ~200ms to auto-trigger.
+5) Template system for different OMR Sheets & **custom** designing.
+6) Creating a **Web** Version of the app.
 
 ### Minor:
-1) Implement a "recycle bin" feature to safely store deleted exams or student data before permanent deletion.
-2) Reduce network latency & improve app performance.
-3) Improve the OMR & App designs.
+1) **Exam Grouping:** Allow teachers to group multiple exams together for better organization and management.
+2) Implement a **recycle bin** feature to safely store deleted exams or student data before permanent deletion (30 days).
+3) Reduce network latency & improve app performance via **native modules**.
 
-Anyways, in the last couple of months, I've explored a lot about the android Operating System, Computer Vision & Cross-Platform Apps.
-It's still under development and I'm continuously learning & researching new things & hoping to make OMRElite better 💜.
+Anyways, in the last couple of months, I've explored a lot about the android Operating System, Image Processing & Cross-Platform Apps.
+It's still under development and I'm continuously learning & researching new things and hoping to make OMRElite better 💜.
+
 ## Update:
-Currently i'm Planning to build a hardware device for this.
-Currently one has to evaluate each paper by holding the phone with hand, which might become overwhelming if the there's a lot of OMR papers (let's say 500+).
-So, if there were a machine where one will simply put all the OMR papers & adjust the mobile phone on top that machine in a way that the machine will automatically slide the papers & this app will evaluate each paper one by one, then it'll literally eliminate all human intervention.
+Currently i'm planning to build a hardware device for this.
+Right now, one has to evaluate each paper by holding the phone with hand, which might become overwhelming if the there's a lot of OMR papers (let's say 500+).
+So, if there were a machine where one will simply put all the OMR papers & adjust the mobile phone on top of that machine in such a way that the machine automatically slides the papers & this app evaluates each paper one by one, then it'll literally eliminate all human intervention.
 The machine & the app will have to work in sync btw.
