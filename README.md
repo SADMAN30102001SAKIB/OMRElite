@@ -12,7 +12,7 @@ I) Creating customizable OMR Sheets (the OMR PDF can be printed for examination)
 II) Evaluating those papers with mobile camera in a short amount of time using computer vision
 III) Generating customizable report of all evaluated students (available as a PDF or send it to teacher's email as a .csv file)
 
-### Check This Demo Video: https://youtu.be/F7PN6prPl0g?si=3p7yAwGtiqWsPqlr
+### [https://youtu.be/F7PN6prPl0g?si=3p7yAwGtiqWsPqlr](Check This Demo Video)
 
 ## But there are many minor features as well, like
 * If somehow user deletes the PDFs made by the app (mistakenly or to free up storage), then the app can re-generate those PDFs automatically with 1 click of a button.
