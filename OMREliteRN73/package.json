@@ -22,7 +22,7 @@
     "@react-navigation/native-stack": "^6.9.26",
     "axios": "^1.6.8",
     "react": "^18.2.0",
-    "react-native": "^0.73.6",
+    "react-native": "^0.82.1",
     "react-native-file-viewer": "^2.1.5",
     "react-native-fs": "^2.20.0",
     "react-native-image-picker": "^7.1.2",
