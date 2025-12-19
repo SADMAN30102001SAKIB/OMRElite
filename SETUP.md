@@ -551,7 +551,6 @@ npm run clean; npm run android:stable       # Bypass daemon crashes
 
 ```
 npm run start:reset
-
 ```
 
 ---
@@ -559,4 +558,3 @@ npm run start:reset
 **Happy Coding! 🚀**
 
 If you found this guide helpful, please star the repository! ⭐
-```
