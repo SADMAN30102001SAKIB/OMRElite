@@ -549,6 +549,7 @@ npm run clean; npm run android:stable       # Bypass daemon crashes
 
 # Restart Metro bundler with cache reset
 
+```
 npm run start:reset
 
 ```
